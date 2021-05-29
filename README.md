@@ -16,6 +16,7 @@ POST-запросом подается json с адресом ссылки на 
 
 ```
 curl -L -X POST "http://localhost:3000/api/senya" -H "Content-Type: application/json" --data-raw "{ \"url\": \"https://picture_url.jpg\" }"
+
 {"ok":true,"is_senya":false}
 ```
 
