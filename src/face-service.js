@@ -110,34 +110,76 @@ async function detectFaces(url) {
     initialized = true;
   }
 
-  const tensor = await image(url);
-  const detectResult = await detect(tensor);
+  const c = await image(url);
+  const detectResult = await detect(c);
   // tensor.dispose();
 
   if (detectResult.isErr) {
     return detectResult;
   }
 
-  return Ok(detectResult.value);
+  return Ok({ faces: detectResult.value, c });
 }
 
 async function checkFaceMatch(url, modelName, distanceThreshold) {
   const facesResult = await detectFaces(url);
   if (facesResult.isErr) return facesResult;
-  const faces = facesResult.value;
+  const { faces, c } = facesResult.value;
 
   const faceMatcherResult = await createFaceMatcher(modelName, distanceThreshold);
   if (faceMatcherResult.isErr) return faceMatcherResult;
   const faceMatcher = faceMatcherResult.value;
 
+  const matches = faces
+    .filter((x) => x !== undefined)
+    .map((face) => {
+      const match = faceMatcher.findBestMatch(face.descriptor);
+      return {
+        label: match["_label"],
+        distance: match["_distance"],
+        aligned_box: face.alignedRect._box,
+        landmarks: face.landmarks,
+      };
+    });
+
+  if (matches.length > 0) {
+    drawBoxesAndSaveFile(matches, c);
+  }
+
   return Ok(
-    faces
-      .filter((x) => x !== undefined)
-      .map((face) => {
-        const match = faceMatcher.findBestMatch(face.descriptor);
-        return { label: match["_label"], distance: match["_distance"] };
-      })
+    matches.map(({ label, distance, aligned_box }) => ({
+      label,
+      distance: Number(distance.toFixed(4)),
+      box: {
+        x: parseInt(aligned_box._x, 10),
+        y: parseInt(aligned_box._y, 10),
+        width: parseInt(aligned_box._width, 10),
+        height: parseInt(aligned_box._height, 10),
+      },
+    }))
   );
+}
+
+function drawBoxesAndSaveFile(matches, c) {
+  drawFaceDetectBoxes();
+  drawFaceLandmarks();
+  fs.writeFile("output.jpg", c.toBuffer("image/jpeg"), () => {});
+
+  function drawFaceDetectBoxes() {
+    for (const m of matches) {
+      const drawBox = new faceapi.draw.DrawBox(m.aligned_box, {
+        label: `${m.label} (${m.distance.toFixed(2)})`,
+      });
+      drawBox.draw(c);
+    }
+  }
+
+  function drawFaceLandmarks() {
+    faceapi.draw.drawFaceLandmarks(
+      c,
+      matches.map((m) => m.landmarks)
+    );
+  }
 }
 
 module.exports.checkFaceMatch = checkFaceMatch;
