@@ -5,20 +5,37 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "uvu tests \\.test\\.mjs$",
+    "test:watch": "watchlist src tests -e -- uvu tests \\.test\\.mjs$"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "--deps": {
+  },
   "dependencies": {
-    "@tensorflow/tfjs-node": "^3.6.1",
-    "@vladmandic/face-api": "^1.2.5",
-    "canvas": "^2.8.0",
-    "express": "^4.17.1",
-    "node-fetch": "^2.6.1"
+    "@tensorflow/tfjs-node": "3.20.0",
+    "@vladmandic/face-api": "^1.7.3",
+    "canvas": "^2.10.1",
+    "@phaticusthiccy/open-apis": "^1.8.5",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "instagram-url-direct": "^1.0.13",
+    "keyv": "^4.5.2",
+    "keyv-file": "^0.2.0",
+    "node-fetch": "^3.3.1",
+    "node-tiklydown": "^1.0.0",
+    "social_media_downloader": "^1.0.6",
+    "threads-api": "^1.4.2",
+    "tikchan": "^1.0.1",
+    "tiktok-scraper": "^1.4.36",
+    "write-json-file": "^4.3.0"
   },
   "devDependencies": {
-    "prettier": "^2.3.0"
+    "prettier": "^2.8.8",
+    "uvu": "^0.5.6",
+    "watchlist": "^0.3.1"
   },
   "prettier": {
     "printWidth": 100

@@ -142,7 +142,7 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
       };
     });
 
-  if (matches.length > 0) {
+  if (matches.some((x) => x.label.startsWith("senya"))) {
     drawBoxesAndSaveFile(matches, c);
   }
 

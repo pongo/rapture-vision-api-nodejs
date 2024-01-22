@@ -35,3 +35,6 @@ curl -L -X POST "http://localhost:3000/api/senya" -H "Content-Type: application/
 ### Illegal instruction после запуска
 
 Свежие версии tfjs-node используют инструкции, которых нет на старых процессорах. Придется использовать @tensorflow/tfjs-node@1.2.1 или компилировать tensorflow из исходников.
+
+* "@tensorflow/tfjs-node": "1.2.1",
+* /usr/local/n/versions/node/14.17.0/bin/npm i

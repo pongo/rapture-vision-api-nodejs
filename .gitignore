@@ -122,3 +122,5 @@ dist
 
 # local
 /output.jpg
+/package-lock.json
+/tmp/
