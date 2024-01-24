@@ -17,7 +17,10 @@ type Err2 = <E extends Error = Error>(error: string, data?: unknown) => Result<n
 
 export type Err = Err1 & Err2;
 
-// export declare function Err<E extends Error = Error>(error: E): Result<never, E>;
-// export declare function Err<E extends Error = Error>(error: string, data?: unknown): Result<never, E>;
+export declare function Err<E extends Error = Error>(error: E): Result<never, E>;
+export declare function Err<E extends Error = Error>(
+  error: string,
+  data?: unknown
+): Result<never, E>;
 
 export {};

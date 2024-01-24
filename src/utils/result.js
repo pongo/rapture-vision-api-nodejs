@@ -2,10 +2,11 @@
 
 const { StacklessError } = require("./stackless-error");
 
-/**
- * @param value
- * @returns {{isOk: true, isErr: false, value}}
- */
+// /**
+//  * @param value
+//  * @returns {{isOk: true, isErr: false, value}}
+//  */
+
 function ok(value) {
   return {
     isOk: true,
@@ -14,11 +15,12 @@ function ok(value) {
   };
 }
 
-/**
- * @param {string|Error} error
- * @param data
- * @returns {{isOk: false, isErr: true, error: Error}}
- */
+// /**
+//  * @param {string|Error} error
+//  * @param data
+//  * @returns {{isOk: false, isErr: true, error: Error}}
+//  */
+
 function err(error, data) {
   return {
     isOk: false,

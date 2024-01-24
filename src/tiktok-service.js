@@ -8,6 +8,9 @@ const SMD = require("social_media_downloader");
 const tiklydown = require("node-tiklydown").v1;
 const TikChan = require("tikchan");
 const axios = require("axios");
+const { TiktokDL } = require("@tobyg74/tiktok-api-dl");
+const Snaptik = require("snaptik");
+const { FetchCatchError, FetchEmpty } = require("./services/tiktok/errors");
 
 async function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -133,8 +136,56 @@ async function fetchTikTokMirzahadjaeva(videoUrl) {
   return Err();
 }
 
+async function fetchTobyg74(videoUrl) {
+  try {
+    const data = await TiktokDL(videoUrl, {
+      version: "v1", //  version: "v1" | "v2" | "v3"
+    });
+
+    // const video = data?.video;
+    // if (video) {
+    //   return Ok({ collector: [{ videoUrl: video }] });
+    // }
+  } catch (e) {
+    // console.error(e);
+    return Err();
+  }
+  return Err();
+}
+
+async function fetchSnaptik(videoUrl) {
+  try {
+    const snaptik = new Snaptik(videoUrl);
+    const data = await snaptik.download();
+    if (data?.status === 200 && data?.link_1?.startsWith("http")) {
+      return Ok({ collector: [{ videoUrl: data.link_1 }] });
+    }
+  } catch (e) {
+    // console.error(e);
+    return Err(new FetchCatchError(videoUrl, e));
+  }
+  return Err(new FetchEmpty(videoUrl));
+}
+
+/**
+ *
+ * @param {string} videoUrl
+ * @returns {Result<{ collector: Array<{ videoUrl: string }> }>}
+ */
 async function getTiktokVideoMeta(videoUrl) {
   let result;
+
+  // console.log("fetchSnaptik");
+  // result = await fetchSnaptik(videoUrl);
+  // if (result.isOk) {
+  //   return result;
+  // }
+
+  console.log("fetchTobyg74");
+  result = await fetchTobyg74(videoUrl);
+  if (result.isOk) {
+    return result;
+  }
 
   console.log("fetchTiklydown");
   result = await fetchTiklydown(videoUrl);
@@ -165,7 +216,7 @@ async function getTiktokVideoMeta(videoUrl) {
   if (result.isOk) {
     return result;
   }
-  
+
   console.log("fetchTikTokMirzahadjaeva");
   result = await fetchTikTokMirzahadjaeva(videoUrl);
   if (result.isOk) {

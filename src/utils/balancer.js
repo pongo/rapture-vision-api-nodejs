@@ -137,6 +137,10 @@ class Balancer {
   }
 }
 
+/**
+ * @param {Result<*>} result
+ * @returns {{ remaining: number, reset: number }}
+ */
 function parseLimits(result) {
   const remaining = (result.isOk ? result.value.remaining : result.error.data?.remaining) ?? -1;
   const reset = (result.isOk ? result.value.reset : result.error.data?.reset) ?? 0;

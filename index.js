@@ -44,14 +44,9 @@ app.post("/api/v1/tiktok-video", async (req, res) => {
   const result = await getTiktokVideoMeta(videoUrl);
 
   if (result.isErr) {
-    console.error(
-      `tiktokVideo '${videoUrl}' error: ${
-        result.error?.message ?? result.error
-      }, elapsed: ${elapsed()} ms`
-    );
-    return void res
-      .status(500)
-      .json({ ok: false, error: { code: 500, message: result.error?.message ?? result.error } });
+    const message = result.error?.message ?? result.error;
+    console.error(`tiktokVideo '${videoUrl}' error: ${message}, elapsed: ${elapsed()} ms`);
+    return void res.status(500).json({ ok: false, error: { code: 500, message } });
   }
 
   console.info(`Fetched tiktok video ${videoUrl}`);
@@ -138,6 +133,8 @@ app.post("/api/v1/twitter", async (req, res) => {
   res.json({ ok: true, value: reqResult.value });
 });
 
-app.listen(port, () => {
-  console.log("Server started on port " + port);
-});
+if (require.main === module && process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log("Server started on port " + port);
+  });
+}
