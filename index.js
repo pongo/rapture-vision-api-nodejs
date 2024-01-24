@@ -2,7 +2,7 @@
 
 require("dotenv").config();
 const express = require("express");
-const { getTiktokVideoMeta } = require("./src/tiktok-service");
+const { getTiktok } = require("./src/tiktok-service");
 const { timeStart } = require("./src/utils/time-start");
 const { getInstagram, getInstagramStory } = require("./src/instagram-service");
 const { getThreads } = require("./src/threads-service");
@@ -41,16 +41,15 @@ app.post("/api/v1/tiktok-video", async (req, res) => {
   }
 
   const elapsed = timeStart();
-  const result = await getTiktokVideoMeta(videoUrl);
-
+  const result = await getTiktok(videoUrl);
   if (result.isErr) {
     const message = result.error?.message ?? result.error;
     console.error(`tiktokVideo '${videoUrl}' error: ${message}, elapsed: ${elapsed()} ms`);
     return void res.status(500).json({ ok: false, error: { code: 500, message } });
   }
 
-  console.info(`Fetched tiktok video ${videoUrl}`);
-  res.json(result.value);
+  console.info(`Fetched tiktok video in ${elapsed()} ms ${videoUrl}`);
+  res.json({ ok: true, value: result.value });
 });
 
 app.post("/api/v1/instagram", async (req, res) => {
@@ -70,7 +69,7 @@ app.post("/api/v1/instagram", async (req, res) => {
   }
 
   console.log(
-    `Fetched instagram. ${igResult.value.length} links found in ${elapsed()} ms ${post_id} ${url}`
+    `Fetched instagram. ${igResult.value.length} links found in ${elapsed()} ms ${post_id} ${url}`,
   );
   res.json({ ok: true, links: igResult.value });
 });
@@ -92,7 +91,7 @@ app.post("/api/v1/instagram_story", async (req, res) => {
   }
 
   console.log(
-    `Fetched instagram_story. ${igResult.value.length} links found in ${elapsed()} ms ${id} ${url}`
+    `Fetched instagram_story. ${igResult.value.length} links found in ${elapsed()} ms ${id} ${url}`,
   );
   res.json({ ok: true, links: igResult.value });
 });
@@ -133,7 +132,7 @@ app.post("/api/v1/twitter", async (req, res) => {
   res.json({ ok: true, value: reqResult.value });
 });
 
-if (require.main === module && process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== "test" && require.main === module) {
   app.listen(port, () => {
     console.log("Server started on port " + port);
   });

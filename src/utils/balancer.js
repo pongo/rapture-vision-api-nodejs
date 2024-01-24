@@ -92,7 +92,7 @@ class Balancer {
    * @param payload
    * @returns {Promise<Result>}
    */
-  async callOneRound(payload) {
+  async callOneRound(...payload) {
     for (const [apiName, call] of this.apisOneRound()) {
       if (await this._isLimited(apiName)) {
         console.log(`[Balancer] Api "${apiName}" is limited`);
@@ -101,7 +101,7 @@ class Balancer {
 
       console.log(`[Balancer] Call api "${apiName}"...`);
       try {
-        const result = await call(payload);
+        const result = await call(...payload);
         await this._setRemaining(apiName, result);
 
         if (result.isOk) return result;
@@ -147,4 +147,28 @@ function parseLimits(result) {
   return { remaining, reset };
 }
 
-module.exports = { Balancer, parseLimits };
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { describe, it } = require("node:test");
+
+  describe("parseLimits", () => {
+    it("should parse Ok with limits data", () => {
+      assert.deepEqual(parseLimits(Ok({ remaining: 100, reset: 5 })), { remaining: 100, reset: 5 });
+    });
+
+    it("should parse Error with limits data", () => {
+      assert.deepEqual(parseLimits(Err("error", { remaining: 100, reset: 5 })), {
+        remaining: 100,
+        reset: 5,
+      });
+    });
+
+    it("should parse Result without limits data", (t) => {
+      assert.deepEqual(parseLimits(Ok({})), { remaining: -1, reset: 0 });
+      assert.deepEqual(parseLimits(Err(new Error("error"))), { remaining: -1, reset: 0 });
+      assert.deepEqual(parseLimits(Ok({ remaining: 100 })), { remaining: 100, reset: 0 });
+    });
+  });
+}
+
+module.exports = { Balancer };

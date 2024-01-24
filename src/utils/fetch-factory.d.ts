@@ -13,9 +13,11 @@ export declare class FetchEmpty extends StacklessError {
 export type FetchError = FetchEmpty | FetchCatchError;
 
 type FactoryOptions = {
-  fetchFn: (url: string) => Promise<unknown>;
+  fetchFn: (url: string) => Promise<Result<unknown>>;
   parseFn: (data: unknown) => unknown;
+  checkFn: (data: unknown) => boolean;
   tmpFileNameFn: (url: string) => string;
+  checkUrlFn: (url: string) => boolean;
   loadFn?: (path: string) => Promise<object>;
   saveFn?: (path: string, data: object) => Promise<void>;
 };
@@ -32,10 +34,10 @@ type FactoryResultFn = (
   }?: {
     loadFromDisk?: boolean | undefined;
     saveToDisk?: boolean | undefined;
-  }
+  },
 ) => Promise<Result<FetchResult, FetchError>>;
 
 export declare function FetchFactory(
   apiName: string,
-  { fetchFn, parseFn, tmpFileNameFn, loadFn, saveFn }: FactoryOptions
+  { fetchFn, parseFn, checkFn, tmpFileNameFn, checkUrlFn, loadFn, saveFn }: FactoryOptions,
 ): FactoryResultFn;

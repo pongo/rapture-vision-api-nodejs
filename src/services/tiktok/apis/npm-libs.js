@@ -1,22 +1,20 @@
 "use strict";
 
 const Snaptik = require("snaptik");
-const { parseTiktokUrl } = require("../parse-tiktok-url");
 const { FetchFactory } = require("../../../utils/fetch-factory");
 const { TiktokDL } = require("@tobyg74/tiktok-api-dl");
 const TikChan = require("tikchan");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { StacklessError } = require("../../../utils/stackless-error");
-const TiktokScraperNowatermarks = require("tiktok-scraper-nowatermarks").default;
 const prevter = require("@prevter/tiktok-scraper").fetchVideo;
 const BtchDownloader = require("btch-downloader").ttdl;
 const { tiktokurl } = require("tiktokurl");
 const tiklydownSanzy = require("tiklydown-sanzy");
 const tiktod = require("tiktod").download;
 const TikTokNoWatermark = require("tiktok-no-watermark-api");
-const { startsWithHttp, tmpFileNameFn } = require("./shared");
+const { startsWithHttp, tmpFileNameFn, checkFn, assertLongUrl } = require("./shared");
 const nayan = require("nayan-media-downloader").tikdown;
+const fetch = require("node-fetch"); // TODO: удалить при переходе на node >= 18
 
 const fetchSnaptik = FetchFactory("tiktok/snaptik", {
   async fetchFn(url) {
@@ -25,24 +23,23 @@ const fetchSnaptik = FetchFactory("tiktok/snaptik", {
   },
   parseFn(data) {
     if (data?.status === 200 && data?.link_1?.startsWith("http")) {
-      return [data.link_1, data.link_2, data.link_3].filter(startsWithHttp);
+      return { videos: [data.link_1, data.link_2, data.link_3].filter(startsWithHttp) };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchSnaptik", (it) => {
-    it("fetchSnaptik", async () => {
-      const res = await fetchSnaptik("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 2);
-      assert.match(res.value.videos[0], /^https:\/\/d.rapidcdn.app\/d\?token=/);
-      assert.match(res.value.videos[1], /^https:\/\/d.rapidcdn.app\/d\?token=/);
-    });
+  test("fetchSnaptik", async () => {
+    const res = await fetchSnaptik("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 2);
+    assert.match(res.value.videos[0], /^https:\/\/d.rapidcdn.app\/d\?token=/);
+    assert.match(res.value.videos[1], /^https:\/\/d.rapidcdn.app\/d\?token=/);
   });
 }
 
@@ -52,25 +49,24 @@ const fetchTobyg74_v1 = FetchFactory("tiktok/tobyg74_v1", {
   },
   parseFn(data) {
     if (data?.status === "success" && data?.result?.video?.length > 0) {
-      return data?.result?.video.filter(startsWithHttp);
+      return { videos: data?.result?.video.filter(startsWithHttp) };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchTobyg74_v1", (it) => {
-    it("fetchTobyg74_v1", async () => {
-      const res = await fetchTobyg74_v1("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 3);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+.tiktokcdn.com/);
-      assert.match(res.value.videos[1], /^https:\/\/v\d+.tiktokcdn.com/);
-      assert.match(res.value.videos[2], /^https:\/\/api-h\d+.tiktokv.com/);
-    });
+  test("fetchTobyg74_v1", async () => {
+    const res = await fetchTobyg74_v1("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 3);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+.tiktokcdn.com/);
+    assert.match(res.value.videos[1], /^https:\/\/v\d+.tiktokcdn.com/);
+    assert.match(res.value.videos[2], /^https:\/\/api-h\d+.tiktokv.com/);
   });
 }
 
@@ -80,25 +76,28 @@ const fetchTobyg74_v3 = FetchFactory("tiktok/tobyg74_v3", {
   },
   parseFn(data) {
     if (data?.status === "success" && data.result) {
-      return [data.result.video_hd, data.result.video1, data.result.video2].filter(startsWithHttp);
+      return {
+        videos: [data.result.video_hd, data.result.video1, data.result.video2].filter(
+          startsWithHttp,
+        ),
+      };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchTobyg74_v3", (it) => {
-    it("fetchTobyg74_v3", async () => {
-      const res = await fetchTobyg74_v3("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 3);
-      assert.match(res.value.videos[0], /^https:\/\/cdn\d+.musdown.xyz/);
-      assert.match(res.value.videos[1], /^https:\/\/musdown.xyz/);
-      assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchTobyg74_v3", async () => {
+    const res = await fetchTobyg74_v3("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 3);
+    assert.match(res.value.videos[0], /^https:\/\/cdn\d+.musdown.xyz/);
+    assert.match(res.value.videos[1], /^https:\/\/musdown.xyz/);
+    assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -107,59 +106,158 @@ const fetchTikChan = FetchFactory("tiktok/TikChan", {
     return await TikChan.download(url);
   },
   parseFn(data) {
-    return [data?.no_wm, data?.wm].filter(startsWithHttp);
+    return { videos: [data?.no_wm, data?.wm].filter(startsWithHttp) };
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchTikChan", (it) => {
-    it("fetchTikChan", async () => {
-      const res = await fetchTikChan("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 2);
-      assert.match(res.value.videos[0], /^https:\/\/ttdownloader.com/);
-      assert.match(res.value.videos[1], /^https:\/\/ttdownloader.com/);
-    });
+  test("fetchTikChan", async () => {
+    const res = await fetchTikChan("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 2);
+    assert.match(res.value.videos[0], /^https:\/\/ttdownloader.com/);
+    assert.match(res.value.videos[1], /^https:\/\/ttdownloader.com/);
+  });
+}
+
+// https://github.com/swherden/tiktok-scraper-nowatermarks/blob/main/src/index.ts
+async function TiktokScraperNowatermarks(videoUrl) {
+  return new Promise((resolve, reject) => {
+    if (!videoUrl || videoUrl.length === 0) {
+      reject(new Error("No video URL provided"));
+    }
+    fetch("https://tikfast.net/en")
+      .then((mainResponse) => {
+        const cookie = mainResponse.headers.get("set-cookie");
+        if (cookie) {
+          fetch("https://tikfast.net/tik-download/download-link", {
+            headers: {
+              accept: "application/json, text/javascript, */*; q=0.01",
+              "accept-language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
+              "content-type": "application/json",
+              "sec-ch-ua": '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
+              "sec-ch-ua-mobile": "?0",
+              "sec-ch-ua-platform": '"macOS"',
+              "sec-fetch-dest": "empty",
+              "sec-fetch-mode": "cors",
+              "sec-fetch-site": "same-origin",
+              "x-requested-with": "XMLHttpRequest",
+              cookie,
+              Referer: "https://tikfast.net/en",
+              "Referrer-Policy": "strict-origin-when-cross-origin",
+            },
+            body: `{"0": "${videoUrl}"}`,
+            method: "POST",
+          })
+            .then((downloadLinkResponse) => downloadLinkResponse.json())
+            .then((downloadLinkJson) => {
+              if (
+                downloadLinkJson &&
+                downloadLinkJson.status === "ok" &&
+                downloadLinkJson.code === 200 &&
+                downloadLinkJson.data &&
+                downloadLinkJson.data.length > 0
+              ) {
+                const { data } = downloadLinkJson;
+                for (const dataItem of data) {
+                  const link =
+                    dataItem === null || dataItem === void 0 ? void 0 : dataItem.water_free_link;
+                  if (link) {
+                    fetch("https://tikfast.net/tik-download/download", {
+                      headers: {
+                        accept: "application/json, text/javascript, */*; q=0.01",
+                        "accept-language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
+                        "content-type": "application/json",
+                        "sec-ch-ua":
+                          '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
+                        "sec-ch-ua-mobile": "?0",
+                        "sec-ch-ua-platform": '"macOS"',
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "same-origin",
+                        "x-requested-with": "XMLHttpRequest",
+                        cookie,
+                        Referer: "https://tikfast.net/en",
+                        "Referrer-Policy": "strict-origin-when-cross-origin",
+                      },
+                      body: `{"url": "${link}"}`,
+                      method: "POST",
+                    })
+                      .then((downloadResponse) => downloadResponse.json())
+                      .then((downloadJson) => {
+                        if (
+                          downloadJson.status === "ok" &&
+                          downloadJson.code === 200 &&
+                          downloadJson.data &&
+                          downloadJson.data.length > 0
+                        ) {
+                          const responseData = downloadJson.data[0];
+                          if (responseData) {
+                            responseData.description = downloadLinkJson.data[0].description;
+                            responseData.cover_url = downloadLinkJson.data[0].cover_url;
+                            resolve(responseData);
+                          } else {
+                            reject(new Error("[Fetching download] No data found"));
+                          }
+                        } else {
+                          reject(new Error("[Fetching download] error"));
+                        }
+                      })
+                      .catch((err) => reject(err));
+                  } else {
+                    reject(new Error("[Fetching download link] No link found"));
+                  }
+                }
+              } else {
+                reject(new Error("[Fetching download-link] error"));
+              }
+            })
+            .catch((err) => reject(err));
+        } else {
+          reject(new Error("No cookie found"));
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 }
 
 const fetchTiktokScraperNowatermarks = FetchFactory("tiktok/TiktokScraperNowatermarks", {
   async fetchFn(url) {
-    const parsed = parseTiktokUrl(url);
-    if (parsed.id == null && parsed.username == null) {
-      throw new StacklessError("Only supports long url");
-    }
     return await TiktokScraperNowatermarks(url);
   },
   parseFn(data) {
-    return [data.url].filter(startsWithHttp);
+    return { videos: [data.url].filter(startsWithHttp) };
   },
+  checkFn,
   tmpFileNameFn,
+  checkUrlFn: assertLongUrl,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { describe, it } = require("node:test");
 
-  describe("fetchTiktokScraperNowatermarks", (it) => {
-    it("fetchTiktokScraperNowatermarks", async () => {
+  describe("fetchTiktokScraperNowatermarks", () => {
+    it("long url", async () => {
       const res = await fetchTiktokScraperNowatermarks(
         "https://www.tiktok.com/@andakitty/video/7295937209176214816",
-        {
-          loadFromDisk: true,
-        }
+        { loadFromDisk: true },
       );
       assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m.tiktokcdn.com/);
+      assert.equal(res.value.videos.length, 1);
+      assert.match(res.value.videos[0], /^https:\/\/.+myqcloud.com/);
     });
+
     it("not support short urls", async () => {
       const res = await fetchTiktokScraperNowatermarks("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: false,
+        loadFromDisk: true,
       });
       assert.ok(res.isErr);
       assert.match(res.error.message, /Only supports long url/);
@@ -172,23 +270,24 @@ const fetchPrevter = FetchFactory("tiktok/prevter", {
     return await prevter(url);
   },
   parseFn(data) {
-    return [data?.videoNoWatermark?.url, data?.videoWatermark?.url].filter(startsWithHttp);
+    return {
+      videos: [data?.videoNoWatermark?.url, data?.videoWatermark?.url].filter(startsWithHttp),
+    };
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchPrevter", (it) => {
-    it("fetchPrevter", async () => {
-      const res = await fetchPrevter("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 2);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-      assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchPrevter", async () => {
+    const res = await fetchPrevter("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 2);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
+    assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -197,24 +296,23 @@ const fetchBtchDownloader = FetchFactory("tiktok/BtchDownloader", {
     return await BtchDownloader(url);
   },
   parseFn(data) {
-    return data?.video?.filter(startsWithHttp);
+    return { videos: data?.video?.filter(startsWithHttp) };
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchBtchDownloader", (it) => {
-    it("fetchBtchDownloader", async () => {
-      const res = await fetchBtchDownloader("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
+  test("fetchBtchDownloader", async () => {
+    const res = await fetchBtchDownloader("https://vt.tiktok.com/ZSNwYG2DD/", {
+      loadFromDisk: true,
     });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -223,24 +321,21 @@ const fetchTiktokurl = FetchFactory("tiktok/tiktokurl", {
     return await tiktokurl(url);
   },
   parseFn(data) {
-    return [data.video].filter(startsWithHttp);
+    return { videos: [data.video].filter(startsWithHttp) };
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchTiktokurl", (it) => {
-    it("fetchTiktokurl", async () => {
-      const res = await fetchTiktokurl("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchTiktokurl", async () => {
+    const res = await fetchTiktokurl("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -285,24 +380,21 @@ const fetchRuhend = FetchFactory("tiktok/ruhend", {
     return await ruhend(url);
   },
   parseFn(data) {
-    return [data.video].filter(startsWithHttp);
+    return { videos: [data.video].filter(startsWithHttp) };
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchRuhend", (it) => {
-    it("fetchRuhend", async () => {
-      const res = await fetchRuhend("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchRuhend", async () => {
+    const res = await fetchRuhend("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -336,53 +428,49 @@ const fetchKaveesha = FetchFactory("tiktok/kaveesha", {
     return await kaveesha(url);
   },
   parseFn(data) {
-    return [data.video].filter(startsWithHttp);
+    return { videos: [data.video].filter(startsWithHttp) };
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchKaveesha", (it) => {
-    it("fetchKaveesha", async () => {
-      const res = await fetchKaveesha("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchKaveesha", async () => {
+    const res = await fetchKaveesha("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
-const tiklydownSanzy1 = FetchFactory("tiktok/tiklydownSanzy1", {
+const fetchTiklydownSanzy1 = FetchFactory("tiktok/tiklydownSanzy1", {
   async fetchFn(url) {
     return await tiklydownSanzy.v1(url);
   },
   parseFn(data) {
     if (data.video) {
-      return [data.video.noWatermark, data.video.watermark].filter(startsWithHttp);
+      return { videos: [data.video.noWatermark, data.video.watermark].filter(startsWithHttp) };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("tiklydownSanzy1", (it) => {
-    it("tiklydownSanzy1", async () => {
-      const res = await tiklydownSanzy1("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 2);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-      assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
+  test("fetchTiklydownSanzy1", async () => {
+    const res = await fetchTiklydownSanzy1("https://vt.tiktok.com/ZSNwYG2DD/", {
+      loadFromDisk: true,
     });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 2);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
+    assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -392,25 +480,22 @@ const fetchTiktod = FetchFactory("tiktok/tiktod", {
   },
   parseFn(data) {
     if (data?.status === 200 && data.result) {
-      return [data.result.media].filter(startsWithHttp);
+      return { videos: [data.result.media].filter(startsWithHttp) };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchTiktod", (it) => {
-    it("fetchTiktod", async () => {
-      const res = await fetchTiktod("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchTiktod", async () => {
+    const res = await fetchTiktod("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -420,25 +505,24 @@ const fetchTikTokNoWatermark = FetchFactory("tiktok/TikTokNoWatermark", {
   },
   parseFn(data) {
     if (data?.status === "ok" && data?.result?.details) {
-      return [data.result.details.video_url].filter(startsWithHttp);
+      return { videos: [data.result.details.video_url].filter(startsWithHttp) };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchTikTokNoWatermark", (it) => {
-    it("fetchTikTokNoWatermark", async () => {
-      const res = await fetchTikTokNoWatermark("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
+  test("fetchTikTokNoWatermark", async () => {
+    const res = await fetchTikTokNoWatermark("https://vt.tiktok.com/ZSNwYG2DD/", {
+      loadFromDisk: true,
     });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -448,25 +532,22 @@ const fetchNayan = FetchFactory("tiktok/nayan", {
   },
   parseFn(data) {
     if (data?.status && data.data) {
-      return [data.data.video].filter(startsWithHttp);
+      return { videos: [data.data.video].filter(startsWithHttp) };
     }
   },
+  checkFn,
   tmpFileNameFn,
 });
 
-if (globalThis.UVU_DEFER) {
-  const assert = require("uvu/assert");
-  const { describe } = require("tests/utils");
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  const assert = require("node:assert/strict");
+  const { test } = require("node:test");
 
-  describe("fetchNayan", (it) => {
-    it("fetchNayan", async () => {
-      const res = await fetchNayan("https://vt.tiktok.com/ZSNwYG2DD/", {
-        loadFromDisk: true,
-      });
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-      assert.is(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    });
+  test("fetchNayan", async () => {
+    const res = await fetchNayan("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -479,11 +560,11 @@ if (globalThis.UVU_DEFER) {
 //     //   return [data.result.video_hd, data.result.video1, data.result.video2].filter(startsWithHttp);
 //     // }
 //   },
-//   tmpFileNameFn,
+//   checkFn,tmpFileNameFn,
 // });
 
-// TODO: uninstall: node-tiklydown tiktok-scraper @phaticusthiccy/open-apis social_media_downloader
 module.exports = {
+  // fetchSmth,
   fetchSnaptik,
   fetchTobyg74_v1,
   fetchTobyg74_v3,
@@ -494,9 +575,8 @@ module.exports = {
   fetchTiktokurl,
   fetchRuhend,
   fetchKaveesha,
-  tiklydownSanzy1,
+  fetchTiklydownSanzy1,
   fetchTiktod,
-  TikTokNoWatermark,
+  fetchTikTokNoWatermark,
   fetchNayan,
-  // fetchSmth,
 };
