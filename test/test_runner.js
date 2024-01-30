@@ -12,7 +12,7 @@ const source = ["src/**/*.js", "tests/**/*.test.js"];
 const ignore = [
   "*/face-service.js",
   "*/senya-service.js",
-  "src/*-service.js",
+  "**/*-service.js",
   "src/services/tiktok/apis/index.js",
 ];
 

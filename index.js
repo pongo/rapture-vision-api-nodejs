@@ -2,12 +2,12 @@
 
 require("dotenv").config();
 const express = require("express");
-const { getTiktok } = require("./src/tiktok-service");
+const { getTiktok } = require("./src/services/tiktok-service");
 const { timeStart } = require("./src/utils/time-start");
-const { getInstagram, getInstagramStory } = require("./src/instagram-service");
-const { getThreads } = require("./src/threads-service");
-const { getTwitter } = require("./src/services/twitter/twitter");
-const { checkSenya } = require("./src/senya-service");
+const { getInstagram, getInstagramStory } = require("./src/services/instagram-service");
+const { getThreads } = require("./src/services/threads-service");
+const { getTwitter } = require("./src/services/twitter-service");
+const { checkSenya } = require("./src/services/senya-service");
 
 const app = express();
 const port = process.env.PORT || 3000;

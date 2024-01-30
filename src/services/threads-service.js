@@ -1,11 +1,11 @@
 "use strict";
 
 const ThreadsAPI = require("threads-api").ThreadsAPI;
-const { Ok, Err } = require("./utils/result");
+const { Ok, Err } = require("../utils/result");
 const axios = require("axios");
 const writeJsonFile = require("write-json-file");
 const fs = require("node:fs/promises");
-const SimpleMemCache = require("./utils/simple-mem-cache").SimpleMemCache;
+const SimpleMemCache = require("../utils/simple-mem-cache").SimpleMemCache;
 
 const cache = new SimpleMemCache();
 const EXPIRE = 24 * 60 * 60 * 1000;

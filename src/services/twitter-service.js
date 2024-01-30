@@ -1,8 +1,8 @@
 "use strict";
 
-const { Balancer } = require("../../utils/balancer");
-const { Err } = require("../../utils/result");
-const { apis } = require("./twitter-apis");
+const { Balancer } = require("../utils/balancer");
+const { Err } = require("../utils/result");
+const { apis } = require("./twitter/twitter-apis");
 
 const balancer = new Balancer({ name: "twitter", apis, shuffle: true, strategy: "last" });
 
