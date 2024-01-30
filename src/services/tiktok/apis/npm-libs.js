@@ -252,7 +252,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
       );
       assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
       assert.equal(res.value.videos.length, 1);
-      assert.match(res.value.videos[0], /^https:\/\/.+myqcloud.com/);
+      assert.match(res.value.videos[0], /^https:\/\/v\d+m.tiktokcdn.com/);
     });
 
     it("not support short urls", async () => {
