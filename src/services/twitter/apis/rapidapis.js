@@ -1,12 +1,10 @@
 "use strict";
 
 const delay = require("node:timers/promises").setTimeout;
-const { FetchFactory } = require("../../../utils/fetch-factory");
 const { requestRapidApi } = require("../../../utils/rapidapi");
 const { StacklessError } = require("../../../utils/stackless-error");
 const {
-  tmpFileNameFn,
-  checkFn,
+  TwitterFactory,
   parseThreadedConversationV2,
   parseGlavierTweet,
   parseDavethebeast241,
@@ -14,7 +12,7 @@ const {
 } = require("./shared");
 
 // https://rapidapi.com/omarmhaimdat/api/twitter-v24/
-const fetchOmarmhaimdat24 = FetchFactory("twitter/omarmhaimdat24", {
+const fetchOmarmhaimdat24 = TwitterFactory("twitter/omarmhaimdat24", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter-v24.p.rapidapi.com/tweet/details", {
       host: "twitter-v24.p.rapidapi.com",
@@ -24,12 +22,10 @@ const fetchOmarmhaimdat24 = FetchFactory("twitter/omarmhaimdat24", {
   parseFn({ remaining, reset, data }, id) {
     return { ...parseThreadedConversationV2(id, data.data), remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 // https://rapidapi.com/Glavier/api/twitter135
-const fetchGlavier135TweetDetail = FetchFactory("twitter/Glavier135/TweetDetail", {
+const fetchGlavier135TweetDetail = TwitterFactory("twitter/Glavier135/TweetDetail", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter135.p.rapidapi.com/v2/TweetDetail/", {
       host: "twitter135.p.rapidapi.com",
@@ -39,12 +35,10 @@ const fetchGlavier135TweetDetail = FetchFactory("twitter/Glavier135/TweetDetail"
   parseFn({ remaining, reset, data }, id) {
     return { ...parseThreadedConversationV2(id, data.data), remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 // https://rapidapi.com/Glavier/api/twitter135
-const fetchGlavier135Tweet = FetchFactory("twitter/Glavier135/Tweet", {
+const fetchGlavier135Tweet = TwitterFactory("twitter/Glavier135/Tweet", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter135.p.rapidapi.com/v2/Tweet/", {
       host: "twitter135.p.rapidapi.com",
@@ -54,12 +48,10 @@ const fetchGlavier135Tweet = FetchFactory("twitter/Glavier135/Tweet", {
   parseFn({ remaining, reset, data }) {
     return { ...parseGlavierTweet(data), remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 // https://rapidapi.com/davethebeast/api/twitter241
-const fetchDavethebeast241 = FetchFactory("twitter/davethebeast241", {
+const fetchDavethebeast241 = TwitterFactory("twitter/davethebeast241", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter241.p.rapidapi.com/tweet", {
       host: "twitter241.p.rapidapi.com",
@@ -88,12 +80,10 @@ const fetchDavethebeast241 = FetchFactory("twitter/davethebeast241", {
 
     return { ...orig, remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 // https://rapidapi.com/abcdsxg/api/twitter-v1-1-v2-api
-const fetchAbcdsxg1TweetResultByRestId = FetchFactory("twitter/abcdsxg1/TweetResultByRestId", {
+const fetchAbcdsxg1TweetResultByRestId = TwitterFactory("twitter/abcdsxg1/TweetResultByRestId", {
   async fetchFn(id) {
     return await requestRapidApi(
       "GET",
@@ -117,12 +107,10 @@ const fetchAbcdsxg1TweetResultByRestId = FetchFactory("twitter/abcdsxg1/TweetRes
   parseFn({ remaining, reset, data }, id) {
     return { ...parseAbcdsxg1TweetResultByRestId(data, id), remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 // https://rapidapi.com/restocked-gAGxip8a_/api/twitter-api47
-const fetchRestocked47 = FetchFactory("twitter/restocked47", {
+const fetchRestocked47 = TwitterFactory("twitter/restocked47", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter-api47.p.rapidapi.com/v1/tweet-details", {
       host: "twitter-api47.p.rapidapi.com",
@@ -132,11 +120,9 @@ const fetchRestocked47 = FetchFactory("twitter/restocked47", {
   parseFn({ remaining, reset, data }, id) {
     return { ...parseThreadedConversationV2(id, data), remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
-// const fetchSmth = FetchFactory("twitter/restocked47", {
+// const fetchSmth = TwitterFactory("twitter/restocked47", {
 //   async fetchFn(id) {
 //     return await requestRapidApi("GET", "https://twitter-api47.p.rapidapi.com/v1/tweet-details", {
 //       host: "twitter-api47.p.rapidapi.com",
@@ -158,8 +144,6 @@ const fetchRestocked47 = FetchFactory("twitter/restocked47", {
 //     // const videos = [data?.details?.download_url].filter(startsWithHttp);
 //     // return { videos, remaining, reset };
 //   },
-//   checkFn,
-//   tmpFileNameFn,
 // });
 
 module.exports = {

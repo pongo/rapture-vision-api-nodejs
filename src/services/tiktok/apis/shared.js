@@ -2,6 +2,7 @@
 
 const { StacklessError } = require("../../../utils/stackless-error");
 const { parseTiktokUrl } = require("../parse-tiktok-url");
+const { FetchFactory } = require("../../../utils/fetch-factory");
 
 function startsWithHttp(str) {
   return str?.startsWith("http");
@@ -62,4 +63,8 @@ function checkFn({ videos }) {
   return Array.isArray(videos) && videos.length > 0;
 }
 
-module.exports = { startsWithHttp, tmpFileNameFn, checkFn, assertLongUrl, assertId };
+function TiktokFactory(apiName, options) {
+  return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
+}
+
+module.exports = { startsWithHttp, assertLongUrl, assertId, TiktokFactory };

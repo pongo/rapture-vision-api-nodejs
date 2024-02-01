@@ -1,10 +1,9 @@
 "use strict";
 
-const { FetchFactory } = require("../../../utils/fetch-factory");
 const { requestRapidApi } = require("../../../utils/rapidapi");
 const { StacklessError } = require("../../../utils/stackless-error");
 const { parseTiktokUrl } = require("../parse-tiktok-url");
-const { startsWithHttp, tmpFileNameFn, checkFn, assertLongUrl, assertId } = require("./shared");
+const { startsWithHttp, TiktokFactory, assertLongUrl, assertId } = require("./shared");
 
 /*
 
@@ -15,7 +14,7 @@ TODO: 404 https://rapidapi.com/tikwm-tikwm-default/api/tiktok-scraper7/
 */
 
 // https://rapidapi.com/maatootz/api/tiktok-full-info-without-watermark/
-const fetchMaatootz = FetchFactory("tiktok/maatootz", {
+const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -42,8 +41,6 @@ const fetchMaatootz = FetchFactory("tiktok/maatootz", {
     const videos = [...data.video, ...data.OriginalWatermarkedVideo].filter(startsWithHttp);
     return { videos, remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -60,7 +57,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/maatootz/api/tiktok-downloader-download-tiktok-videos-without-watermark/
-const fetchMaatootz2 = FetchFactory("tiktok/maatootz2", {
+const fetchMaatootz2 = TiktokFactory("tiktok/maatootz2", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -75,8 +72,6 @@ const fetchMaatootz2 = FetchFactory("tiktok/maatootz2", {
     const videos = [...data.video, ...data.OriginalWatermarkedVideo].filter(startsWithHttp);
     return { videos, remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -93,7 +88,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/datauniverse/api/tiktok82/
-const fetchTiktok82 = FetchFactory("tiktok/tiktok82", {
+const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok82.p.rapidapi.com/getDownloadVideo", {
       host: "tiktok82.p.rapidapi.com",
@@ -107,9 +102,7 @@ const fetchTiktok82 = FetchFactory("tiktok/tiktok82", {
     }
     return { remaining, reset };
   },
-  checkFn,
   checkUrlFn: assertLongUrl,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -140,7 +133,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/yi005/api/tiktok-download-without-watermark/
-const fetchYi005 = FetchFactory("tiktok/yi005", {
+const fetchYi005 = TiktokFactory("tiktok/yi005", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -160,8 +153,6 @@ const fetchYi005 = FetchFactory("tiktok/yi005", {
     }
     return { remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -178,7 +169,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/liuzhaolong765481/api/tiktok-video-feature-summary/
-const fetchVoyagel = FetchFactory("tiktok/voyagel", {
+const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok-video-feature-summary.p.rapidapi.com/", {
       host: "tiktok-video-feature-summary.p.rapidapi.com",
@@ -194,8 +185,6 @@ const fetchVoyagel = FetchFactory("tiktok/voyagel", {
     }
     return { remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -212,7 +201,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/littlesun123/api/tiktok-video-no-watermark10/
-const fetchLittlesun123 = FetchFactory("tiktok/littlesun123", {
+const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -238,8 +227,6 @@ const fetchLittlesun123 = FetchFactory("tiktok/littlesun123", {
     }
     return { remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -256,7 +243,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/omarmhaimdat/api/tiktok-api6/
-const fetchOmarmhaimdat = FetchFactory("tiktok/omarmhaimdat", {
+const fetchOmarmhaimdat = TiktokFactory("tiktok/omarmhaimdat", {
   async fetchFn(url) {
     const parsed = parseTiktokUrl(url);
     if (parsed.id == null) {
@@ -271,9 +258,7 @@ const fetchOmarmhaimdat = FetchFactory("tiktok/omarmhaimdat", {
     const videos = [data?.details?.download_url].filter(startsWithHttp);
     return { videos, remaining, reset };
   },
-  checkFn,
   checkUrlFn: assertId,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -302,7 +287,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/littlesun123/api/tiktok-api15/
-const fetchLittlesun123tapi15 = FetchFactory("tiktok/littlesun123_tapi15", {
+const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -322,8 +307,6 @@ const fetchLittlesun123tapi15 = FetchFactory("tiktok/littlesun123_tapi15", {
     }
     return { remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -342,7 +325,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/llbbmm/api/tiktok-download5/
-const fetchLlbbmm = FetchFactory("tiktok/llbbmm", {
+const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok-download5.p.rapidapi.com/getVideo", {
       host: "tiktok-download5.p.rapidapi.com",
@@ -358,8 +341,6 @@ const fetchLlbbmm = FetchFactory("tiktok/llbbmm", {
     }
     return { remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -378,7 +359,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 }
 
 // https://rapidapi.com/JoTucker/api/tiktok-scraper2/
-const fetchJoTucker = FetchFactory("tiktok/JoTucker", {
+const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -393,8 +374,6 @@ const fetchJoTucker = FetchFactory("tiktok/JoTucker", {
     const videos = [data?.no_watermark].filter(startsWithHttp);
     return { videos, remaining, reset };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -411,7 +390,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-// const fetchSmth = FetchFactory("tiktok/JoTucker", {
+// const fetchSmth = TiktokFactory("tiktok/JoTucker", {
 //   async fetchFn(url) {
 //     return await requestRapidApi(
 //       "GET",
@@ -437,8 +416,6 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 //     // const videos = [data?.details?.download_url].filter(startsWithHttp);
 //     // return { videos, remaining, reset };
 //   },
-//   checkFn,
-//   tmpFileNameFn,
 // });
 
 module.exports = {

@@ -1,7 +1,6 @@
 "use strict";
 
 const Snaptik = require("snaptik");
-const { FetchFactory } = require("../../../utils/fetch-factory");
 const { TiktokDL } = require("@tobyg74/tiktok-api-dl");
 const TikChan = require("tikchan");
 const axios = require("axios");
@@ -12,11 +11,11 @@ const { tiktokurl } = require("tiktokurl");
 const tiklydownSanzy = require("tiklydown-sanzy");
 const tiktod = require("tiktod").download;
 const TikTokNoWatermark = require("tiktok-no-watermark-api");
-const { startsWithHttp, tmpFileNameFn, checkFn, assertLongUrl } = require("./shared");
+const { startsWithHttp, TiktokFactory, assertLongUrl } = require("./shared");
 const nayan = require("nayan-media-downloader").tikdown;
 const fetch = require("node-fetch"); // TODO: удалить при переходе на node >= 18
 
-const fetchSnaptik = FetchFactory("tiktok/snaptik", {
+const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
   async fetchFn(url) {
     const snaptik = new Snaptik(url);
     return await snaptik.download();
@@ -26,8 +25,6 @@ const fetchSnaptik = FetchFactory("tiktok/snaptik", {
       return { videos: [data.link_1, data.link_2, data.link_3].filter(startsWithHttp) };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -43,7 +40,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTobyg74_v1 = FetchFactory("tiktok/tobyg74_v1", {
+const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   async fetchFn(url) {
     return await TiktokDL(url, { version: "v1" });
   },
@@ -52,8 +49,6 @@ const fetchTobyg74_v1 = FetchFactory("tiktok/tobyg74_v1", {
       return { videos: data?.result?.video.filter(startsWithHttp) };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -70,7 +65,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTobyg74_v3 = FetchFactory("tiktok/tobyg74_v3", {
+const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   async fetchFn(url) {
     return await TiktokDL(url, { version: "v3" });
   },
@@ -83,8 +78,6 @@ const fetchTobyg74_v3 = FetchFactory("tiktok/tobyg74_v3", {
       };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -101,15 +94,13 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTikChan = FetchFactory("tiktok/TikChan", {
+const fetchTikChan = TiktokFactory("tiktok/TikChan", {
   async fetchFn(url) {
     return await TikChan.download(url);
   },
   parseFn(data) {
     return { videos: [data?.no_wm, data?.wm].filter(startsWithHttp) };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -228,15 +219,13 @@ async function TiktokScraperNowatermarks(videoUrl) {
   });
 }
 
-const fetchTiktokScraperNowatermarks = FetchFactory("tiktok/TiktokScraperNowatermarks", {
+const fetchTiktokScraperNowatermarks = TiktokFactory("tiktok/TiktokScraperNowatermarks", {
   async fetchFn(url) {
     return await TiktokScraperNowatermarks(url);
   },
   parseFn(data) {
     return { videos: [data.url].filter(startsWithHttp) };
   },
-  checkFn,
-  tmpFileNameFn,
   checkUrlFn: assertLongUrl,
 });
 
@@ -265,7 +254,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchPrevter = FetchFactory("tiktok/prevter", {
+const fetchPrevter = TiktokFactory("tiktok/prevter", {
   async fetchFn(url) {
     return await prevter(url);
   },
@@ -274,8 +263,6 @@ const fetchPrevter = FetchFactory("tiktok/prevter", {
       videos: [data?.videoNoWatermark?.url, data?.videoWatermark?.url].filter(startsWithHttp),
     };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -291,15 +278,13 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchBtchDownloader = FetchFactory("tiktok/BtchDownloader", {
+const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
   async fetchFn(url) {
     return await BtchDownloader(url);
   },
   parseFn(data) {
     return { videos: data?.video?.filter(startsWithHttp) };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -316,15 +301,13 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTiktokurl = FetchFactory("tiktok/tiktokurl", {
+const fetchTiktokurl = TiktokFactory("tiktok/tiktokurl", {
   async fetchFn(url) {
     return await tiktokurl(url);
   },
   parseFn(data) {
     return { videos: [data.video].filter(startsWithHttp) };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -375,15 +358,13 @@ async function ruhend(url) {
   };
 }
 
-const fetchRuhend = FetchFactory("tiktok/ruhend", {
+const fetchRuhend = TiktokFactory("tiktok/ruhend", {
   async fetchFn(url) {
     return await ruhend(url);
   },
   parseFn(data) {
     return { videos: [data.video].filter(startsWithHttp) };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -423,15 +404,13 @@ async function kaveesha(url) {
   }
 }
 
-const fetchKaveesha = FetchFactory("tiktok/kaveesha", {
+const fetchKaveesha = TiktokFactory("tiktok/kaveesha", {
   async fetchFn(url) {
     return await kaveesha(url);
   },
   parseFn(data) {
     return { videos: [data.video].filter(startsWithHttp) };
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -446,7 +425,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTiklydownSanzy1 = FetchFactory("tiktok/tiklydownSanzy1", {
+const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
   async fetchFn(url) {
     return await tiklydownSanzy.v1(url);
   },
@@ -455,8 +434,6 @@ const fetchTiklydownSanzy1 = FetchFactory("tiktok/tiklydownSanzy1", {
       return { videos: [data.video.noWatermark, data.video.watermark].filter(startsWithHttp) };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -474,7 +451,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTiktod = FetchFactory("tiktok/tiktod", {
+const fetchTiktod = TiktokFactory("tiktok/tiktod", {
   async fetchFn(url) {
     return await tiktod(url);
   },
@@ -483,8 +460,6 @@ const fetchTiktod = FetchFactory("tiktok/tiktod", {
       return { videos: [data.result.media].filter(startsWithHttp) };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -499,7 +474,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchTikTokNoWatermark = FetchFactory("tiktok/TikTokNoWatermark", {
+const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
   async fetchFn(url) {
     return await TikTokNoWatermark(url, true);
   },
@@ -508,8 +483,6 @@ const fetchTikTokNoWatermark = FetchFactory("tiktok/TikTokNoWatermark", {
       return { videos: [data.result.details.video_url].filter(startsWithHttp) };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -526,7 +499,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-const fetchNayan = FetchFactory("tiktok/nayan", {
+const fetchNayan = TiktokFactory("tiktok/nayan", {
   async fetchFn(url) {
     return await nayan(url);
   },
@@ -535,8 +508,6 @@ const fetchNayan = FetchFactory("tiktok/nayan", {
       return { videos: [data.data.video].filter(startsWithHttp) };
     }
   },
-  checkFn,
-  tmpFileNameFn,
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
@@ -551,7 +522,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-// const fetchSmth = FetchFactory("tiktok/nayan", {
+// const fetchSmth = TiktokFactory("tiktok/nayan", {
 //   async fetchFn(url) {
 //     return await nayan(url);
 //   },
@@ -560,7 +531,6 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 //     //   return [data.result.video_hd, data.result.video1, data.result.video2].filter(startsWithHttp);
 //     // }
 //   },
-//   checkFn,tmpFileNameFn,
 // });
 
 module.exports = {

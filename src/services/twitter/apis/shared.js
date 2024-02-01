@@ -1,5 +1,7 @@
 "use strict";
 
+const { FetchFactory } = require("../../../utils/fetch-factory");
+
 function tmpFileNameFn(id) {
   return id;
 }
@@ -127,12 +129,14 @@ function parseAbcdsxg1TweetResultByRestId(data, id) {
   return { text, images, videos };
 }
 
+function TwitterFactory(apiName, options) {
+  return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
+}
+
 module.exports = {
-  tmpFileNameFn,
-  checkFn,
-  startsWithHttp,
   parseThreadedConversationV2,
   parseGlavierTweet,
   parseDavethebeast241,
   parseAbcdsxg1TweetResultByRestId,
+  TwitterFactory,
 };
