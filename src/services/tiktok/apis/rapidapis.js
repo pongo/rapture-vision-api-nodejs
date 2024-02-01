@@ -147,13 +147,15 @@ const fetchYi005 = FetchFactory("tiktok/yi005", {
       "https://tiktok-download-without-watermark.p.rapidapi.com/analysis",
       {
         host: "tiktok-download-without-watermark.p.rapidapi.com",
-        params: { url, hd: "1" },
+        params: { url, hd: "0" },
       },
     );
   },
   parseFn({ remaining, reset, data }) {
     if (data.msg === "success" && data.data) {
-      const videos = [data.data?.hdplay, data.data?.play, data.data?.wmplay].filter(startsWithHttp);
+      const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
+        startsWithHttp,
+      );
       return { videos, remaining, reset };
     }
     return { remaining, reset };
@@ -175,16 +177,19 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
+// https://rapidapi.com/liuzhaolong765481/api/tiktok-video-feature-summary/
 const fetchVoyagel = FetchFactory("tiktok/voyagel", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok-video-feature-summary.p.rapidapi.com/", {
       host: "tiktok-video-feature-summary.p.rapidapi.com",
-      params: { url, hd: "1" },
+      params: { url, hd: "0" },
     });
   },
   parseFn({ remaining, reset, data }) {
     if (data.msg === "success" && data.data) {
-      const videos = [data.data?.hdplay, data.data?.play, data.data?.wmplay].filter(startsWithHttp);
+      const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
+        startsWithHttp,
+      );
       return { videos, remaining, reset };
     }
     return { remaining, reset };
@@ -200,10 +205,9 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   test("fetchVoyagel", async () => {
     const res = await fetchVoyagel("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
     assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-    assert.equal(res.value.videos.length, 3);
+    assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -215,7 +219,7 @@ const fetchLittlesun123 = FetchFactory("tiktok/littlesun123", {
       "https://tiktok-video-no-watermark10.p.rapidapi.com/index/Tiktok/getVideoInfo",
       {
         host: "tiktok-video-no-watermark10.p.rapidapi.com",
-        params: { url, hd: "1" },
+        params: { url, hd: "0" },
         parseLimitsFn(response) {
           return {
             remaining: parseInt(response.headers["x-ratelimit-request-remaining"], 10),
@@ -227,7 +231,9 @@ const fetchLittlesun123 = FetchFactory("tiktok/littlesun123", {
   },
   parseFn({ remaining, reset, data }) {
     if (data.msg === "success" && data.data) {
-      const videos = [data.data?.hdplay, data.data?.play, data.data?.wmplay].filter(startsWithHttp);
+      const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
+        startsWithHttp,
+      );
       return { videos, remaining, reset };
     }
     return { remaining, reset };
@@ -243,10 +249,9 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   test("fetchLittlesun123", async () => {
     const res = await fetchLittlesun123("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
     assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-    assert.equal(res.value.videos.length, 3);
+    assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -304,13 +309,15 @@ const fetchLittlesun123tapi15 = FetchFactory("tiktok/littlesun123_tapi15", {
       "https://tiktok-api15.p.rapidapi.com/index/Tiktok/getVideoInfo",
       {
         host: "tiktok-api15.p.rapidapi.com",
-        params: { url, hd: "1" },
+        params: { url, hd: "0" },
       },
     );
   },
   parseFn({ remaining, reset, data }) {
     if (data.msg === "success" && data.data) {
-      const videos = [data.data?.hdplay, data.data?.play, data.data?.wmplay].filter(startsWithHttp);
+      const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
+        startsWithHttp,
+      );
       return { videos, remaining, reset };
     }
     return { remaining, reset };
@@ -328,10 +335,9 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
       loadFromDisk: true,
     });
     assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-    assert.equal(res.value.videos.length, 3);
+    assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 
@@ -340,12 +346,14 @@ const fetchLlbbmm = FetchFactory("tiktok/llbbmm", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok-download5.p.rapidapi.com/getVideo", {
       host: "tiktok-download5.p.rapidapi.com",
-      params: { url, hd: "1" },
+      params: { url, hd: "0" },
     });
   },
   parseFn({ remaining, reset, data }) {
     if (data.msg === "success" && data.data) {
-      const videos = [data.data?.hdplay, data.data?.play, data.data?.wmplay].filter(startsWithHttp);
+      const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
+        startsWithHttp,
+      );
       return { videos, remaining, reset };
     }
     return { remaining, reset };
@@ -363,10 +371,9 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
       loadFromDisk: true,
     });
     assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
-    assert.equal(res.value.videos.length, 3);
+    assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
   });
 }
 

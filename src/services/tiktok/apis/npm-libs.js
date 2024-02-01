@@ -77,7 +77,7 @@ const fetchTobyg74_v3 = FetchFactory("tiktok/tobyg74_v3", {
   parseFn(data) {
     if (data?.status === "success" && data.result) {
       return {
-        videos: [data.result.video_hd, data.result.video1, data.result.video2].filter(
+        videos: [data.result.video1, data.result.video2, data.result.video_hd].filter(
           startsWithHttp,
         ),
       };
@@ -95,9 +95,9 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
     const res = await fetchTobyg74_v3("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
     assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
     assert.equal(res.value.videos.length, 3);
-    assert.match(res.value.videos[0], /^https:\/\/cdn\d+.musdown.xyz/);
-    assert.match(res.value.videos[1], /^https:\/\/musdown.xyz/);
-    assert.match(res.value.videos[2], /^https:\/\/v\d+m-default.akamaized.net/);
+    assert.match(res.value.videos[0], /^https:\/\/musdown.xyz/);
+    assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
+    assert.match(res.value.videos[2], /^https:\/\/cdn\d+.musdown.xyz/);
   });
 }
 
