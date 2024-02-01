@@ -12,13 +12,13 @@ const source = ["src/**/*.js", "tests/**/*.test.js"];
 const ignore = [
   "*/face-service.js",
   "*/senya-service.js",
-  "src/*-service.js",
-  "src/services/tiktok/apis/index.js",
+  "**/*-service.js",
+  // "src/services/tiktok/apis/index.js",
 ];
 
 files = fg(source, { ignore });
+// files = [`src/services/twitter/apis/index.js`];
 // files = fg(["src/services/tiktok/apis/*.js"]);
-// files = ["src/services/tiktok/adder.js"];
 
 // console.log(files);
 

@@ -1,7 +1,7 @@
 "use strict";
 
-const { checkFaceMatch } = require("./face-service");
-const { Ok } = require("./utils/result");
+const { checkFaceMatch } = require("./senya/face-service");
+const { Ok } = require("../utils/result");
 
 // мало ложных 0.58, по-умолчанию 0.6
 const DISTANCE_THRESHOLD = 0.58;

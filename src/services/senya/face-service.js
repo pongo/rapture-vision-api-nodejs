@@ -4,9 +4,9 @@ const canvas = require("canvas");
 const tf = require("@tensorflow/tfjs-node"); // @tensorflow/tfjs-node@1.2.1
 const faceapi = require("@vladmandic/face-api");
 const fs = require("fs");
-const { timeStart } = require("./utils/time-start");
-const { Ok } = require("./utils/result");
-const { Err } = require("./utils/result");
+const { timeStart } = require("../../utils/time-start");
+const { Ok } = require("../../utils/result");
+const { Err } = require("../../utils/result");
 
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
@@ -35,7 +35,7 @@ async function setup() {
 
     optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
       minConfidence,
-      maxResults,
+      maxResults
     });
 
     console.log(
@@ -138,7 +138,7 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
         label: match["_label"],
         distance: match["_distance"],
         aligned_box: face.alignedRect._box,
-        landmarks: face.landmarks,
+        landmarks: face.landmarks
       };
     });
 
@@ -154,8 +154,8 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
         x: parseInt(aligned_box._x, 10),
         y: parseInt(aligned_box._y, 10),
         width: parseInt(aligned_box._width, 10),
-        height: parseInt(aligned_box._height, 10),
-      },
+        height: parseInt(aligned_box._height, 10)
+      }
     }))
   );
 }
@@ -163,12 +163,13 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
 function drawBoxesAndSaveFile(matches, c) {
   drawFaceDetectBoxes();
   drawFaceLandmarks();
-  fs.writeFile("output.jpg", c.toBuffer("image/jpeg"), () => {});
+  fs.writeFile("output.jpg", c.toBuffer("image/jpeg"), () => {
+  });
 
   function drawFaceDetectBoxes() {
     for (const m of matches) {
       const drawBox = new faceapi.draw.DrawBox(m.aligned_box, {
-        label: `${m.label} (${m.distance.toFixed(2)})`,
+        label: `${m.label} (${m.distance.toFixed(2)})`
       });
       drawBox.draw(c);
     }

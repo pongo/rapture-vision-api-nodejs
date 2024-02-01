@@ -1,7 +1,7 @@
 "use strict";
 
 const instagramGetUrl = require("instagram-url-direct");
-const { Ok, Err } = require("./utils/result");
+const { Ok, Err } = require("../utils/result");
 const axios = require("axios");
 
 async function getInstagramGetUrl(url) {
