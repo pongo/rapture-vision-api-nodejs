@@ -6,13 +6,13 @@
   "scripts": {
     "start": "node index.js",
     "test": "node test/test_runner.js",
-    "test:watch": "watchexec -qc --shell=none -e js -w src -w test node test/test_runner.js"
+    "test:watch": "watchexec -qc --shell=none -e js -w src -w test node test/test_runner.js",
+    "coverage": "c8 --clean --all --src src -r text -r html node test/test_runner.js && echo Report: coverage/index.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "--deps": {
-  },
+  "--deps": {},
   "dependencies": {
     "@tensorflow/tfjs-node": "3.20.0",
     "@vladmandic/face-api": "^1.7.3",
