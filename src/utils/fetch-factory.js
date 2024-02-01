@@ -32,7 +32,8 @@ function FetchFactory(
     saveFn = undefined,
   } = {},
 ) {
-  return async function (url, { loadFromDisk = false, saveToDisk = false } = {}) {
+  return async function (url, options = {}) {
+    const { loadFromDisk = false, saveToDisk = false } = options;
     try {
       _checkUrl();
 
@@ -46,7 +47,7 @@ function FetchFactory(
         await _save(data);
       }
 
-      const result = parseFn(data);
+      const result = await parseFn(data, url, options);
       if (checkFn(result)) {
         return Ok(result);
       } else {
@@ -118,7 +119,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         assert.deepEqual(fetchFn.mock.calls[0].arguments, ["url2"]);
 
         assert.equal(parseFn.mock.calls.length, 1);
-        assert.deepEqual(parseFn.mock.calls[0].arguments, [{ code: "42" }]);
+        assert.deepEqual(parseFn.mock.calls[0].arguments, [{ code: "42" }, "url2", {}]);
 
         assert.equal(tmpFileNameFn.mock.calls.length, 0);
         assert.equal(loadFn.mock.calls.length, 0);
@@ -184,7 +185,11 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         );
 
         assert.equal(parseFn.mock.calls.length, 1, "parseFn calls");
-        assert.deepEqual(parseFn.mock.calls[0].arguments, [{ code: "43" }], "parseFn args");
+        assert.deepEqual(
+          parseFn.mock.calls[0].arguments,
+          [{ code: "43" }, "url2", { loadFromDisk: true }],
+          "parseFn args",
+        );
 
         assert.equal(tmpFileNameFn.mock.calls.length, 1, "tmpFileNameFn calls");
         assert.deepEqual(tmpFileNameFn.mock.calls[0].arguments, ["url2"], "tmpFileNameFn args");
@@ -219,7 +224,11 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         assert.deepEqual(fetchFn.mock.calls[0].arguments, ["url2"]);
 
         assert.equal(parseFn.mock.calls.length, 1);
-        assert.deepEqual(parseFn.mock.calls[0].arguments, [{ code: "42" }]);
+        assert.deepEqual(parseFn.mock.calls[0].arguments, [
+          { code: "42" },
+          "url2",
+          { saveToDisk: true },
+        ]);
 
         assert.equal(tmpFileNameFn.mock.calls.length, 1);
         assert.equal(saveFn.mock.calls.length, 1, "saveFn calls");
