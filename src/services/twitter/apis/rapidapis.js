@@ -10,7 +10,6 @@ const {
   parseThreadedConversationV2,
   parseGlavierTweet,
   parseDavethebeast241,
-  parseAbcdsxg1,
   parseAbcdsxg1TweetResultByRestId,
 } = require("./shared");
 
@@ -93,26 +92,6 @@ const fetchDavethebeast241 = FetchFactory("twitter/davethebeast241", {
   tmpFileNameFn,
 });
 
-// TODO: del
-// https://rapidapi.com/abcdsxg/api/twitter-v1-1-v2-api
-const fetchAbcdsxg1 = FetchFactory("twitter/abcdsxg1", {
-  async fetchFn(id) {
-    return await requestRapidApi(
-      "GET",
-      "https://twitter-v1-1-v2-api.p.rapidapi.com/sapi/TweetDetail",
-      {
-        host: "twitter-v1-1-v2-api.p.rapidapi.com",
-        params: { tweet_id: id },
-      },
-    );
-  },
-  parseFn({ remaining, reset, data }, id) {
-    return { ...parseAbcdsxg1(data, id), remaining, reset };
-  },
-  checkFn,
-  tmpFileNameFn,
-});
-
 // https://rapidapi.com/abcdsxg/api/twitter-v1-1-v2-api
 const fetchAbcdsxg1TweetResultByRestId = FetchFactory("twitter/abcdsxg1/TweetResultByRestId", {
   async fetchFn(id) {
@@ -189,7 +168,6 @@ module.exports = {
   fetchGlavier135TweetDetail,
   fetchGlavier135Tweet,
   fetchDavethebeast241,
-  fetchAbcdsxg1,
   fetchAbcdsxg1TweetResultByRestId,
   fetchRestocked47,
 };

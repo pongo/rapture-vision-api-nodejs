@@ -12,7 +12,6 @@ const apis = [
   ["fetchGlavier135TweetDetail", rapidApis.fetchGlavier135TweetDetail],
   // // ["fetchGlavier135Tweet", rapidApis.fetchGlavier135Tweet],
   ["fetchDavethebeast241", rapidApis.fetchDavethebeast241],
-  // ["fetchAbcdsxg1", rapidApis.fetchAbcdsxg1],
   ["fetchAbcdsxg1TweetResultByRestId", rapidApis.fetchAbcdsxg1TweetResultByRestId],
   ["fetchRestocked47", rapidApis.fetchRestocked47],
 ];

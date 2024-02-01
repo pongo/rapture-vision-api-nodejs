@@ -14,6 +14,7 @@ class FetchCatchError extends Error {
   }
 }
 
+// TODO: переименовать. ошибка возвращается если не проходит checkFn
 class FetchEmpty extends StacklessError {
   constructor(url) {
     super(`Empty fetch for "${url}"`);

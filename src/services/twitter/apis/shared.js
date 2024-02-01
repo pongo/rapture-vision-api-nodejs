@@ -97,36 +97,6 @@ function parseGlavierTweet(data) {
   return { text, images, videos };
 }
 
-// TODO: del me
-async function _parseDavethebeast241(data, id, fetchFn, options) {
-  if (data.data && "threaded_conversation_with_injections_v2" in data.data) {
-    return parseThreadedConversationV2(id, data.data);
-  }
-
-  const post = data.tweet;
-  const text = post?.full_text ?? "";
-
-  let quotedImages = [];
-  let quotedVideos = [];
-  if (post?.is_quote_status && options.loadQuote !== false) {
-    if (!options.loadFromDisk) await delay(1000);
-    const quotedResult = await fetchFn(post.quoted_status_id_str, {
-      ...options,
-      loadQuote: false,
-    });
-    if (quotedResult.isOk) {
-      quotedImages = quotedResult.value.images;
-      quotedVideos = quotedResult.value.videos;
-    }
-  }
-
-  const media = post?.extended_entities?.media ?? [];
-  const images = [...getImages(media), ...quotedImages];
-  const videos = [...getVideos(media), ...quotedVideos];
-
-  return { text, images, videos };
-}
-
 function parseDavethebeast241(data, id) {
   if (data.data && "threaded_conversation_with_injections_v2" in data.data) {
     return parseThreadedConversationV2(id, data.data);
@@ -140,23 +110,6 @@ function parseDavethebeast241(data, id) {
 
   const quote_id = post?.is_quote_status ? post.quoted_status_id_str : undefined;
   return { text, images, videos, quote_id };
-}
-
-// TODO: del
-function parseAbcdsxg1(data, id) {
-  const post = getPost();
-  const text = post.text ?? "";
-
-  const images = post.medias ?? [];
-
-  return { text, images, videos: [] };
-
-  function getPost() {
-    for (const tweet of data.tweets) {
-      if (tweet.tweet_id === id) return tweet;
-    }
-    throw new Error("tweet not found in data;", id);
-  }
 }
 
 function parseAbcdsxg1TweetResultByRestId(data, id) {
@@ -181,6 +134,5 @@ module.exports = {
   parseThreadedConversationV2,
   parseGlavierTweet,
   parseDavethebeast241,
-  parseAbcdsxg1,
   parseAbcdsxg1TweetResultByRestId,
 };
