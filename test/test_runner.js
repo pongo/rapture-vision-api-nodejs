@@ -8,7 +8,7 @@ const bail = require("@reporters/bail");
 process.env.NODE_ENV = "test";
 
 let files;
-const source = ["src/**/*.js", "tests/**/*.test.js"];
+const source = ["src/**/*.js", "test/**/*.test.js"];
 const ignore = [
   "*/face-service.js",
   "*/senya-service.js",
