@@ -2,8 +2,9 @@
 
 const { requestRapidApi } = require("../../../utils/rapidapi");
 const { StacklessError } = require("../../../utils/stackless-error");
+const { startsWithHttp } = require("../../../utils/starts-with-http");
 const { parseTiktokUrl } = require("../parse-tiktok-url");
-const { startsWithHttp, TiktokFactory, assertLongUrl, assertId } = require("./shared");
+const { TiktokFactory, assertLongUrl, assertId } = require("./shared");
 
 /*
 

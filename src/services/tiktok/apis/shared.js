@@ -4,10 +4,6 @@ const { StacklessError } = require("../../../utils/stackless-error");
 const { parseTiktokUrl } = require("../parse-tiktok-url");
 const { FetchFactory } = require("../../../utils/fetch-factory");
 
-function startsWithHttp(str) {
-  return str?.startsWith("http");
-}
-
 function tmpFileNameFn(videoUrl) {
   const tiktok = parseTiktokUrl(videoUrl);
   return tiktok?.id ?? tiktok?.shortcode ?? videoUrl.replaceAll("/", "_");
@@ -67,4 +63,4 @@ function TiktokFactory(apiName, options) {
   return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
 }
 
-module.exports = { startsWithHttp, assertLongUrl, assertId, TiktokFactory };
+module.exports = { assertLongUrl, assertId, TiktokFactory };

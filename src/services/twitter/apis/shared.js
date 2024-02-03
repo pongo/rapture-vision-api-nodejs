@@ -1,6 +1,7 @@
 "use strict";
 
 const { FetchFactory } = require("../../../utils/fetch-factory");
+const { startsWithHttp } = require("../../../utils/starts-with-http");
 
 function tmpFileNameFn(id) {
   return id;
@@ -19,10 +20,6 @@ function checkUrlsArray(urls) {
   if (urls.length === 0) return true;
   if (Array.isArray(urls[0])) return urls.map(checkUrlsArray).every(isTrue);
   return urls.filter(startsWithHttp).length > 0;
-}
-
-function startsWithHttp(str) {
-  return str?.startsWith("http");
 }
 
 function parseThreadedConversationV2(tweet_id, data) {

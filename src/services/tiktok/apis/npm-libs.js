@@ -11,9 +11,10 @@ const { tiktokurl } = require("tiktokurl");
 const tiklydownSanzy = require("tiklydown-sanzy");
 const tiktod = require("tiktod").download;
 const TikTokNoWatermark = require("tiktok-no-watermark-api");
-const { startsWithHttp, TiktokFactory, assertLongUrl } = require("./shared");
+const { TiktokFactory, assertLongUrl } = require("./shared");
 const nayan = require("nayan-media-downloader").tikdown;
 const fetch = require("node-fetch"); // TODO: удалить при переходе на node >= 18
+const { startsWithHttp } = require("../../../utils/starts-with-http");
 
 const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
   async fetchFn(url) {
