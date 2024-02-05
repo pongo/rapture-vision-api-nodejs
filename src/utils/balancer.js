@@ -2,7 +2,7 @@
 
 const Keyv = require("keyv");
 const { KeyvFile } = require("keyv-file");
-const { Err, Ok } = require("./result");
+const { Err, Ok, isOk } = require("./result");
 
 // https://stackoverflow.com/a/12646864/136559
 function shuffleArrayInplace(array) {
@@ -58,15 +58,15 @@ function createIterableList(items, shuffle = true) {
   }
 }
 
+/**
+ * @template T
+ */
 class Balancer {
   /**
-   * @param {object} c
-   * @param {string} c.name
-   * @param {Array<[string, Function]>} c.apis
-   * @param {boolean} c.shuffle
-   * @param {"last"|"again"|"random"} c.strategy
+   * @param {import("./balancer").BalancerOptions<T>} options
    */
-  constructor({ name, apis, shuffle = true, strategy = "last" }) {
+  constructor(options) {
+    const { name, apis, shuffle = true, strategy = "last" } = options;
     this.keyv = new Keyv({
       store: new KeyvFile({
         filename: `${name}-limits.json`,
@@ -88,10 +88,6 @@ class Balancer {
     }
   }
 
-  /**
-   * @param payload
-   * @returns {Promise<Result>}
-   */
   async callOneRound(...payload) {
     for (const [apiName, call] of this.apisOneRound()) {
       if (await this._isLimited(apiName)) {
@@ -138,12 +134,13 @@ class Balancer {
 }
 
 /**
- * @param {Result<*>} result
+ * @template T
+ * @param {import("./balancer").ApiResult<T>} result
  * @returns {{ remaining: number, reset: number }}
  */
 function parseLimits(result) {
-  const remaining = (result.isOk ? result.value.remaining : result.error.data?.remaining) ?? -1;
-  const reset = (result.isOk ? result.value.reset : result.error.data?.reset) ?? 0;
+  const remaining = (isOk(result) ? result.value.remaining : result.error.data?.remaining) ?? -1;
+  const reset = (isOk(result) ? result.value.reset : result.error.data?.reset) ?? 0;
   return { remaining, reset };
 }
 

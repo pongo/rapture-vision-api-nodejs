@@ -2,7 +2,7 @@
 
 const ThreadsAPI = require("threads-api").ThreadsAPI;
 const { Ok, Err } = require("../utils/result");
-const axios = require("axios");
+const axios = require("axios").default;
 const writeJsonFile = require("write-json-file");
 const fs = require("node:fs/promises");
 const SimpleMemCache = require("../utils/simple-mem-cache").SimpleMemCache;

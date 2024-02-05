@@ -10,6 +10,7 @@ function tmpFileNameFn(videoUrl) {
 }
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
   const { describe, it } = require("node:test");
 
@@ -36,6 +37,7 @@ function assertLongUrl(url) {
 }
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
   const { test } = require("node:test");
 

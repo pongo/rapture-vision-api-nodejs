@@ -2,7 +2,7 @@
 
 const instagramGetUrl = require("instagram-url-direct");
 const { Ok, Err } = require("../utils/result");
-const axios = require("axios");
+const axios = require("axios").default;
 
 async function getInstagramGetUrl(url) {
   try {
@@ -35,7 +35,7 @@ async function getRocketApi(post_id, story = false) {
   try {
     const data = (await axios.request(options)).data;
     const items = data?.response?.body?.items;
-    if (items == null || items.length === 0) return Err();
+    if (items == null || items.length === 0) return Err("items is empty");
     const root = items[0];
     if (root?.carousel_media != null && root.carousel_media.length > 0) {
       return Ok(root.carousel_media.map(parseOne));

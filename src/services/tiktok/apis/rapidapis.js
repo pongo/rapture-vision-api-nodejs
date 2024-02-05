@@ -45,12 +45,14 @@ const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchMaatootz", async () => {
     const res = await fetchMaatootz("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -76,12 +78,14 @@ const fetchMaatootz2 = TiktokFactory("tiktok/maatootz2", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchMaatootz2", async () => {
     const res = await fetchMaatootz2("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -107,7 +111,9 @@ const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { describe, it } = require("node:test");
 
   describe("fetchTiktok82", () => {
@@ -116,7 +122,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         "https://www.tiktok.com/@andakitty/video/7295937209176214816",
         { loadFromDisk: true },
       );
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+      assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
       assert.equal(res.value.videos.length, 3);
       assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
       assert.match(res.value.videos[1], /^https:\/\/v16m.byteicdn.com/);
@@ -157,12 +163,14 @@ const fetchYi005 = TiktokFactory("tiktok/yi005", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchYi005", async () => {
     const res = await fetchYi005("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -189,12 +197,14 @@ const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchVoyagel", async () => {
     const res = await fetchVoyagel("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -231,12 +241,14 @@ const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchLittlesun123", async () => {
     const res = await fetchLittlesun123("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -263,7 +275,9 @@ const fetchOmarmhaimdat = TiktokFactory("tiktok/omarmhaimdat", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { describe, it } = require("node:test");
 
   describe("fetchOmarmhaimdat", () => {
@@ -272,7 +286,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         "https://www.tiktok.com/@andakitty/video/7295937209176214816",
         { loadFromDisk: true },
       );
-      assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+      assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
       assert.equal(res.value.videos.length, 1);
       assert.match(res.value.videos[0], /^https:\/\/v16-webapp-prime.tiktok.com/);
     });
@@ -311,14 +325,16 @@ const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchLittlesun123tapi15", async () => {
     const res = await fetchLittlesun123tapi15("https://vt.tiktok.com/ZSNwYG2DD/", {
       loadFromDisk: true,
     });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -345,14 +361,16 @@ const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchLlbbmm", async () => {
     const res = await fetchLlbbmm("https://vt.tiktok.com/ZSNwYG2DD/", {
       loadFromDisk: true,
     });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 2);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
     assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
@@ -378,14 +396,16 @@ const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
 });
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
   const { test } = require("node:test");
 
   test("fetchJoTucker", async () => {
     const res = await fetchJoTucker("https://vt.tiktok.com/ZSNwYG2DD/", {
       loadFromDisk: true,
     });
-    assert.ok(res.isOk, `${res?.error?.name}: ${res?.error?.message}`);
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
     assert.equal(res.value.videos.length, 1);
     assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
   });

@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@reporters/bail": "^1.1.4",
+    "@types/node": "^20.11.16",
     "prettier": "^3.2.4"
   },
   "_moduleAliases": {

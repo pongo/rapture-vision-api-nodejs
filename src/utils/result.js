@@ -32,3 +32,6 @@ function err(error, data) {
 // module.exports.Result = { ok, err };
 module.exports.Ok = ok;
 module.exports.Err = err;
+
+module.exports.isErr = (result) => result.isErr;
+module.exports.isOk = (result) => result.isOk;
