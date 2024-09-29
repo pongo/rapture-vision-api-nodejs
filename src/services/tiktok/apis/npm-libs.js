@@ -7,7 +7,7 @@ const axios = require("axios").default;
 const cheerio = require("cheerio");
 const prevter = require("@prevter/tiktok-scraper").fetchVideo;
 const BtchDownloader = require("btch-downloader").ttdl;
-const { tiktokurl } = require("tiktokurl");
+//const { tiktokurl } = require("tiktokurl");
 const tiklydownSanzy = require("tiklydown-sanzy");
 const tiktod = require("tiktod").download;
 const TikTokNoWatermark = require("tiktok-no-watermark-api");
@@ -317,7 +317,8 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 
 const fetchTiktokurl = TiktokFactory("tiktok/tiktokurl", {
   async fetchFn(url) {
-    return await tiktokurl(url);
+    return null;
+    //return await tiktokurl(url);
   },
   parseFn(data) {
     return { videos: [data.video].filter(startsWithHttp) };
