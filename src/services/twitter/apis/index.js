@@ -3,7 +3,8 @@
 const rapidApis = require("./rapidapis");
 
 /**
- * @type {Array<[string, function(url: string)]>}
+ * @template T
+ * @type {Array<[string, import("../../../utils/balancer").ApiFn<T>]>}
  */
 const apis = [
   // ["fail", async ({ id }) => Err("Fail", { remaining: 100, reset: 1 })],

@@ -1,7 +1,7 @@
 "use strict";
 
 const { checkFaceMatch } = require("./senya/face-service");
-const { Ok } = require("../utils/result");
+const { Ok, isErr } = require("../utils/result");
 
 // мало ложных 0.58, по-умолчанию 0.6
 const DISTANCE_THRESHOLD = 0.58;
@@ -9,7 +9,7 @@ const MODEL = "senya/senya_multi.json";
 
 async function checkSenya(url) {
   const matchesResult = await checkFaceMatch(url, MODEL, DISTANCE_THRESHOLD);
-  if (matchesResult.isErr) return matchesResult;
+  if (isErr(matchesResult)) return matchesResult;
 
   const matches = matchesResult.value;
   prettyLogMatches(matches);

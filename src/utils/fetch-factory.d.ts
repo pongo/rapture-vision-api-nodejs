@@ -1,3 +1,4 @@
+import { FactoryOptions } from "./fetch-factory.d";
 import { Result } from "./result.d";
 import { StacklessError } from "./stackless-error";
 
@@ -12,32 +13,24 @@ export declare class FetchEmpty extends StacklessError {
 
 export type FetchError = FetchEmpty | FetchCatchError;
 
-type FactoryOptions = {
-  fetchFn: (url: string) => Promise<Result<unknown>>;
-  parseFn: (data: unknown) => unknown;
-  checkFn: (data: unknown) => boolean;
+export type FactoryOptions<T, F> = {
+  fetchFn: (url: string) => Promise<Result<F>>;
+  parseFn: (data: F, url: string, options: FetchOptions) => T;
+  checkFn: (data: T) => boolean;
   tmpFileNameFn: (url: string) => string;
-  checkUrlFn: (url: string) => boolean;
-  loadFn?: (path: string) => Promise<object>;
+  checkUrlFn?: (url: string) => boolean;
+  loadFn?: (path: string) => Promise<F>;
   saveFn?: (path: string, data: object) => Promise<void>;
 };
 
-type FetchResult = {
-  videos: string[];
+export type FetchOptions = {
+  loadFromDisk?: boolean;
+  saveToDisk?: boolean;
 };
 
-type FactoryResultFn = (
-  url: string,
-  {
-    loadFromDisk,
-    saveToDisk,
-  }?: {
-    loadFromDisk?: boolean | undefined;
-    saveToDisk?: boolean | undefined;
-  },
-) => Promise<Result<FetchResult, FetchError>>;
+export type FetchFn<T> = (url: string, options?: FetchOptions) => Promise<Result<T, FetchError>>;
 
-export declare function FetchFactory(
+export function FetchFactory<T, F>(
   apiName: string,
-  { fetchFn, parseFn, checkFn, tmpFileNameFn, checkUrlFn, loadFn, saveFn }: FactoryOptions,
-): FactoryResultFn;
+  factoryOptions: FactoryOptions<T, F>,
+): FetchFn<T>;

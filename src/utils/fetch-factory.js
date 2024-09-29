@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require("node:fs/promises");
-const { Ok, Err } = require("./result");
+const { Ok, Err, isErr } = require("./result");
 const { StacklessError } = require("./stackless-error");
 const { sanitizeFilename } = require("./sanitize-filename");
 const writeJsonFile = require("write-json-file");
@@ -21,9 +21,15 @@ class FetchEmpty extends StacklessError {
   }
 }
 
-function FetchFactory(
-  apiName,
-  {
+/**
+ * @template T
+ * @template F
+ * @param {string} apiName
+ * @param {import("./fetch-factory").FactoryOptions<T, F>} factoryOptions
+ * @returns {import("./fetch-factory").FetchFn<T>}
+ */
+function FetchFactory(apiName, factoryOptions) {
+  const {
     fetchFn,
     parseFn,
     checkFn,
@@ -31,15 +37,14 @@ function FetchFactory(
     checkUrlFn = undefined,
     loadFn = undefined,
     saveFn = undefined,
-  } = {},
-) {
+  } = factoryOptions;
   return async function (url, options = {}) {
     const { loadFromDisk = false, saveToDisk = false } = options;
     try {
       _checkUrl();
 
       const dataResult = await _fetch();
-      if (dataResult.isErr) {
+      if (isErr(dataResult)) {
         return dataResult;
       }
 
@@ -90,20 +95,25 @@ function FetchFactory(
 }
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
   const { describe, it, mock } = require("node:test");
+  const throwNotImplemented = () => {
+    throw Error("Not implemented");
+  };
 
   describe("FetchFactory", () => {
     describe("with default params", () => {
       it("happy path", async () => {
-        const fetchFn = mock.fn(() => ({ code: "42" }));
+        const fetchFn = mock.fn(async () => ({ code: "42" }));
         const parseFn = mock.fn(({ code }) => ({ videos: [code] }));
-        const checkFn = mock.fn(() => true);
+        const checkFn = mock.fn(({ videos }) => Array.isArray(videos) && videos.length === 1);
         const tmpFileNameFn = mock.fn(() => "tmpFileNameFn");
         const loadFn = mock.fn();
         const saveFn = mock.fn();
 
         const smth = FetchFactory("tiktok/smth", {
+          // @ts-expect-error internal fetchFn can works without Result
           fetchFn,
           parseFn,
           checkFn,
@@ -113,7 +123,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         });
 
         const actual = await smth("url2");
-        assert.ok(actual.isOk, actual.error);
+        assert.ok(actual.isOk, actual.isErr && actual.error);
         assert.deepEqual(actual.value, { videos: ["42"] });
 
         assert.equal(fetchFn.mock.calls.length, 1);
@@ -128,14 +138,19 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
       });
 
       it("empty parse", async () => {
-        const fetchFn = mock.fn(() => ({ code: "42" }));
+        const fetchFn = mock.fn(async () => Ok({ code: "42" }));
         const parseFn = mock.fn(() => undefined);
         const checkFn = mock.fn(() => false);
-        const smth = FetchFactory("tiktok/smth", { fetchFn, parseFn, checkFn });
+        const smth = FetchFactory("tiktok/smth", {
+          fetchFn,
+          parseFn,
+          checkFn,
+          tmpFileNameFn: throwNotImplemented,
+        });
 
         const actual = await smth("url2");
         assert.ok(actual.isErr);
-        assert.deepEqual(actual.error.name, "FetchEmpty", actual?.error?.message);
+        assert.deepEqual(actual.error.name, "FetchEmpty", actual.error.message);
       });
 
       it("throwing error", async () => {
@@ -143,7 +158,12 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
           throw Error("oops");
         });
         const parseFn = mock.fn(() => undefined);
-        const smth = FetchFactory("tiktok/smth", { fetchFn, parseFn });
+        const smth = FetchFactory("tiktok/smth", {
+          fetchFn,
+          parseFn,
+          checkFn: throwNotImplemented,
+          tmpFileNameFn: throwNotImplemented,
+        });
 
         const actual = await smth("url2");
         assert.ok(actual.isErr);
@@ -156,11 +176,11 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 
     describe("load from disk", () => {
       it("happy path", async () => {
-        const fetchFn = mock.fn(() => ({ code: "42" }));
+        const fetchFn = mock.fn(async () => Ok({ code: "42" }));
         const parseFn = mock.fn(({ code }) => ({ videos: [code] }));
         const checkFn = mock.fn(() => true);
         const tmpFileNameFn = mock.fn(() => "tmpFileNameFn");
-        const loadFn = mock.fn(() => ({ data: { code: "43" } }));
+        const loadFn = mock.fn(async () => ({ data: { code: "43" } }));
         const saveFn = mock.fn();
 
         const smth = FetchFactory("tiktok/smth", {
@@ -173,7 +193,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
         });
 
         const actual = await smth("url2", { loadFromDisk: true });
-        assert.ok(actual.isOk, `${actual?.error?.name}: ${actual?.error?.message}`);
+        assert.ok(actual.isOk, actual.isErr && `${actual.error.name}: ${actual.error.message}`);
         assert.deepEqual(actual.value, { videos: ["43"] });
 
         assert.equal(fetchFn.mock.calls.length, 0, "fetchFn calls");
@@ -201,7 +221,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 
     describe("save to disk", () => {
       it("happy path", async () => {
-        const fetchFn = mock.fn(() => Ok({ code: "42" }));
+        const fetchFn = mock.fn(async () => Ok({ code: "42" }));
         const parseFn = mock.fn(({ code }) => ({ videos: [code] }));
         const checkFn = mock.fn(() => true);
         const tmpFileNameFn = mock.fn(() => "tmpFileNameFn");
@@ -265,6 +285,7 @@ function getTmpFilePath(apiName, filename) {
 }
 
 if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
   const assert = require("node:assert/strict");
   const { test } = require("node:test");
 

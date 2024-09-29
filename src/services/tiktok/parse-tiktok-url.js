@@ -7,7 +7,7 @@ const reId = /(?:\/|\?shareId=|\&item_id=)(\d+)/i;
 
 /**
  * @param {string} url
- * @returns {({ shortcode: string; } | { username?: string; id: string; })}
+ * @returns {({ shortcode: string; id?: never; username?: never } | { username?: string; id: string; shortcode?: never })}
  */
 function parseTiktokUrl(url) {
   return (

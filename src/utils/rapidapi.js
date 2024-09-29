@@ -1,6 +1,6 @@
 "use strict";
 
-const axios = require("axios");
+const axios = require("axios").default;
 const { Ok, Err } = require("./result");
 
 const HOUR = 3600;

@@ -5,8 +5,7 @@ const tf = require("@tensorflow/tfjs-node"); // @tensorflow/tfjs-node@1.2.1
 const faceapi = require("@vladmandic/face-api");
 const fs = require("fs");
 const { timeStart } = require("../../utils/time-start");
-const { Ok } = require("../../utils/result");
-const { Err } = require("../../utils/result");
+const { Ok, Err, isErr } = require("../../utils/result");
 
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
@@ -35,13 +34,13 @@ async function setup() {
 
     optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
       minConfidence,
-      maxResults
+      maxResults,
     });
 
     console.log(
       `Version: TensorFlow/JS ${faceapi.tf?.version_core} FaceAPI ${
         faceapi.version.faceapi
-      } Backend: ${faceapi.tf?.getBackend()}, (${elapsed()} ms)`
+      } Backend: ${faceapi.tf?.getBackend()}, (${elapsed()} ms)`,
     );
     return Ok();
   } catch (error) {
@@ -68,7 +67,7 @@ async function detect(tensor) {
         .withFaceLandmarks()
         // .withFaceExpressions()
         // .withAgeAndGender()
-        .withFaceDescriptors()
+        .withFaceDescriptors(),
     );
   } catch (e) {
     console.error("Detect error", e.message);
@@ -114,7 +113,7 @@ async function detectFaces(url) {
   const detectResult = await detect(c);
   // tensor.dispose();
 
-  if (detectResult.isErr) {
+  if (isErr(detectResult)) {
     return detectResult;
   }
 
@@ -123,11 +122,11 @@ async function detectFaces(url) {
 
 async function checkFaceMatch(url, modelName, distanceThreshold) {
   const facesResult = await detectFaces(url);
-  if (facesResult.isErr) return facesResult;
+  if (isErr(facesResult)) return facesResult;
   const { faces, c } = facesResult.value;
 
   const faceMatcherResult = await createFaceMatcher(modelName, distanceThreshold);
-  if (faceMatcherResult.isErr) return faceMatcherResult;
+  if (isErr(faceMatcherResult)) return faceMatcherResult;
   const faceMatcher = faceMatcherResult.value;
 
   const matches = faces
@@ -138,7 +137,7 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
         label: match["_label"],
         distance: match["_distance"],
         aligned_box: face.alignedRect._box,
-        landmarks: face.landmarks
+        landmarks: face.landmarks,
       };
     });
 
@@ -154,22 +153,21 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
         x: parseInt(aligned_box._x, 10),
         y: parseInt(aligned_box._y, 10),
         width: parseInt(aligned_box._width, 10),
-        height: parseInt(aligned_box._height, 10)
-      }
-    }))
+        height: parseInt(aligned_box._height, 10),
+      },
+    })),
   );
 }
 
 function drawBoxesAndSaveFile(matches, c) {
   drawFaceDetectBoxes();
   drawFaceLandmarks();
-  fs.writeFile("output.jpg", c.toBuffer("image/jpeg"), () => {
-  });
+  fs.writeFile("output.jpg", c.toBuffer("image/jpeg"), () => {});
 
   function drawFaceDetectBoxes() {
     for (const m of matches) {
       const drawBox = new faceapi.draw.DrawBox(m.aligned_box, {
-        label: `${m.label} (${m.distance.toFixed(2)})`
+        label: `${m.label} (${m.distance.toFixed(2)})`,
       });
       drawBox.draw(c);
     }
@@ -178,7 +176,7 @@ function drawBoxesAndSaveFile(matches, c) {
   function drawFaceLandmarks() {
     faceapi.draw.drawFaceLandmarks(
       c,
-      matches.map((m) => m.landmarks)
+      matches.map((m) => m.landmarks),
     );
   }
 }
