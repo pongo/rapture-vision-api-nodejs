@@ -3,8 +3,9 @@
 const { Err } = require("../utils/result");
 const { Balancer } = require("../utils/balancer");
 const { apis } = require("./tiktok/apis");
+const { analytics } = require("../analytics/analytics");
 
-const balancer = new Balancer({ name: "tiktok", apis, shuffle: true, strategy: "last" });
+const balancer = new Balancer({ name: "tiktok", apis, shuffle: true, strategy: "last", analytics });
 
 async function getTiktok(url) {
   try {

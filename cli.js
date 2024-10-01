@@ -2,21 +2,34 @@
 
 require("dotenv").config();
 const delay = require("node:timers/promises").setTimeout;
-const tiktokApis = require("./src/services/tiktok/apis/npm-libs");
-// const tiktokApis = require("./src/services/tiktok/apis/rapidapis");
-// const { getTiktok } = require("./src/services/tiktok-service");
-const twitterApis = require("./src/services/twitter/apis/rapidapis");
-const { getTwitter } = require("./src/services/twitter-service");
 
 async function main() {
-  await tiktok();
+  // await tiktok();
   // await twitter();
   // getTwitter("1679529814212894723").then(console.log);
+  // await analyticsTest();
+  await tiktokService();
 }
 
 main().catch(console.error);
 
+async function tiktokService() {
+  const { getTiktok } = require("./src/services/tiktok-service");
+
+  console.log(await getTiktok("https://vt.tiktok.com/ZSNwYG2DD/"));
+}
+
+async function analyticsTest() {
+  const { CsvWriter } = require("./src/analytics/csv-writer");
+
+  const csv = new CsvWriter("analytics-test.csv", "header");
+  csv.writeRow("1");
+}
+
 async function tiktok() {
+  const tiktokApis = require("./src/services/tiktok/apis/npm-libs");
+  // const tiktokApis = require("./src/services/tiktok/apis/rapidapis");
+
   const fail = "https://vm.tiktok.com/ZSjZpJ/";
   const ok = "https://www.tiktok.com/@andakitty/video/7295937209176214816";
   const ok2 = "https://vt.tiktok.com/ZSNwYG2DD/";
@@ -35,6 +48,9 @@ async function tiktok() {
 }
 
 async function twitter() {
+  const twitterApis = require("./src/services/twitter/apis/rapidapis");
+  const { getTwitter } = require("./src/services/twitter-service");
+
   const ids = ["1679529814212894723"];
   const ids2 = [
     // "1677672844803682307",

@@ -3,6 +3,7 @@
 const Keyv = require("keyv");
 const { KeyvFile } = require("keyv-file");
 const { Err, isOk } = require("./result");
+const { timeStart } = require("./time-start");
 
 // https://stackoverflow.com/a/12646864/136559
 function shuffleArrayInplace(array) {
@@ -58,6 +59,11 @@ function createIterableList(items, shuffle = true) {
   }
 }
 
+/** @type {import("./balancer").IAnalytics} */
+const nullAnalytics = {
+  trackApiCall: async () => {},
+};
+
 /**
  * @template T
  */
@@ -67,11 +73,15 @@ class Balancer {
    */
   constructor(options) {
     const { name, apis, shuffle = true, strategy = "last" } = options;
+
+    this.name = name;
+
     this.keyv = new Keyv({
       store: new KeyvFile({
         filename: `${name}-limits.json`,
       }),
     });
+
     this.apis = createIterableList(apis, shuffle);
     switch (strategy) {
       case "last":
@@ -86,6 +96,8 @@ class Balancer {
       default:
         throw new Error(`Unknown strategy "${strategy}"`);
     }
+
+    this.analytics = options.analytics == null ? nullAnalytics : options.analytics;
   }
 
   async callOneRound(...payload) {
@@ -96,14 +108,22 @@ class Balancer {
       }
 
       console.log(`[Balancer] Call api "${apiName}"...`);
+      const elapsed = timeStart();
       try {
         const result = await call(...payload);
+        const elapsedMs = elapsed();
         await this._setRemaining(apiName, result);
 
-        if (result.isOk) return result;
+        if (result.isOk) {
+          this.analytics.trackApiCall(this.name, apiName, true, elapsedMs);
+          return result;
+        }
+
         console.error(result.error);
+        this.analytics.trackApiCall(this.name, apiName, false, elapsedMs);
       } catch (error) {
         console.error(error);
+        this.analytics.trackApiCall(this.name, apiName, false, elapsed());
       }
     }
 
