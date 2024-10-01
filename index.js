@@ -7,7 +7,8 @@ const { timeStart } = require("./src/utils/time-start");
 const { getInstagram, getInstagramStory } = require("./src/services/instagram-service");
 const { getThreads } = require("./src/services/threads-service");
 const { getTwitter } = require("./src/services/twitter-service");
-const { checkSenya } = require("./src/services/senya-service");
+const { checkSenya } = initCheckSenya();
+const { Err } = require("./src/utils/result");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -131,6 +132,16 @@ app.post("/api/v1/twitter", async (req, res) => {
   console.log(`Fetched twitter in ${elapsed()} ms ${id}`);
   res.json({ ok: true, value: reqResult.value });
 });
+
+function initCheckSenya() {
+  if (process.env.DISABLE_CHECK_SENYA === "on") {
+    return {
+      checkSenya: async () => Err("checkSenya disabled by environment variable"),
+    };
+  }
+
+  return require("./src/services/senya-service");
+}
 
 if (process.env.NODE_ENV !== "test" && require.main === module) {
   app.listen(port, () => {
