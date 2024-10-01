@@ -2,8 +2,8 @@
 
 const assert = require("node:assert/strict");
 const { describe, it } = require("node:test");
-const { apis } = require("../src/services/tiktok/apis");
-const { startsWithHttp } = require("../src/utils/starts-with-http");
+const { apis } = require(".");
+const { startsWithHttp } = require("../../../utils/starts-with-http");
 
 describe("tiktok apis", () => {
   for (const [name, apiFn] of apis) {
@@ -57,5 +57,5 @@ function assertResult(res) {
 
 function assertVideos(videos) {
   assert.ok(Array.isArray(videos), videos);
-  assert.ok(videos.filter(startsWithHttp).length > 0, videos);
+  assert.ok(videos.filter(startsWithHttp).length > 0, videos.toString());
 }

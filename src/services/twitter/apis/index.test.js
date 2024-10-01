@@ -2,7 +2,7 @@
 
 const assert = require("node:assert/strict");
 const { describe, it } = require("node:test");
-const { apis } = require("../src/services/twitter/apis");
+const { apis } = require(".");
 
 const tweets = {
   // long text.

@@ -24,21 +24,6 @@ const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
   },
 });
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchSnaptik", async () => {
-    const res = await fetchSnaptik("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 2);
-    assert.match(res.value.videos[0], /^https:\/\/d.rapidcdn.app\/d\?token=/);
-    assert.match(res.value.videos[1], /^https:\/\/d.rapidcdn.app\/d\?token=/);
-  });
-}
-
 const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   async fetchFn(url) {
     return await tobyg74.Downloader(url, { version: "v1" });
@@ -50,21 +35,6 @@ const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   },
 });
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTobyg74_v1", async () => {
-    const res = await fetchTobyg74_v1("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 3);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+.tiktokcdn.com/);
-    assert.match(res.value.videos[1], /^https:\/\/v\d+.tiktokcdn.com/);
-    assert.match(res.value.videos[2], /^https:\/\/api-h\d+.tiktokv.com/);
-  });
-}
 const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
   async fetchFn(url) {
     return await tobyg74.Downloader(url, { version: "v2" });
@@ -77,20 +47,6 @@ const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
     }
   },
 });
-
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTobyg74_v2", async () => {
-    const res = await fetchTobyg74_v2("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 1);
-    assert.match(res.value.videos[0], /^https:\/\/tikcdn.io/);
-  });
-}
 
 const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   async fetchFn(url) {
@@ -107,22 +63,6 @@ const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   },
 });
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTobyg74_v3", async () => {
-    const res = await fetchTobyg74_v3("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 3);
-    assert.match(res.value.videos[0], /^https:\/\/musdown.xyz/);
-    assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[2], /^https:\/\/cdn\d+.musdown.xyz/);
-  });
-}
-
 const fetchTikChan = TiktokFactory("tiktok/TikChan", {
   async fetchFn(url) {
     return await TikChan.download(url);
@@ -131,21 +71,6 @@ const fetchTikChan = TiktokFactory("tiktok/TikChan", {
     return { videos: [data?.no_wm, data?.wm].filter(startsWithHttp) };
   },
 });
-
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTikChan", async () => {
-    const res = await fetchTikChan("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 2);
-    assert.match(res.value.videos[0], /^https:\/\/ttdownloader.com/);
-    assert.match(res.value.videos[1], /^https:\/\/ttdownloader.com/);
-  });
-}
 
 const fetchPrevter = TiktokFactory("tiktok/prevter", {
   async fetchFn(url) {
@@ -158,21 +83,6 @@ const fetchPrevter = TiktokFactory("tiktok/prevter", {
   },
 });
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchPrevter", async () => {
-    const res = await fetchPrevter("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 2);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
-
 const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
   async fetchFn(url) {
     return await BtchDownloader(url);
@@ -181,22 +91,6 @@ const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
     return { videos: data?.video?.filter(startsWithHttp) };
   },
 });
-
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchBtchDownloader", async () => {
-    const res = await fetchBtchDownloader("https://vt.tiktok.com/ZSNwYG2DD/", {
-      loadFromDisk: true,
-    });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 1);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
 
 const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
   async fetchFn(url) {
@@ -209,23 +103,6 @@ const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
   },
 });
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTiklydownSanzy1", async () => {
-    const res = await fetchTiklydownSanzy1("https://vt.tiktok.com/ZSNwYG2DD/", {
-      loadFromDisk: true,
-    });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 2);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-    assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
-
 const fetchTiktod = TiktokFactory("tiktok/tiktod", {
   async fetchFn(url) {
     return await tiktod(url);
@@ -236,20 +113,6 @@ const fetchTiktod = TiktokFactory("tiktok/tiktod", {
     }
   },
 });
-
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTiktod", async () => {
-    const res = await fetchTiktod("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 1);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
 
 const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
   async fetchFn(url) {
@@ -262,22 +125,6 @@ const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
   },
 });
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchTikTokNoWatermark", async () => {
-    const res = await fetchTikTokNoWatermark("https://vt.tiktok.com/ZSNwYG2DD/", {
-      loadFromDisk: true,
-    });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 1);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
-
 const fetchNayan = TiktokFactory("tiktok/nayan", {
   async fetchFn(url) {
     return await nayan(url);
@@ -288,20 +135,6 @@ const fetchNayan = TiktokFactory("tiktok/nayan", {
     }
   },
 });
-
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchNayan", async () => {
-    const res = await fetchNayan("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 1);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
 
 // const fetchSmth = TiktokFactory("tiktok/nayan", {
 //   async fetchFn(url) {

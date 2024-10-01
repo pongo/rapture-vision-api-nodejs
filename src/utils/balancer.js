@@ -2,7 +2,7 @@
 
 const Keyv = require("keyv");
 const { KeyvFile } = require("keyv-file");
-const { Err, Ok, isOk } = require("./result");
+const { Err, isOk } = require("./result");
 
 // https://stackoverflow.com/a/12646864/136559
 function shuffleArrayInplace(array) {
@@ -133,39 +133,10 @@ class Balancer {
   }
 }
 
-/**
- * @template T
- * @param {import("./balancer").ApiResult<T>} result
- * @returns {{ remaining: number, reset: number }}
- */
 function parseLimits(result) {
   const remaining = (isOk(result) ? result.value.remaining : result.error.data?.remaining) ?? -1;
   const reset = (isOk(result) ? result.value.reset : result.error.data?.reset) ?? 0;
   return { remaining, reset };
 }
 
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  const assert = require("node:assert/strict");
-  const { describe, it } = require("node:test");
-
-  describe("parseLimits", () => {
-    it("should parse Ok with limits data", () => {
-      assert.deepEqual(parseLimits(Ok({ remaining: 100, reset: 5 })), { remaining: 100, reset: 5 });
-    });
-
-    it("should parse Error with limits data", () => {
-      assert.deepEqual(parseLimits(Err("error", { remaining: 100, reset: 5 })), {
-        remaining: 100,
-        reset: 5,
-      });
-    });
-
-    it("should parse Result without limits data", (t) => {
-      assert.deepEqual(parseLimits(Ok({})), { remaining: -1, reset: 0 });
-      assert.deepEqual(parseLimits(Err(new Error("error"))), { remaining: -1, reset: 0 });
-      assert.deepEqual(parseLimits(Ok({ remaining: 100 })), { remaining: 100, reset: 0 });
-    });
-  });
-}
-
-module.exports = { Balancer };
+module.exports = { Balancer, parseLimits };

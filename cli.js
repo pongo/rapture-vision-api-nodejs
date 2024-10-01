@@ -1,18 +1,20 @@
 "use strict";
 
+require("dotenv").config();
 const delay = require("node:timers/promises").setTimeout;
-const tiktokApis = require("../src/services/tiktok/apis/npm-libs");
-// const tiktokApis = require("../src/services/tiktok/apis/rapidapis");
-// const { getTiktok } = require("../src/services/tiktok-service");
-const twitterApis = require("../src/services/twitter/apis/rapidapis");
-const { getTwitter } = require("../src/services/twitter-service");
+const tiktokApis = require("./src/services/tiktok/apis/npm-libs");
+// const tiktokApis = require("./src/services/tiktok/apis/rapidapis");
+// const { getTiktok } = require("./src/services/tiktok-service");
+const twitterApis = require("./src/services/twitter/apis/rapidapis");
+const { getTwitter } = require("./src/services/twitter-service");
 
-if (require.main === module && process.env.NODE_ENV !== "test") {
-  require("dotenv").config();
-  tiktok().catch(console.error);
-  // twitter().catch(console.error);
+async function main() {
+  await tiktok();
+  // await twitter();
   // getTwitter("1679529814212894723").then(console.log);
 }
+
+main().catch(console.error);
 
 async function tiktok() {
   const fail = "https://vm.tiktok.com/ZSjZpJ/";

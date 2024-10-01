@@ -34,3 +34,5 @@ export function FetchFactory<T, F>(
   apiName: string,
   factoryOptions: FactoryOptions<T, F>,
 ): FetchFn<T>;
+
+export function getTmpFilePath(apiName: string, filename: string): string;

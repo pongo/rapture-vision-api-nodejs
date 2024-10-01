@@ -143,8 +143,6 @@ function initCheckSenya() {
   return require("./src/services/senya-service");
 }
 
-if (process.env.NODE_ENV !== "test" && require.main === module) {
-  app.listen(port, () => {
-    console.log("Server started on port " + port);
-  });
-}
+app.listen(port, () => {
+  console.log("Server started on port " + port);
+});

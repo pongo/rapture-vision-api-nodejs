@@ -19,3 +19,5 @@ export declare class Balancer<T> {
   constructor(options: BalancerOptions<T>);
   callOneRound<T>(...payload: unknown[]): Promise<ApiResult<T>>;
 }
+
+export function parseLimits<T>(result: ApiResult<T>): Required<Limits>;

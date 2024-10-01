@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node test/test_runner.js",
-    "test:watch": "watchexec -qc --shell=none -e js -w src -w test node test/test_runner.js",
-    "coverage": "c8 --clean --all --src src -r text -r html node test/test_runner.js && echo Report: coverage/index.html"
+    "test": "node --test",
+    "test:bail": "node --test --test-reporter=@reporters/bail --test-reporter-destination=stderr --test-reporter=spec --test-reporter-destination=stdout",
+    "test:watch": "node --test --watch",
+    "coverage": "c8 --clean --all --src src -r text -r html node --test && echo Report: coverage/index.html"
   },
   "keywords": [],
   "author": "",
@@ -23,11 +24,10 @@
     "btch-downloader": "2.3.2",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
-    "fast-glob": "^3.3.2",
     "instagram-url-direct": "1.0.20",
     "keyv": "^4.5.4",
     "keyv-file": "^0.3.0",
-    "nayan-media-downloader": "2.5.7",
+    "nayan-media-downloader": "2.5.8",
     "snaptik": "1.0.3",
     "threads-api": "1.6.3",
     "tikchan": "1.0.1",
@@ -37,9 +37,9 @@
     "write-json-file": "4.3.0"
   },
   "devDependencies": {
-    "@reporters/bail": "^1.1.4",
+    "@reporters/bail": "^1.2.1",
     "@types/node": "^20.11.16",
-    "prettier": "^3.2.4"
+    "prettier": "^3.3.3"
   },
   "_moduleAliases": {
     "src": "./src",
