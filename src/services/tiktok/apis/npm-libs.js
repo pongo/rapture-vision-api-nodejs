@@ -4,7 +4,6 @@ const Snaptik = require("snaptik");
 const { TiktokDL } = require("@tobyg74/tiktok-api-dl");
 const TikChan = require("tikchan");
 const axios = require("axios").default;
-const cheerio = require("cheerio");
 const prevter = require("@prevter/tiktok-scraper").fetchVideo;
 const BtchDownloader = require("btch-downloader").ttdl;
 //const { tiktokurl } = require("tiktokurl");
@@ -398,54 +397,6 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
   });
 }
 
-// https://www.npmjs.com/package/@kaveesha-sithum/tiktok-dl
-async function kaveesha(url) {
-  try {
-    const res = await axios("https://tools.revesery.com/tiktok/revesery.php?url=" + url, {
-      method: "POST",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "user-agent":
-          "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36",
-      },
-    });
-    const $ = cheerio.load(res.data);
-    return {
-      status: true,
-      // title: $("p").text().replace("Here's the result:", ""),
-      // thumbnail: $("img").attr("src"),
-      video: $("a.btn.btn-primary").attr("href"),
-    };
-  } catch {
-    return {
-      status: false,
-    };
-  }
-}
-
-const fetchKaveesha = TiktokFactory("tiktok/kaveesha", {
-  async fetchFn(url) {
-    return await kaveesha(url);
-  },
-  parseFn(data) {
-    return { videos: [data.video].filter(startsWithHttp) };
-  },
-});
-
-if (process.env.NODE_ENV === "test" && require.main === module) {
-  // @ts-expect-error inline testing
-  const assert = require("node:assert/strict");
-  // @ts-expect-error inline testing
-  const { test } = require("node:test");
-
-  test("fetchKaveesha", async () => {
-    const res = await fetchKaveesha("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
-    assert.equal(res.value.videos.length, 1);
-    assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-  });
-}
-
 const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
   async fetchFn(url) {
     return await tiklydownSanzy.v1(url);
@@ -573,7 +524,6 @@ module.exports = {
   fetchBtchDownloader,
   fetchTiktokurl,
   fetchRuhend,
-  fetchKaveesha,
   fetchTiklydownSanzy1,
   fetchTiktod,
   fetchTikTokNoWatermark,

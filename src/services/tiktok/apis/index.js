@@ -20,7 +20,6 @@ const apis = [
   ["fetchBtchDownloader", npmLibs.fetchBtchDownloader],
   ["fetchTiktokurl", npmLibs.fetchTiktokurl],
   ["fetchRuhend", npmLibs.fetchRuhend],
-  ["fetchKaveesha", npmLibs.fetchKaveesha],
   ["fetchTiklydownSanzy1", npmLibs.fetchTiklydownSanzy1],
   ["fetchTiktod", npmLibs.fetchTiktod],
   ["fetchTikTokNoWatermark", npmLibs.fetchTikTokNoWatermark],

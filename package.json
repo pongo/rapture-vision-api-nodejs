@@ -21,7 +21,6 @@
     "@tobyg74/tiktok-api-dl": "1.1.9",
     "axios": "^1.6.5",
     "btch-downloader": "2.3.2",
-    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "fast-glob": "^3.3.2",
