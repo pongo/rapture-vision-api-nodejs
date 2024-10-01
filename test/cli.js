@@ -21,7 +21,7 @@ async function tiktok() {
 
   const loadFromDisk = false;
   console.log(
-    await tiktokApis.fetchKaveesha(ok2, {
+    await tiktokApis.fetchTobyg74_v2(ok2, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

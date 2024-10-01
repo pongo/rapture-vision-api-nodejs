@@ -13,6 +13,7 @@ const apis = [
   // npm libs
   ["fetchSnaptik", npmLibs.fetchSnaptik],
   ["fetchTobyg74_v1", npmLibs.fetchTobyg74_v1],
+  ["fetchTobyg74_v2", npmLibs.fetchTobyg74_v2],
   ["fetchTobyg74_v3", npmLibs.fetchTobyg74_v3],
   ["fetchTikChan", npmLibs.fetchTikChan],
   ["fetchTiktokScraperNowatermarks", npmLibs.fetchTiktokScraperNowatermarks],

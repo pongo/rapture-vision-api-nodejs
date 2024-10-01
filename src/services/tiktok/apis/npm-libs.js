@@ -1,7 +1,7 @@
 "use strict";
 
 const Snaptik = require("snaptik");
-const { TiktokDL } = require("@tobyg74/tiktok-api-dl");
+const tobyg74 = require("@tobyg74/tiktok-api-dl");
 const TikChan = require("tikchan");
 const axios = require("axios").default;
 const prevter = require("@prevter/tiktok-scraper").fetchVideo;
@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
 
 const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   async fetchFn(url) {
-    return await TiktokDL(url, { version: "v1" });
+    return await tobyg74.Downloader(url, { version: "v1" });
   },
   parseFn(data) {
     if (data?.status === "success" && data?.result?.video?.length > 0) {
@@ -68,10 +68,36 @@ if (process.env.NODE_ENV === "test" && require.main === module) {
     assert.match(res.value.videos[2], /^https:\/\/api-h\d+.tiktokv.com/);
   });
 }
+const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
+  async fetchFn(url) {
+    return await tobyg74.Downloader(url, { version: "v2" });
+  },
+  parseFn(data) {
+    if (data?.status === "success" && data.result) {
+      return {
+        videos: [data.result.video].filter(startsWithHttp),
+      };
+    }
+  },
+});
+
+if (process.env.NODE_ENV === "test" && require.main === module) {
+  // @ts-expect-error inline testing
+  const assert = require("node:assert/strict");
+  // @ts-expect-error inline testing
+  const { test } = require("node:test");
+
+  test("fetchTobyg74_v2", async () => {
+    const res = await fetchTobyg74_v2("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
+    assert.equal(res.value.videos.length, 1);
+    assert.match(res.value.videos[0], /^https:\/\/tikcdn.io/);
+  });
+}
 
 const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   async fetchFn(url) {
-    return await TiktokDL(url, { version: "v3" });
+    return await tobyg74.Downloader(url, { version: "v3" });
   },
   parseFn(data) {
     if (data?.status === "success" && data.result) {
@@ -517,6 +543,7 @@ module.exports = {
   // fetchSmth,
   fetchSnaptik,
   fetchTobyg74_v1,
+  fetchTobyg74_v2,
   fetchTobyg74_v3,
   fetchTikChan,
   fetchTiktokScraperNowatermarks,
