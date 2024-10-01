@@ -28,7 +28,6 @@
     "keyv": "^4.5.4",
     "keyv-file": "^0.3.0",
     "nayan-media-downloader": "2.5.7",
-    "node-fetch": "^2.7.0",
     "snaptik": "1.0.3",
     "threads-api": "1.6.3",
     "tikchan": "1.0.1",

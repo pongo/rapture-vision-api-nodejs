@@ -18,10 +18,11 @@ async function tiktok() {
   const fail = "https://vm.tiktok.com/ZSjZpJ/";
   const ok = "https://www.tiktok.com/@andakitty/video/7295937209176214816";
   const ok2 = "https://vt.tiktok.com/ZSNwYG2DD/";
+  const ok3 = "https://www.tiktok.com/@netleya/video/7070543692007787777";
 
   const loadFromDisk = false;
   console.log(
-    await tiktokApis.fetchTobyg74_v2(ok2, {
+    await tiktokApis.fetchTiktokScraperNowatermarks(ok3, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
