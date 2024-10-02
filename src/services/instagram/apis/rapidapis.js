@@ -25,15 +25,25 @@ const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
     }
 
     const root = items[0];
+    const images = [];
+    const videos = [];
     if (root?.carousel_media != null && root.carousel_media.length > 0) {
-      return { ...splitUrls(root.carousel_media.map(parseOne)), remaining, reset };
+      root.carousel_media.forEach(parseOne);
     } else {
-      return { ...splitUrls([parseOne(root)]), remaining, reset };
+      parseOne(root);
     }
 
+    return { images, videos, remaining, reset };
+
     function parseOne(obj) {
-      if (obj.media_type === 1) return obj.image_versions2.candidates[0].url;
-      if (obj.media_type === 2) return obj.video_versions[0].url;
+      if (obj.media_type === 1) {
+        images.push(obj.image_versions2.candidates[0].url);
+        return;
+      }
+      if (obj.media_type === 2) {
+        videos.push(obj.video_versions[0].url);
+        return;
+      }
       throw Error("unknown media_type: " + obj.media_type);
     }
   },
