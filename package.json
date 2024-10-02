@@ -8,16 +8,14 @@
     "test": "node --test",
     "test:bail": "node --test --test-reporter=@reporters/bail --test-reporter-destination=stderr --test-reporter=spec --test-reporter-destination=stdout",
     "test:watch": "node --test --watch",
-    "coverage": "c8 --clean --all --src src -r text -r html node --test && echo Report: coverage/index.html"
+    "coverage": "c8 --clean --all --src src -r text -r html node --test && echo Report: coverage/index.html",
+    "installation": "npm i --include=optional --include=peer"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "--deps": {},
   "dependencies": {
-    "@tensorflow/tfjs-node": "^4.21.0",
-    "@vladmandic/face-api": "1.7.3",
-    "canvas": "^2.11.2",
     "@prevter/tiktok-scraper": "1.0.1",
     "@tobyg74/tiktok-api-dl": "1.1.9",
     "axios": "^1.6.5",
@@ -41,6 +39,22 @@
     "@reporters/bail": "^1.2.1",
     "@types/node": "^20.11.16",
     "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "@tensorflow/tfjs-node": "^4.21.0",
+    "@vladmandic/face-api": "1.7.3",
+    "canvas": "^2.11.2"
+  },
+  "peerDependenciesMeta": {
+    "@tensorflow/tfjs-node": {
+      "optional": true
+    },
+    "@vladmandic/face-api": {
+      "optional": true
+    },
+    "canvas": {
+      "optional": true
+    }
   },
   "_moduleAliases": {
     "src": "./src",
