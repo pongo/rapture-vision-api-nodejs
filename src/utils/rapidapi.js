@@ -48,7 +48,7 @@ async function requestRapidApi(method, url, { host, params, parseLimitsFn = unde
 async function requestRapidApiFetch(
   method,
   url,
-  { host, params, body = undefined, parseLimitsFn = undefined, parseJSON = true },
+  { host, params = undefined, body = undefined, parseLimitsFn = undefined, parseJSON = true },
 ) {
   const parseLimits = parseLimitsFn ?? _parseLimits;
 

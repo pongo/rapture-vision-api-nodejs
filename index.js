@@ -4,7 +4,11 @@ require("dotenv").config();
 const express = require("express");
 const { getTiktok } = require("./src/services/tiktok-service");
 const { timeStart } = require("./src/utils/time-start");
-const { getInstagram, getInstagramStory } = require("./src/services/instagram-service");
+const {
+  getInstagram,
+  getInstagram_v1,
+  getInstagramStory,
+} = require("./src/services/instagram-service");
 const { getThreads } = require("./src/services/threads-service");
 const { getTwitter } = require("./src/services/twitter-service");
 const { checkSenya } = initCheckSenya();
@@ -63,7 +67,7 @@ app.post("/api/v1/instagram", async (req, res) => {
   }
 
   const elapsed = timeStart();
-  const igResult = await getInstagram({ post_id, url });
+  const igResult = await getInstagram_v1({ post_id, url });
   if (igResult.isErr) {
     console.error(`/instagram error: ${igResult.error.message}, elapsed: ${elapsed()} ms`);
     return void res.json({ ok: false, error: igResult.error });
@@ -73,6 +77,25 @@ app.post("/api/v1/instagram", async (req, res) => {
     `Fetched instagram. ${igResult.value.length} links found in ${elapsed()} ms ${post_id} ${url}`,
   );
   res.json({ ok: true, links: igResult.value });
+});
+
+app.post("/api/v2/instagram", async (req, res) => {
+  const post_id = req.body?.post_id?.trim();
+  if (!post_id) {
+    return void res
+      .status(400)
+      .json({ ok: false, error: { code: 400, message: "Should be post_id" } });
+  }
+
+  const elapsed = timeStart();
+  const igResult = await getInstagram(post_id);
+  if (igResult.isErr) {
+    console.error(`/instagram error: ${igResult.error.message}, elapsed: ${elapsed()} ms`);
+    return void res.json({ ok: false, error: igResult.error });
+  }
+
+  console.log(`Fetched instagram in ${elapsed()} ms ${post_id}`);
+  res.json({ ok: true, value: igResult.value });
 });
 
 app.post("/api/v1/instagram_story", async (req, res) => {

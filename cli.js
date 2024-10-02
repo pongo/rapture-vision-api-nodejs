@@ -3,20 +3,49 @@
 require("dotenv").config();
 const delay = require("node:timers/promises").setTimeout;
 
+main().catch(console.error);
+
 async function main() {
   // await tiktok();
   // await twitter();
   // getTwitter("1679529814212894723").then(console.log);
   // await analyticsTest();
-  await tiktokService();
+  // await tiktokService();
+  await instagram();
+  // await instagramService();
 }
 
-main().catch(console.error);
+async function instagram() {
+  // const apis = require("./src/services/instagram/apis/npm-libs");
+  const apis = require("./src/services/instagram/apis/rapidapis");
+
+  const image = "Cf4PRxnlMUa";
+  const image2 = "DAN98w7zs0j";
+  const image_and_video = "CnpKCjYPyd6";
+  const video = "ClYitVwDnJ-";
+  const video2 = "CmOBTkvjJs1";
+  const multiple_videos = "ClwKf74ywve";
+  const multiple_images = "CXJdPfRgFl8";
+
+  const loadFromDisk = true;
+  console.log(
+    await apis.fetchRocketApi(image_and_video, {
+      loadFromDisk,
+      saveToDisk: !loadFromDisk,
+    }),
+  );
+}
 
 async function tiktokService() {
   const { getTiktok } = require("./src/services/tiktok-service");
 
   console.log(await getTiktok("https://vt.tiktok.com/ZSNwYG2DD/"));
+}
+
+async function instagramService() {
+  const { getInstagram } = require("./src/services/instagram-service");
+
+  console.log(await getInstagram("CnpKCjYPyd6"));
 }
 
 async function analyticsTest() {
