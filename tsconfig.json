@@ -13,7 +13,7 @@
 
     // "strict" implies this, but you'll want to enable it when you're
     // ready: it's a huge reason your project will start complaining
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
-  "include": ["src/**/*.js"],
+  "include": ["src/**/*.js", "test/**/*.js", "test_integration/**/*.js"]
 }
