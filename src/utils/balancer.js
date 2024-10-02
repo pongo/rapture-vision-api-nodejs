@@ -1,6 +1,6 @@
 "use strict";
 
-const Keyv = require("keyv");
+const { Keyv } = require("keyv");
 const { KeyvFile } = require("keyv-file");
 const { Err, isOk } = require("./result");
 const { timeStart } = require("./time-start");
