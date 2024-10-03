@@ -1,4 +1,3 @@
-import { FactoryOptions } from "./fetch-factory.d";
 import { Result } from "./result.d";
 import { StacklessError } from "./stackless-error";
 
@@ -16,8 +15,8 @@ export type FetchError = FetchEmpty | FetchCatchError;
 export type FactoryOptions<T, F> = {
   fetchFn: (url: string) => Promise<Result<F>>;
   parseFn: (data: F, url: string, options: FetchOptions) => T;
-  checkFn: (data: T) => boolean;
-  tmpFileNameFn: (url: string) => string;
+  checkFn?: (data: T) => boolean;
+  tmpFileNameFn?: (url: string) => string;
   checkUrlFn?: (url: string) => boolean;
   loadFn?: (path: string) => Promise<F>;
   saveFn?: (path: string, data: object) => Promise<void>;

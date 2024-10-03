@@ -16,8 +16,8 @@ async function main() {
 }
 
 async function instagram() {
-  // const apis = require("./src/services/instagram/apis/npm-libs");
-  const apis = require("./src/services/instagram/apis/rapidapis");
+  const apis = require("./src/services/instagram/apis/npm-libs");
+  // const apis = require("./src/services/instagram/apis/rapidapis");
 
   const image = "Cf4PRxnlMUa";
   const image2 = "DAN98w7zs0j";
@@ -29,7 +29,7 @@ async function instagram() {
 
   const loadFromDisk = true;
   console.log(
-    await apis.fetchRocketApi(image_and_video, {
+    await apis.fetchRuhend(image_and_video, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

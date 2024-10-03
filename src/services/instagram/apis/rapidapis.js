@@ -1,10 +1,8 @@
 "use strict";
 
-const delay = require("node:timers/promises").setTimeout;
 const { requestRapidApiFetch } = require("../../../utils/rapidapi");
-const { StacklessError } = require("../../../utils/stackless-error");
 const { startsWithHttp } = require("../../../utils/starts-with-http");
-const { InstagramFactory, splitUrls, urlFromId } = require("./shared");
+const { InstagramFactory, urlFromId } = require("./shared");
 
 // https://rapidapi.com/rocketapi/api/rocketapi-for-instagram
 const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
@@ -21,7 +19,7 @@ const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
   parseFn({ remaining, reset, data }) {
     const items = data?.response?.body?.items;
     if (items == null || items.length === 0) {
-      return { remaining, reset };
+      return { remaining, reset, images: [], videos: [] };
     }
 
     const root = items[0];
@@ -68,7 +66,7 @@ const fetchLooter2 = InstagramFactory("instagram/looter2", {
       };
     }
 
-    return { remaining, reset };
+    return { remaining, reset, images: [], videos: [] };
 
     function filterMedia(medias, mediaType) {
       return medias

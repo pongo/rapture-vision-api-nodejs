@@ -8,6 +8,7 @@ const { igdl: btch } = require("btch-downloader");
 const { InstagramFactory, urlFromId, splitUrls } = require("./shared");
 
 const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url-direct", {
+  /** @returns {Promise<import("../../../utils/result").Result<{url_list?: string[]}>>} */
   async fetchFn(id) {
     return await instagramUrlDirect(urlFromId(id));
   },
