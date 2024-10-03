@@ -12,13 +12,17 @@ export declare class FetchEmpty extends StacklessError {
 
 export type FetchError = FetchEmpty | FetchCatchError;
 
-export type FactoryOptions<T, F> = {
-  fetchFn: (url: string) => Promise<Result<F>>;
-  parseFn: (data: F, url: string, options: FetchOptions) => T;
-  checkFn?: (data: T) => boolean;
+export type FactoryOptions<TParseResult, TFetchResult, TFetchOptionsExtension = {}> = {
+  fetchFn: (url: string) => Promise<Result<TFetchResult>> | Promise<TFetchResult>;
+  parseFn: (
+    data: TFetchResult,
+    url: string,
+    options: FetchOptions & TFetchOptionsExtension,
+  ) => TParseResult;
+  checkFn?: (data: TParseResult) => boolean;
   tmpFileNameFn?: (url: string) => string;
   checkUrlFn?: (url: string) => boolean;
-  loadFn?: (path: string) => Promise<F>;
+  loadFn?: (path: string) => Promise<TFetchResult>;
   saveFn?: (path: string, data: object) => Promise<void>;
 };
 
@@ -28,6 +32,7 @@ export type FetchOptions = {
 };
 
 export type FetchFn<T> = (url: string, options?: FetchOptions) => Promise<Result<T, FetchError>>;
+export type FetchFnParameters<T> = Parameters<FetchFn<T>>;
 
 export function FetchFactory<T, F>(
   apiName: string,

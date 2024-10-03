@@ -8,9 +8,11 @@ const BtchDownloader = require("btch-downloader").ttdl;
 const tiklydownSanzy = require("tiklydown-sanzy");
 const tiktod = require("tiktod").download;
 const TikTokNoWatermark = require("tiktok-no-watermark-api");
-const { TiktokFactory, assertLongUrl } = require("./shared");
+const { TiktokFactory } = require("./shared");
 const nayan = require("nayan-media-downloader").tikdown;
 const { startsWithHttp } = require("../../../utils/starts-with-http");
+
+const emptyResult = { videos: [] };
 
 const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
   async fetchFn(url) {
@@ -21,6 +23,7 @@ const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
     if (data?.status === 200 && data?.link_1?.startsWith("http")) {
       return { videos: [data.link_1, data.link_2, data.link_3].filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -28,10 +31,12 @@ const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   async fetchFn(url) {
     return await tobyg74.Downloader(url, { version: "v1" });
   },
+  /** @param {object} data */
   parseFn(data) {
     if (data?.status === "success" && data?.result?.video?.length > 0) {
       return { videos: data?.result?.video.filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -41,10 +46,9 @@ const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
   },
   parseFn(data) {
     if (data?.status === "success" && data.result) {
-      return {
-        videos: [data.result.video].filter(startsWithHttp),
-      };
+      return { videos: [data.result.video ?? ""].filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -55,11 +59,15 @@ const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   parseFn(data) {
     if (data?.status === "success" && data.result) {
       return {
-        videos: [data.result.video1, data.result.video2, data.result.video_hd].filter(
-          startsWithHttp,
-        ),
+        videos: [
+          data.result.video1,
+          data.result.video2,
+          data.result.videoHD,
+          data.result["video_hd"],
+        ].filter(startsWithHttp),
       };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -88,7 +96,7 @@ const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
     return await BtchDownloader(url);
   },
   parseFn(data) {
-    return { videos: data?.video?.filter(startsWithHttp) };
+    return { videos: data?.video?.filter(startsWithHttp) ?? [] };
   },
 });
 
@@ -100,6 +108,7 @@ const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
     if (data.video) {
       return { videos: [data.video.noWatermark, data.video.watermark].filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -111,6 +120,7 @@ const fetchTiktod = TiktokFactory("tiktok/tiktod", {
     if (data?.status === 200 && data.result) {
       return { videos: [data.result.media].filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -122,6 +132,7 @@ const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
     if (data?.status === "ok" && data?.result?.details) {
       return { videos: [data.result.details.video_url].filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
@@ -133,22 +144,11 @@ const fetchNayan = TiktokFactory("tiktok/nayan", {
     if (data?.status && data.data) {
       return { videos: [data.data.video].filter(startsWithHttp) };
     }
+    return { ...emptyResult };
   },
 });
 
-// const fetchSmth = TiktokFactory("tiktok/nayan", {
-//   async fetchFn(url) {
-//     return await nayan(url);
-//   },
-//   parseFn(data) {
-//     // if (data?.status === "success" && data.result) {
-//     //   return [data.result.video_hd, data.result.video1, data.result.video2].filter(startsWithHttp);
-//     // }
-//   },
-// });
-
 module.exports = {
-  // fetchSmth,
   fetchSnaptik,
   fetchTobyg74_v1,
   fetchTobyg74_v2,

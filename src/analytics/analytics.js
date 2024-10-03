@@ -4,7 +4,10 @@ const { CsvWriter } = require("./csv-writer");
 
 class Analytics {
   constructor() {
-    this.setupCsvFiles();
+    this.apisCsvWriter = new CsvWriter(
+      "analytics-api-calls.csv",
+      "service,api,result,elapsed,created_at",
+    );
   }
 
   async trackApiCall(service, api, isOk, elapsedMs) {
@@ -15,13 +18,6 @@ class Analytics {
       elapsedMs,
       new Date().toISOString(),
     ]);
-  }
-
-  setupCsvFiles() {
-    this.apisCsvWriter = new CsvWriter(
-      "analytics-api-calls.csv",
-      "service,api,result,elapsed,created_at",
-    );
   }
 }
 

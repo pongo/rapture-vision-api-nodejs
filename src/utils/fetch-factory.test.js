@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const { describe, it, mock, test } = require("node:test");
 const { Ok } = require("./result");
 const { FetchFactory, getTmpFilePath } = require("./fetch-factory");
+const { formatErr } = require("./testing-utils");
 
 const throwNotImplemented = () => {
   throw Error("Not implemented");
@@ -16,11 +17,10 @@ describe("FetchFactory", () => {
       const parseFn = mock.fn(({ code }) => ({ videos: [code] }));
       const checkFn = mock.fn(({ videos }) => Array.isArray(videos) && videos.length === 1);
       const tmpFileNameFn = mock.fn(() => "tmpFileNameFn");
-      const loadFn = mock.fn();
-      const saveFn = mock.fn();
+      const loadFn = /** @type {any} */ (mock.fn());
+      const saveFn = /** @type {any} */ (mock.fn());
 
       const smth = FetchFactory("tiktok/smth", {
-        // @ts-expect-error internal fetchFn can works without Result
         fetchFn,
         parseFn,
         checkFn,
@@ -30,7 +30,7 @@ describe("FetchFactory", () => {
       });
 
       const actual = await smth("url2");
-      assert.ok(actual.isOk, actual.isErr && actual.error);
+      assert.ok(actual.isOk, formatErr(actual));
       assert.deepEqual(actual.value, { videos: ["42"] });
 
       assert.equal(fetchFn.mock.calls.length, 1);
@@ -88,7 +88,7 @@ describe("FetchFactory", () => {
       const checkFn = mock.fn(() => true);
       const tmpFileNameFn = mock.fn(() => "tmpFileNameFn");
       const loadFn = mock.fn(async () => ({ data: { code: "43" } }));
-      const saveFn = mock.fn();
+      const saveFn = /** @type {any} */ (mock.fn());
 
       const smth = FetchFactory("tiktok/smth", {
         fetchFn,
@@ -100,7 +100,7 @@ describe("FetchFactory", () => {
       });
 
       const actual = await smth("url2", { loadFromDisk: true });
-      assert.ok(actual.isOk, actual.isErr && `${actual.error.name}: ${actual.error.message}`);
+      assert.ok(actual.isOk, formatErr(actual));
       assert.deepEqual(actual.value, { videos: ["43"] });
 
       assert.equal(fetchFn.mock.calls.length, 0, "fetchFn calls");
@@ -132,8 +132,8 @@ describe("FetchFactory", () => {
       const parseFn = mock.fn(({ code }) => ({ videos: [code] }));
       const checkFn = mock.fn(() => true);
       const tmpFileNameFn = mock.fn(() => "tmpFileNameFn");
-      const loadFn = mock.fn();
-      const saveFn = mock.fn();
+      const loadFn = /** @type {any} */ (mock.fn());
+      const saveFn = /** @type {any} */ (mock.fn());
 
       const smth = FetchFactory("tiktok/smth", {
         fetchFn,

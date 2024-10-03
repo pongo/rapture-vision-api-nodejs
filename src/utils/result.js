@@ -35,3 +35,4 @@ module.exports.Err = err;
 
 module.exports.isErr = (result) => result.isErr;
 module.exports.isOk = (result) => result.isOk;
+module.exports.isResult = (value) => value.isOk || value.isErr;

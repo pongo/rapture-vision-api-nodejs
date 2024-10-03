@@ -6,7 +6,7 @@ const { parseTiktokUrl } = require("./parse-tiktok-url");
 
 describe("parseTiktokUrl()", () => {
   it("should parse shortcode", () => {
-    assert.equal(parseTiktokUrl("https://vm.tiktok.com//"), undefined);
+    assert.deepEqual(parseTiktokUrl("https://vm.tiktok.com//"), {});
 
     s("https://vm.tiktok.com/ZSjZpJ/", "ZSjZpJ");
     s("https://vt.tiktok.com/ZSjZpJ/", "ZSjZpJ");

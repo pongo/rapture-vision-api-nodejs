@@ -1,10 +1,11 @@
 "use strict";
 
 const fs = require("node:fs/promises");
-const { Ok, Err, isErr } = require("./result");
+const { Ok, Err, isErr, isResult } = require("./result");
 const { StacklessError } = require("./stackless-error");
 const { sanitizeFilename } = require("./sanitize-filename");
 const writeJsonFile = require("write-json-file");
+const assert = require("node:assert/strict");
 
 class FetchCatchError extends Error {
   constructor(url, catchedError) {
@@ -38,6 +39,9 @@ function FetchFactory(apiName, factoryOptions) {
     loadFn = undefined,
     saveFn = undefined,
   } = factoryOptions;
+  assert(checkFn !== undefined);
+  assert(tmpFileNameFn !== undefined);
+
   return async function (url, options = {}) {
     const { loadFromDisk = false, saveToDisk = false } = options;
     try {
@@ -64,6 +68,7 @@ function FetchFactory(apiName, factoryOptions) {
     }
 
     function _tmpFilePath() {
+      assert(tmpFileNameFn !== undefined);
       return getTmpFilePath(apiName, tmpFileNameFn(url));
     }
 
@@ -89,7 +94,7 @@ function FetchFactory(apiName, factoryOptions) {
       }
 
       const res = await fetchFn(url);
-      return res.isOk || res.isErr ? res : Ok(res);
+      return isResult(res) ? res : Ok(res);
     }
   };
 }
@@ -103,6 +108,11 @@ async function loadJson(path) {
   // }
 }
 
+/**
+ * @param {string} apiName
+ * @param {string} filename
+ * @returns {string}
+ */
 function getTmpFilePath(apiName, filename) {
   return `./tmp/${apiName}/${sanitizeFilename(filename)}.json`;
 }

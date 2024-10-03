@@ -75,7 +75,7 @@ const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
       const videos = data.url_list.filter(startsWithHttp);
       return { videos, remaining, reset };
     }
-    return { remaining, reset };
+    return { remaining, reset, videos: [] };
   },
   checkUrlFn: assertLongUrl,
 });
@@ -99,7 +99,7 @@ const fetchYi005 = TiktokFactory("tiktok/yi005", {
       );
       return { videos, remaining, reset };
     }
-    return { remaining, reset };
+    return { remaining, reset, videos: [] };
   },
 });
 
@@ -118,7 +118,7 @@ const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
       );
       return { videos, remaining, reset };
     }
-    return { remaining, reset };
+    return { remaining, reset, videos: [] };
   },
 });
 
@@ -147,7 +147,7 @@ const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
       );
       return { videos, remaining, reset };
     }
-    return { remaining, reset };
+    return { remaining, reset, videos: [] };
   },
 });
 
@@ -189,7 +189,7 @@ const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
       );
       return { videos, remaining, reset };
     }
-    return { remaining, reset };
+    return { remaining, reset, videos: [] };
   },
 });
 
@@ -208,7 +208,7 @@ const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
       );
       return { videos, remaining, reset };
     }
-    return { remaining, reset };
+    return { remaining, reset, videos: [] };
   },
 });
 

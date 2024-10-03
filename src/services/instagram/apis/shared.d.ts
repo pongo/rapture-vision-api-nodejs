@@ -1,4 +1,5 @@
-import { FetchFn, FactoryOptions } from "../../../utils/fetch-factory";
+import { FetchFnParameters, FactoryOptions } from "../../../utils/fetch-factory";
+import { ApiFn } from "../../../utils/balancer";
 
 type Limits = {
   reset?: number;
@@ -11,12 +12,11 @@ export function urlFromId(id: string): string;
 
 export function splitUrls(urls: string[]): { images: string[]; videos: string[] };
 
-// export function InstagramFactory(
-//   apiName: string,
-//   options: FactoryOptions<InstagramResult>,
-// ): FetchFn<InstagramResult>;
+type InstagramApiFn = ApiFn<InstagramResult, FetchFnParameters<InstagramResult>>;
 
 export function InstagramFactory<F>(
   apiName: string,
   factoryOptions: FactoryOptions<InstagramResult, F>,
-): FetchFn<InstagramResult>;
+): InstagramApiFn;
+
+export type InstagramApis = Array<[string, InstagramApiFn]>;

@@ -7,8 +7,10 @@ const { igdl: btch } = require("btch-downloader");
 
 const { InstagramFactory, urlFromId, splitUrls } = require("./shared");
 
+const emptyResult = { images: [], videos: [] };
+
 const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url-direct", {
-  /** @returns {Promise<import("../../../utils/result").Result<{url_list?: string[]}>>} */
+  /** @returns {Promise<{url_list?: string[]}>} */
   async fetchFn(id) {
     return await instagramUrlDirect(urlFromId(id));
   },
@@ -16,6 +18,7 @@ const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url-direct
     if (data?.url_list && data.url_list.length > 0) {
       return splitUrls(data.url_list);
     }
+    return { ...emptyResult };
   },
 });
 
@@ -27,6 +30,7 @@ const fetchRuhend = InstagramFactory("instagram/ruhend", {
     if (data?.status && data.data && data.data.length > 0) {
       return splitUrls(data.data.map((x) => x.url));
     }
+    return { ...emptyResult };
   },
 });
 
@@ -38,6 +42,7 @@ const fetchNayan = InstagramFactory("instagram/nayan", {
     if (data?.status && data.data && data.data.length > 0) {
       return splitUrls(data.data.map((x) => x.url));
     }
+    return { ...emptyResult };
   },
 });
 
@@ -49,6 +54,7 @@ const fetchBtch = InstagramFactory("instagram/btch", {
     if (data && data.length > 0) {
       return splitUrls(data.map((x) => x.url));
     }
+    return { ...emptyResult };
   },
 });
 

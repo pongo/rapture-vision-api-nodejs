@@ -10,10 +10,6 @@ test.skip("keyv should create file with limits", async () => {
   const FILENAME = "keyv-test-limits.json";
   fs.existsSync(FILENAME) && fs.unlinkSync(FILENAME);
 
-  /**
-   * @template T
-   * @type {Array<[string, import("../src/utils/balancer").ApiFn<T>]>}
-   */
   const apis = [["fail", async () => Err("Fail", { remaining: 100, reset: 1 })]];
   const balancer = new Balancer({ name: "keyv-test", apis, shuffle: true, strategy: "last" });
   await balancer.callOneRound("test");

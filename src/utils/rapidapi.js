@@ -55,7 +55,7 @@ async function requestRapidApiFetch(
   const options = {
     method,
     headers: {
-      "X-RapidAPI-Key": process.env.RAPID_API_KEY,
+      "X-RapidAPI-Key": process.env.RAPID_API_KEY ?? "",
       "X-RapidAPI-Host": host,
       "Content-Type": "application/json",
     },

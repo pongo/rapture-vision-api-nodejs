@@ -20,3 +20,13 @@ export function requestRapidApiFetch(
   url: string,
   requestOptions: RequestOptions,
 ): Promise<RapidApiResponse>;
+
+export function requestRapidApi(
+  methos: string,
+  url: string,
+  requestOptions: {
+    host: string;
+    params?: object;
+    parseLimitsFn?: (response: any) => Limits;
+  },
+): Promise<RapidApiResponse>;

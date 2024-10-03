@@ -1,11 +1,7 @@
 "use strict";
 
-/**
- * @param {string} str
- * @returns {boolean | undefined}
- */
 function startsWithHttp(str) {
-  return str?.startsWith("http");
+  return str == null ? false : str.startsWith("http");
 }
 
 module.exports = { startsWithHttp };

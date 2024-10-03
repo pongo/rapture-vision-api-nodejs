@@ -22,3 +22,4 @@ export function Err<E extends Error = Error>(error: E | string, data?: unknown):
 
 export function isErr(result: Result<T, E>): result is Err<E>;
 export function isOk(result: Result<T, E>): result is Ok<T>;
+export function isResult<T, E>(value: unknown): value is Result<T, E>;

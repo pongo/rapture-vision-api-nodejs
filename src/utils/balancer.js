@@ -66,10 +66,11 @@ const nullAnalytics = {
 
 /**
  * @template T
+ * @template TParams
  */
 class Balancer {
   /**
-   * @param {import("./balancer").BalancerOptions<T>} options
+   * @param {import("./balancer").BalancerOptions<T, TParams>} options
    */
   constructor(options) {
     const { name, apis, shuffle = true, strategy = "last" } = options;

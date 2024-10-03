@@ -12,7 +12,10 @@ function isTrue(x) {
 }
 
 function checkFn({ images, videos }) {
-  return [checkUrlsArray(images), checkUrlsArray(videos)].every(isTrue);
+  return (
+    [checkUrlsArray(images), checkUrlsArray(videos)].every(isTrue) &&
+    (images.length > 0 || videos.length > 0)
+  );
 }
 
 function checkUrlsArray(urls) {

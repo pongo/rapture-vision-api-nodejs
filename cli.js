@@ -29,7 +29,7 @@ async function instagram() {
 
   const loadFromDisk = true;
   console.log(
-    await apis.fetchRuhend(image_and_video, {
+    await apis.fetchInstagramUrlDirect(image_and_video, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

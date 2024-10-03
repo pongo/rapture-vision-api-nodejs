@@ -10,7 +10,7 @@ const posts = {
 };
 
 describe("instagram apis", () => {
-  const skip = new Set([]);
+  const skip = /** @type {Set<string>} */ (new Set([]));
   for (const [name, twitterFetchFn] of apis) {
     if (skip.has(name)) {
       console.log("skip ", name);

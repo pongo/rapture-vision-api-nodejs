@@ -4,6 +4,7 @@ require("dotenv").config();
 const assert = require("node:assert/strict");
 const { describe, it, test } = require("node:test");
 const { requestRapidApiFetch } = require("../src/utils/rapidapi");
+const { formatErr } = require("../src/utils/testing-utils");
 
 describe("requestRapidApi", () => {
   it.skip("GET with params", async () => {
@@ -18,7 +19,7 @@ describe("requestRapidApi", () => {
       },
     });
     // console.log(res);
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
+    assert.ok(res.isOk, formatErr(res));
     assert.ok(Number.isInteger(res.value.remaining));
     assert.ok(Number.isInteger(res.value.reset));
     assert.ok(res.value.data.data.mainSearch);
@@ -43,7 +44,7 @@ describe("requestRapidApi", () => {
       },
     );
     // console.log(res);
-    assert.ok(res.isOk, res.isErr && `${res.error.name}: ${res.error.message}`);
+    assert.ok(res.isOk, formatErr(res));
     assert.ok(Number.isInteger(res.value.remaining));
     assert.ok(Number.isInteger(res.value.reset));
     assert.deepEqual(res.value.data.status, "success");

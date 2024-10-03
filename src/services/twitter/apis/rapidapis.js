@@ -2,7 +2,6 @@
 
 const delay = require("node:timers/promises").setTimeout;
 const { requestRapidApi } = require("../../../utils/rapidapi");
-const { StacklessError } = require("../../../utils/stackless-error");
 const {
   TwitterFactory,
   parseThreadedConversationV2,
@@ -150,7 +149,7 @@ module.exports = {
   // fetchSmth,
   fetchOmarmhaimdat24,
   fetchGlavier135TweetDetail,
-  fetchGlavier135Tweet,
+  // fetchGlavier135Tweet,
   fetchDavethebeast241,
   fetchAbcdsxg1TweetResultByRestId,
   fetchRestocked47,
