@@ -39,7 +39,9 @@ const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
     );
   },
   parseFn({ remaining, reset, data }) {
-    const videos = [...data.video, ...data.OriginalWatermarkedVideo].filter(startsWithHttp);
+    const videos = [...(data?.video ?? []), ...(data?.OriginalWatermarkedVideo ?? [])].filter(
+      startsWithHttp,
+    );
     return { videos, remaining, reset };
   },
 });
@@ -57,7 +59,9 @@ const fetchMaatootz2 = TiktokFactory("tiktok/maatootz2", {
     );
   },
   parseFn({ remaining, reset, data }) {
-    const videos = [...data.video, ...data.OriginalWatermarkedVideo].filter(startsWithHttp);
+    const videos = [...(data?.video ?? []), ...(data?.OriginalWatermarkedVideo ?? [])].filter(
+      startsWithHttp,
+    );
     return { videos, remaining, reset };
   },
 });
@@ -71,7 +75,7 @@ const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
     });
   },
   parseFn({ remaining, reset, data }) {
-    if (data.success && Array.isArray(data.url_list)) {
+    if (data?.success && Array.isArray(data?.url_list)) {
       const videos = data.url_list.filter(startsWithHttp);
       return { videos, remaining, reset };
     }
@@ -93,7 +97,7 @@ const fetchYi005 = TiktokFactory("tiktok/yi005", {
     );
   },
   parseFn({ remaining, reset, data }) {
-    if (data.msg === "success" && data.data) {
+    if (data?.msg === "success" && data?.data) {
       const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
         startsWithHttp,
       );
@@ -112,7 +116,7 @@ const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
     });
   },
   parseFn({ remaining, reset, data }) {
-    if (data.msg === "success" && data.data) {
+    if (data?.msg === "success" && data?.data) {
       const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
         startsWithHttp,
       );
@@ -141,7 +145,7 @@ const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
     );
   },
   parseFn({ remaining, reset, data }) {
-    if (data.msg === "success" && data.data) {
+    if (data?.msg === "success" && data?.data) {
       const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
         startsWithHttp,
       );
@@ -183,7 +187,7 @@ const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
     );
   },
   parseFn({ remaining, reset, data }) {
-    if (data.msg === "success" && data.data) {
+    if (data?.msg === "success" && data?.data) {
       const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
         startsWithHttp,
       );
@@ -202,7 +206,7 @@ const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
     });
   },
   parseFn({ remaining, reset, data }) {
-    if (data.msg === "success" && data.data) {
+    if (data?.msg === "success" && data?.data) {
       const videos = [/* data.data?.hdplay, */ data.data?.play, data.data?.wmplay].filter(
         startsWithHttp,
       );

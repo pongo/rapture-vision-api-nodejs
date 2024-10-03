@@ -1,4 +1,4 @@
-import { Result } from "./result.d";
+import type { Result, Ok } from "./result.d";
 import { StacklessError } from "./stackless-error";
 
 export declare class FetchCatchError extends Error {
@@ -29,6 +29,7 @@ export type FactoryOptions<TParseResult, TFetchResult, TFetchOptionsExtension = 
 export type FetchOptions = {
   loadFromDisk?: boolean;
   saveToDisk?: boolean;
+  fakeLoadFromDiskData?: Ok<any>;
 };
 
 export type FetchFn<T> = (url: string, options?: FetchOptions) => Promise<Result<T, FetchError>>;

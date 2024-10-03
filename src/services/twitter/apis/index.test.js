@@ -3,6 +3,7 @@
 const assert = require("node:assert/strict");
 const { describe, it } = require("node:test");
 const { apis } = require(".");
+const { Ok } = require("../../../utils/result");
 
 const tweets = {
   // long text.
@@ -127,6 +128,15 @@ function testTwitter(name, twitterFetchFn) {
         }
         assert.deepEqual(actual.value.images, expected.images, "images");
         assert.deepEqual(actual.value.videos, expected.videos, "videos");
+      });
+
+      it(`${id}, but empty`, async () => {
+        const actual = await twitterFetchFn(id, {
+          loadFromDisk: true,
+          fakeLoadFromDiskData: Ok({}),
+        });
+        assert(actual.isErr);
+        assert.match(actual.error.name, /FetchEmpty|FetchCatchError/);
       });
     }
   });

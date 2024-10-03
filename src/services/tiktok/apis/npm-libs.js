@@ -46,7 +46,7 @@ const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
   },
   parseFn(data) {
     if (data?.status === "success" && data.result) {
-      return { videos: [data.result.video ?? ""].filter(startsWithHttp) };
+      return { videos: [data.result?.video ?? ""].filter(startsWithHttp) };
     }
     return { ...emptyResult };
   },

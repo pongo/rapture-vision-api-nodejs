@@ -85,6 +85,9 @@ function FetchFactory(apiName, factoryOptions) {
 
     async function _fetch() {
       if (loadFromDisk) {
+        if (options.fakeLoadFromDiskData !== undefined) {
+          return options.fakeLoadFromDiskData;
+        }
         const load = loadFn ?? loadJson;
         const data = (await load(_tmpFilePath()))?.data;
         if (!data) {

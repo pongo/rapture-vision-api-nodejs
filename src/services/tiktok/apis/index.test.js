@@ -4,6 +4,8 @@ const assert = require("node:assert/strict");
 const { describe, it } = require("node:test");
 const { apis } = require(".");
 const { startsWithHttp } = require("../../../utils/starts-with-http");
+const { formatErr } = require("../../../utils/testing-utils");
+const { Ok } = require("../../../utils/result");
 
 describe("tiktok apis", () => {
   for (const [name, apiFn] of apis) {
@@ -18,15 +20,18 @@ function testTiktok(name, apiFn) {
       case "fetchTiktok82":
         await testLongUrl(apiFn);
         await testShortUrlNotAllowed(apiFn, /Only supports long url/);
+        await testLongUrlWithEmptyFetch(apiFn);
         break;
 
       case "fetchOmarmhaimdat":
         await testLongUrl(apiFn);
         await testShortUrlNotAllowed(apiFn, /Video id not found/);
+        await testLongUrlWithEmptyFetch(apiFn);
         break;
 
       default:
         await testShortUrl(apiFn);
+        await testShortUrlWithEmptyFetch(apiFn);
         break;
     }
   });
@@ -39,9 +44,30 @@ async function testLongUrl(apiFn) {
   assertResult(res);
 }
 
+async function testLongUrlWithEmptyFetch(apiFn) {
+  const res = await apiFn("https://www.tiktok.com/@andakitty/video/7295937209176214816", {
+    loadFromDisk: true,
+    fakeLoadFromDiskData: Ok({}),
+  });
+  assertEmptyResult(res);
+}
+
 async function testShortUrl(apiFn) {
   const res = await apiFn("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
   assertResult(res);
+}
+
+async function testShortUrlWithEmptyFetch(apiFn) {
+  const res = await apiFn("https://vt.tiktok.com/ZSNwYG2DD/", {
+    loadFromDisk: true,
+    fakeLoadFromDiskData: Ok({}),
+  });
+  assertEmptyResult(res);
+}
+
+function assertEmptyResult(res) {
+  assert(res.isErr);
+  assert.equal(res.error.name, "FetchEmpty");
 }
 
 async function testShortUrlNotAllowed(apiFn, errorMatch) {
@@ -51,7 +77,7 @@ async function testShortUrlNotAllowed(apiFn, errorMatch) {
 }
 
 function assertResult(res) {
-  assert.ok(res.isOk, res?.error);
+  assert.ok(res.isOk, formatErr(res));
   assertVideos(res.value.videos);
 }
 

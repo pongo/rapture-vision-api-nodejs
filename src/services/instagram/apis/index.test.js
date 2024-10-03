@@ -3,6 +3,7 @@
 const assert = require("node:assert/strict");
 const { describe, it } = require("node:test");
 const { apis } = require(".");
+const { Ok } = require("../../../utils/result");
 
 const posts = {
   Cf4PRxnlMUa: { images: 1, videos: 0 },
@@ -31,6 +32,12 @@ function testInstagram(name, fetchFn) {
         delete actual.value.remaining;
         assert.deepEqual(actual.value.images.length, expected.images, "images");
         assert.deepEqual(actual.value.videos.length, expected.videos, "videos");
+      });
+
+      it(`${id}, but empty`, async () => {
+        const actual = await fetchFn(id, { loadFromDisk: true, fakeLoadFromDiskData: Ok({}) });
+        assert(actual.isErr);
+        assert.equal(actual.error.name, "FetchEmpty");
       });
     }
   });
