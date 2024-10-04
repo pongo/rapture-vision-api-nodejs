@@ -5,6 +5,7 @@ const { Ok, Err } = require("./result");
 
 const HOUR = 3600;
 
+/** @type {import("./rapidapi.d.ts").requestRapidApi}  */
 async function requestRapidApi(method, url, { host, params, parseLimitsFn = undefined }) {
   const parseLimits = parseLimitsFn ?? _parseLimits;
   try {
@@ -45,6 +46,7 @@ async function requestRapidApi(method, url, { host, params, parseLimitsFn = unde
   }
 }
 
+/** @type {import("./rapidapi.d.ts").requestRapidApiFetch}  */
 async function requestRapidApiFetch(
   method,
   url,

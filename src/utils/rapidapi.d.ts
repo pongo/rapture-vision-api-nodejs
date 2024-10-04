@@ -9,7 +9,7 @@ type RapidApiResponse = Result<{ data?: any } & Limits>;
 
 type RequestOptions = {
   host: string;
-  params?: object;
+  params?: Record<string, string>;
   body?: object;
   parseLimitsFn?: (response: any) => Limits;
   parseJSON?: boolean;
