@@ -3,7 +3,7 @@
 const rapidApis = require("./rapidapis");
 
 /** @type {import("./shared.d.ts").TwitterApis} */
-const _rapidApis = Object.keys(rapidApis).map((key) => [key, rapidApis[key]]);
+const _rapidApis = Object.keys(rapidApis).map((key) => [key.replace(/^fetch/, ""), rapidApis[key]]);
 
 /** @type {import("./shared.d.ts").TwitterApis} */
 const apis = [

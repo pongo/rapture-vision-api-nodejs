@@ -4,10 +4,10 @@ const npmLibs = require("./npm-libs");
 const rapidApis = require("./rapidapis");
 
 /** @type {import("./shared.d.ts").InstagramApis} */
-const _npmLibs = Object.keys(npmLibs).map((key) => [key, npmLibs[key]]);
+const _npmLibs = Object.keys(npmLibs).map((key) => [key.replace(/^fetch/, ""), npmLibs[key]]);
 
 /** @type {import("./shared.d.ts").InstagramApis} */
-const _rapidApis = Object.keys(rapidApis).map((key) => [key, rapidApis[key]]);
+const _rapidApis = Object.keys(rapidApis).map((key) => [key.replace(/^fetch/, ""), rapidApis[key]]);
 
 /** @type {import("./shared.d.ts").InstagramApis} */
 const apis = [

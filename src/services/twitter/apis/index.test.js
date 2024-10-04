@@ -102,7 +102,7 @@ const tweets = {
 };
 
 describe("twitter apis", () => {
-  const skip = new Set(["fetchGlavier135TweetDetail", "fetchRestocked47"]);
+  const skip = new Set(["Glavier135TweetDetail", "Restocked47"]);
   for (const [name, twitterFetchFn] of apis) {
     if (skip.has(name)) {
       console.log("skip ", name);
