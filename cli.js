@@ -10,8 +10,8 @@ async function main() {
   // await twitter();
   // getTwitter("1679529814212894723").then(console.log);
   // await analyticsTest();
-  // await tiktokService();
-  await instagram();
+  await tiktokService();
+  // await instagram();
   // await instagramService();
 }
 

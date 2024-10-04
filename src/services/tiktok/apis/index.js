@@ -1,20 +1,15 @@
 "use strict";
 
+const { apiList } = require("../../../utils/api-utils");
 const npmLibs = require("./npm-libs");
 const rapidApis = require("./rapidapis");
-
-/** @type {import("./shared.d.ts").TiktokApis} */
-const _npmLibs = Object.keys(npmLibs).map((key) => [key, npmLibs[key]]);
-
-/** @type {import("./shared.d.ts").TiktokApis} */
-const _rapidApis = Object.keys(rapidApis).map((key) => [key, rapidApis[key]]);
 
 /** @type {import("./shared.d.ts").TiktokApis} */
 const apis = [
   // ["fail", async ({ id }) => Err("Fail", { remaining: 100, reset: 1 })],
 
-  ..._npmLibs,
-  ..._rapidApis,
+  ...apiList(npmLibs),
+  ...apiList(rapidApis),
 ];
 
 module.exports = { apis };

@@ -16,14 +16,14 @@ describe("tiktok apis", () => {
 function testTiktok(name, apiFn) {
   it(name, async () => {
     switch (name) {
-      case "fetchTiktokScraperNowatermarks":
-      case "fetchTiktok82":
+      case "TiktokScraperNowatermarks":
+      case "Tiktok82":
         await testLongUrl(apiFn);
         await testShortUrlNotAllowed(apiFn, /Only supports long url/);
         await testLongUrlWithEmptyFetch(apiFn);
         break;
 
-      case "fetchOmarmhaimdat":
+      case "Omarmhaimdat":
         await testLongUrl(apiFn);
         await testShortUrlNotAllowed(apiFn, /Video id not found/);
         await testLongUrlWithEmptyFetch(apiFn);
