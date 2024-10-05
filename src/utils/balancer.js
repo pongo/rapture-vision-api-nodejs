@@ -2,6 +2,7 @@
 
 const { Keyv } = require("keyv");
 const { KeyvFile } = require("keyv-file");
+const pTimeout = require("p-timeout");
 const { Err, isOk } = require("./result");
 const { timeStart } = require("./time-start");
 
@@ -111,7 +112,7 @@ class Balancer {
       console.log(`[Balancer] Call api "${apiName}"...`);
       const elapsed = timeStart();
       try {
-        const result = await call(...payload);
+        const result = await pTimeout(call(...payload), 30_000);
         const elapsedMs = elapsed();
         await this._setRemaining(apiName, result);
 
