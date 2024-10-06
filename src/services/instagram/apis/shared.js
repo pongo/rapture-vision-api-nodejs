@@ -33,7 +33,7 @@ function urlFromId(id) {
   return `https://www.instagram.com/p/${id}/`;
 }
 
-const reImage = /\.(webp|jpe?g|png|avif|jfif|jxl)/i;
+const reImage = /\.(webp|jpe?g|png|avif|jfif|jxl|hei[cf]|jpe)/i;
 
 function splitUrls(urls) {
   urls = [...new Set(urls)];

@@ -80,7 +80,7 @@ function getImages(mediaDetails) {
 function getVideos(mediaDetails) {
   return mediaDetails
     .filter((m) => m.type !== "photo")
-    .map((m) => m.video_info.variants.filter((variant) => variant.content_type === "video/mp4"))
+    .map((m) => m.video_info.variants.filter((variant) => variant.content_type.includes("video")))
     .map((variants) => variants.sort((a, b) => b.bitrate - a.bitrate)) // от большего к меньшему
     .map((variants) => variants.map((variant) => variant.url));
 }
