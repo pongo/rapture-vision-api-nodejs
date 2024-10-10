@@ -2,15 +2,15 @@
 
 require("dotenv").config();
 const express = require("express");
-const { getTiktok } = require("./src/services/tiktok-service");
+const { getTiktok } = require("./src/services/tiktok/tiktok-service");
 const { timeStart } = require("./src/utils/time-start");
 const {
   getInstagram,
   getInstagram_v1,
   getInstagramStory,
-} = require("./src/services/instagram-service");
+} = require("./src/services/instagram/instagram-service");
 const { getThreads } = require("./src/services/threads-service");
-const { getTwitter } = require("./src/services/twitter-service");
+const { getTwitter } = require("./src/services/twitter/twitter-service");
 const { checkSenya } = initCheckSenya();
 const { Err } = require("./src/utils/result");
 
@@ -163,7 +163,7 @@ function initCheckSenya() {
     };
   }
 
-  return require("./src/services/senya-service");
+  return require("./src/services/senya/senya-service");
 }
 
 app.listen(port, () => {

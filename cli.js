@@ -37,13 +37,13 @@ async function instagram() {
 }
 
 async function tiktokService() {
-  const { getTiktok } = require("./src/services/tiktok-service");
+  const { getTiktok } = require("./src/services/tiktok/tiktok-service");
 
   console.log(await getTiktok("https://vt.tiktok.com/ZSNwYG2DD/"));
 }
 
 async function instagramService() {
-  const { getInstagram } = require("./src/services/instagram-service");
+  const { getInstagram } = require("./src/services/instagram/instagram-service");
 
   console.log(await getInstagram("CnpKCjYPyd6"));
 }
@@ -78,7 +78,7 @@ async function tiktok() {
 
 async function twitter() {
   const twitterApis = require("./src/services/twitter/apis/rapidapis");
-  const { getTwitter } = require("./src/services/twitter-service");
+  const { getTwitter } = require("./src/services/twitter/twitter-service");
 
   const ids = ["1679529814212894723"];
   const ids2 = [

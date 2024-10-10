@@ -1,11 +1,11 @@
 "use strict";
 
 const instagramGetUrl = require("instagram-url-direct");
-const { Ok, Err } = require("../utils/result");
+const { Ok, Err } = require("../../utils/result");
 const axios = require("axios").default;
-const { Balancer } = require("../utils/balancer");
-const { apis } = require("./instagram/apis");
-const { analytics } = require("../analytics/analytics");
+const { Balancer } = require("../../utils/balancer");
+const { apis } = require("./apis");
+const { analytics } = require("../../analytics/analytics");
 
 const balancer = new Balancer({
   name: "instagram",

@@ -1,9 +1,9 @@
 "use strict";
 
-const { Err } = require("../utils/result");
-const { Balancer } = require("../utils/balancer");
-const { apis } = require("./tiktok/apis");
-const { analytics } = require("../analytics/analytics");
+const { Err } = require("../../utils/result");
+const { Balancer } = require("../../utils/balancer");
+const { apis } = require("./apis");
+const { analytics } = require("../../analytics/analytics");
 
 const balancer = new Balancer({ name: "tiktok", apis, shuffle: true, strategy: "last", analytics });
 
