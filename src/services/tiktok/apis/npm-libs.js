@@ -10,7 +10,7 @@ const tiktod = require("tiktod").download;
 const TikTokNoWatermark = require("tiktok-no-watermark-api");
 const { TiktokFactory } = require("./shared");
 const nayan = require("nayan-media-downloader").tikdown;
-const { startsWithHttp } = require("../../../utils/starts-with-http");
+const { startsWithHttp } = require("../../../utils/api-utils");
 
 const emptyResult = { videos: [] };
 

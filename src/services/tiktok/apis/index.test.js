@@ -3,7 +3,7 @@
 const assert = require("node:assert/strict");
 const { describe, it } = require("node:test");
 const { apis } = require(".");
-const { startsWithHttp } = require("../../../utils/starts-with-http");
+const { startsWithHttp } = require("../../../utils/api-utils");
 const { formatErr } = require("../../../utils/testing-utils");
 const { Ok } = require("../../../utils/result");
 

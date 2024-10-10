@@ -1,7 +1,7 @@
 "use strict";
 
 const { requestRapidApiFetch } = require("../../../utils/rapidapi");
-const { startsWithHttp } = require("../../../utils/starts-with-http");
+const { startsWithHttp } = require("../../../utils/api-utils");
 const { InstagramFactory, urlFromId } = require("./shared");
 
 // https://rapidapi.com/rocketapi/api/rocketapi-for-instagram

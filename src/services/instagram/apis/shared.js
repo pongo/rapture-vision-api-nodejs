@@ -1,7 +1,7 @@
 "use strict";
 
 const { FetchFactory } = require("../../../utils/fetch-factory");
-const { startsWithHttp } = require("../../../utils/starts-with-http");
+const { startsWithHttp } = require("../../../utils/api-utils");
 
 function tmpFileNameFn(id) {
   return id;

@@ -7,4 +7,9 @@ function apiList(apis) {
   return Object.keys(apis).map((key) => [key.replace(reFetch, ""), apis[key]]);
 }
 
-module.exports = { apiList };
+/** @type {import("./api-utils.d.ts").startsWithHttp} */
+function startsWithHttp(str) {
+  return str == null ? false : str.startsWith("http");
+}
+
+module.exports = { apiList, startsWithHttp };
