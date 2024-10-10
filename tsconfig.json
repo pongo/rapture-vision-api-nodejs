@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "checkJs": true,
+    "allowJs": true,
     "noEmit": true,
 
     "module": "commonjs",
@@ -17,5 +18,5 @@
     // changing the type of the variable in a catch clause from unknown to any
     "useUnknownInCatchVariables": false
   },
-  "include": ["src/**/*.js", "test/**/*.js", "test_integration/**/*.js"]
+  "include": ["src/**/*.js", "test/**/*.js", "test_integration/**/*.js", "/cli.js", "/index.js"]
 }
