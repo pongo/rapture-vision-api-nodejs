@@ -16,17 +16,17 @@
   "license": "ISC",
   "dependencies": {
     "@prevter/tiktok-scraper": "1.0.1",
-    "@tobyg74/tiktok-api-dl": "1.1.9",
+    "@tobyg74/tiktok-api-dl": "1.2.0",
     "axios": "^1.6.8",
     "btch-downloader": "2.3.2",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
-    "instagram-url-direct": "1.0.20",
+    "instagram-url-direct": "1.0.21",
     "keyv": "^5.0.3",
     "keyv-file": "^5.0.3",
-    "nayan-media-downloader": "2.5.9",
+    "nayan-media-downloader": "2.6.3",
     "p-timeout": "4.1.0",
-    "ruhend-scraper": "8.0.0",
+    "ruhend-scraper": "8.0.3",
     "snaptik": "1.0.3",
     "threads-api": "1.6.3",
     "tikchan": "1.0.1",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@reporters/bail": "^1.2.1",
-    "@types/node": "^20.16.10",
+    "@types/node": "^20.17.1",
     "prettier": "^3.3.3"
   },
   "peerDependencies": {
