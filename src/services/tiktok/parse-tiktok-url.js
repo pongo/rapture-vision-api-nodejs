@@ -1,7 +1,7 @@
 const reShortVM = /(?:v.)\.tiktok\.com\/(\w+?)(?:\/|\?|$)/i;
 const reShortT = /tiktok\.com\/(?:t\/)(\w+?)(?:\/|\?|$)/i;
 const reWithUsername = /tiktok\.com\/@([\w.-]+)(?:\/video\/|\/.*item_id=)([\d]+)/i;
-const reId = /(?:\/|\?shareId=|\&item_id=)(\d+)/i;
+const reId = /(?:\/|\?shareId=|&item_id=)(\d+)/i;
 
 /** @type {import("./parse-tiktok-url.d.ts").parseTiktokUrl} */
 export function parseTiktokUrl(url) {

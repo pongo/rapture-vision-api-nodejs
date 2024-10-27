@@ -135,7 +135,7 @@ export class Balancer {
     const remaining = await this._getRemaining(apiName);
     if (remaining == null) return false;
     if (remaining < 3) return true;
-    else return false;
+    return false;
   }
 
   async _getRemaining(apiName) {

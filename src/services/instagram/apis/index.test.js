@@ -12,7 +12,7 @@ describe("instagram apis", () => {
   const skip = /** @type {Set<string>} */ (new Set([]));
   for (const [name, twitterFetchFn] of apis) {
     if (skip.has(name)) {
-      console.log("skip ", name);
+      console.log("skip", name);
       continue;
     }
     testInstagram(name, twitterFetchFn);
@@ -26,8 +26,8 @@ function testInstagram(name, fetchFn) {
       it(id, async () => {
         const actual = await fetchFn(id, { loadFromDisk: true });
         assert.ok(actual.isOk, actual.error);
-        delete actual.value.reset;
-        delete actual.value.remaining;
+        actual.value.reset = undefined;
+        actual.value.remaining = undefined;
         assert.deepEqual(actual.value.images.length, expected.images, "images");
         assert.deepEqual(actual.value.videos.length, expected.videos, "videos");
       });

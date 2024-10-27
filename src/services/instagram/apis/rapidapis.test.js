@@ -4,9 +4,9 @@ import { formatErr } from "../../../utils/testing-utils.js";
 import { fetchLooter2, fetchRocketApi } from "./rapidapis.js";
 
 const image_and_video = "CnpKCjYPyd6";
-const reCdnInstagram = /^https\:\/\/scontent.*?\.cdninstagram\.com/i;
-const reRapidCdn = /^https:\/\/d.rapidcdn.app\/d\?token=/i;
-const reFbcdn = /^https\:\/\/.+?\.fbcdn\.net/i;
+const reCdnInstagram = /^https:\/\/scontent.*?\.cdninstagram\.com/i;
+// const reRapidCdn = /^https:\/\/d.rapidcdn.app\/d\?token=/i;
+const reFbcdn = /^https:\/\/.+?\.fbcdn\.net/i;
 
 test("fetchRocketApi", async () => {
   const res = await fetchRocketApi(image_and_video, {

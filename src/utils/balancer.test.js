@@ -15,7 +15,7 @@ describe("parseLimits", () => {
     });
   });
 
-  it("should parse Result without limits data", (t) => {
+  it("should parse Result without limits data", () => {
     assert.deepEqual(parseLimits(Ok({})), { remaining: -1, reset: 0 });
     assert.deepEqual(parseLimits(Err(new Error("error"))), { remaining: -1, reset: 0 });
     assert.deepEqual(parseLimits(Ok({ remaining: 100 })), { remaining: 100, reset: 0 });

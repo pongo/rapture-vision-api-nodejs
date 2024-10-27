@@ -65,7 +65,7 @@ async function tiktok() {
 
   const loadFromDisk = false;
   console.log(
-    await apis.fetchTiklydownSanzy1(ok3, {
+    await apis.fetchNayan(ok3, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

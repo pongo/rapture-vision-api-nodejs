@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prevent-abbreviations */
 /* eslint-disable unicorn/consistent-function-scoping */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";

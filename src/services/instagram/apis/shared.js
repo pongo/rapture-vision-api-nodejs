@@ -20,7 +20,7 @@ function checkUrlsArray(urls) {
   if (!Array.isArray(urls)) return false;
   if (urls.length === 0) return true;
   if (Array.isArray(urls[0])) return urls.map(checkUrlsArray).every(isTrue);
-  return urls.filter(startsWithHttp).length > 0;
+  return urls.some(startsWithHttp);
 }
 
 export function InstagramFactory(apiName, options) {
@@ -34,11 +34,11 @@ export function urlFromId(id) {
 const reImage = /\.(webp|jpe?g|png|avif|jfif|jxl|hei[cf]|jpe)/i;
 
 export function splitUrls(urls) {
-  urls = [...new Set(urls)];
+  const uniqUrls = [...new Set(urls)];
 
   const images = [];
   const videos = [];
-  for (const url of urls) {
+  for (const url of uniqUrls) {
     if (!startsWithHttp(url)) {
       continue;
     }

@@ -5,7 +5,7 @@ import { Ok } from "./result.js";
 import { formatErr } from "./testing-utils.js";
 
 const throwNotImplemented = () => {
-  throw Error("Not implemented");
+  throw new Error("Not implemented");
 };
 
 describe("FetchFactory", () => {
@@ -60,7 +60,7 @@ describe("FetchFactory", () => {
 
     it("throwing error", async () => {
       const fetchFn = mock.fn(() => {
-        throw Error("oops");
+        throw new Error("oops");
       });
       const parseFn = mock.fn(() => undefined);
       const smth = FetchFactory("tiktok/smth", {

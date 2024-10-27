@@ -4,7 +4,7 @@ import { formatErr } from "../../../utils/testing-utils.js";
 import { fetchBtch, fetchInstagramUrlDirect, fetchNayan, fetchRuhend } from "./npm-libs.js";
 
 const image_and_video = "CnpKCjYPyd6";
-const reCdnInstagram = /^https\:\/\/scontent\.cdninstagram\.com/;
+const reCdnInstagram = /^https:\/\/scontent\.cdninstagram\.com/;
 const reRapidCdn = /^https:\/\/d.rapidcdn.app\/d\?token=/;
 
 test("fetchInstagramUrlDirect", async () => {

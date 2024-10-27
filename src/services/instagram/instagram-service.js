@@ -50,24 +50,22 @@ async function getRocketApi(post_id, story = false) {
   };
 
   try {
-    const data = (await axios.request(options)).data;
+    const { data } = await axios.request(options);
     const items = data?.response?.body?.items;
     if (items == null || items.length === 0) return Err("items is empty");
     const root = items[0];
-    if (root?.carousel_media != null && root.carousel_media.length > 0) {
-      return Ok(root.carousel_media.map(parseOne));
-    } else {
-      return Ok([parseOne(root)]);
-    }
+    return root?.carousel_media != null && root.carousel_media.length > 0
+      ? Ok(root.carousel_media.map(parseOneRocketApi))
+      : Ok([parseOneRocketApi(root)]);
   } catch (error) {
     return Err(`getRocketApi error: ${error.message}`, { error });
   }
+}
 
-  function parseOne(obj) {
-    if (obj.media_type === 1) return obj.image_versions2.candidates[0].url;
-    if (obj.media_type === 2) return obj.video_versions[0].url;
-    throw Error("unknown media_type: " + obj.media_type);
-  }
+function parseOneRocketApi(obj) {
+  if (obj.media_type === 1) return obj.image_versions2.candidates[0].url;
+  if (obj.media_type === 2) return obj.video_versions[0].url;
+  throw new Error(`unknown media_type: ${obj.media_type}`);
 }
 
 export async function getInstagram_v1({ post_id, url }) {
@@ -89,10 +87,10 @@ export async function getInstagram_v1({ post_id, url }) {
     }
   }
 
-  return Err(`All instagram services failed`);
+  return Err("All instagram services failed");
 }
 
-export async function getInstagramStory({ id, url }) {
+export async function getInstagramStory({ id, _url }) {
   let result;
 
   if (id) {
@@ -103,5 +101,5 @@ export async function getInstagramStory({ id, url }) {
     }
   }
 
-  return Err(`All instagram_story services failed`);
+  return Err("All instagram_story services failed");
 }

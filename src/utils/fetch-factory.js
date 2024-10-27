@@ -56,13 +56,9 @@ export function FetchFactory(apiName, factoryOptions) {
       }
 
       const result = await parseFn(data, url, options);
-      if (checkFn(result)) {
-        return Ok(result);
-      } else {
-        return Err(new FetchEmpty(url));
-      }
-    } catch (e) {
-      return Err(new FetchCatchError(url, e));
+      return checkFn(result) ? Ok(result) : Err(new FetchEmpty(url));
+    } catch (error) {
+      return Err(new FetchCatchError(url, error));
     }
 
     function _tmpFilePath() {
@@ -87,7 +83,8 @@ export function FetchFactory(apiName, factoryOptions) {
           return options.fakeLoadFromDiskData;
         }
         const load = loadFn ?? loadJson;
-        const data = (await load(_tmpFilePath()))?.data;
+        const loadedData = await load(_tmpFilePath());
+        const data = loadedData?.data;
         if (!data) {
           throw new StacklessError(`Empty data in ${_tmpFilePath()}`, { url });
         }
@@ -101,9 +98,9 @@ export function FetchFactory(apiName, factoryOptions) {
 }
 
 async function loadJson(path) {
-  return JSON.parse(await fs.readFile(path, "utf-8"));
+  return JSON.parse(await fs.readFile(path, "utf8"));
   // try {
-  //   return JSON.parse(await fs.readFile(path, "utf-8"));
+  //   return JSON.parse(await fs.readFile(path, "utf8"));
   // } catch {
   //   return undefined;
   // }

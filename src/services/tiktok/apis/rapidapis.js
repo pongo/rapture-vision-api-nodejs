@@ -23,11 +23,11 @@ export const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
         params: { url },
         parseLimitsFn(response) {
           return {
-            remaining: parseInt(
+            remaining: Number.parseInt(
               response.headers["x-ratelimit-video-without-watermark-%2f-music-remaining"],
               10,
             ),
-            reset: parseInt(
+            reset: Number.parseInt(
               response.headers["x-ratelimit-video-without-watermark-%2f-music-reset"],
               10,
             ),
@@ -135,8 +135,8 @@ export const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
         params: { url, hd: "0" },
         parseLimitsFn(response) {
           return {
-            remaining: parseInt(response.headers["x-ratelimit-request-remaining"], 10),
-            reset: parseInt(response.headers["x-ratelimit-request-reset"], 10),
+            remaining: Number.parseInt(response.headers["x-ratelimit-request-remaining"], 10),
+            reset: Number.parseInt(response.headers["x-ratelimit-request-reset"], 10),
           };
         },
       },
@@ -247,8 +247,8 @@ export const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
 //             response.headers["x-ratelimit-requests-reset"],
 //           );
 //           return {
-//             remaining: parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
-//             reset: parseInt(response.headers["x-ratelimit-requests-reset"], 10),
+//             remaining: Number.parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
+//             reset: Number.parseInt(response.headers["x-ratelimit-requests-reset"], 10),
 //           };
 //         },
 //       },

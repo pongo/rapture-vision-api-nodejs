@@ -40,7 +40,7 @@ export const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
         videos.push(obj.video_versions[0].url);
         return;
       }
-      throw Error("unknown media_type: " + obj.media_type);
+      throw new Error(`unknown media_type: ${obj.media_type}`);
     }
   },
 });
@@ -57,20 +57,20 @@ export const fetchLooter2 = InstagramFactory("instagram/looter2", {
     if (data?.data?.medias && data.data.medias.length > 0) {
       const medias = data.data.medias;
       return {
-        images: filterMedia(medias, "image"),
-        videos: filterMedia(medias, "video"),
+        images: filterMediaLooter2(medias, "image"),
+        videos: filterMediaLooter2(medias, "video"),
         remaining,
         reset,
       };
     }
 
     return { remaining, reset, images: [], videos: [] };
-
-    function filterMedia(medias, mediaType) {
-      return medias
-        .filter((x) => x.type === mediaType)
-        .map((x) => x.link)
-        .filter(startsWithHttp);
-    }
   },
 });
+
+function filterMediaLooter2(medias, mediaType) {
+  return medias
+    .filter((x) => x.type === mediaType)
+    .map((x) => x.link)
+    .filter(startsWithHttp);
+}

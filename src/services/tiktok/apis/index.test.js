@@ -81,5 +81,5 @@ function assertResult(res) {
 
 function assertVideos(videos) {
   assert.ok(Array.isArray(videos), videos);
-  assert.ok(videos.filter(startsWithHttp).length > 0, videos.toString());
+  assert.ok(videos.some(startsWithHttp), videos.toString());
 }

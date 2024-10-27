@@ -11,6 +11,6 @@ export class CsvWriter {
 
   writeRow(row) {
     const _row = Array.isArray(row) ? row.join(",") : row;
-    this.stream.write(_row + "\n");
+    this.stream.write(`${_row}\n`);
   }
 }

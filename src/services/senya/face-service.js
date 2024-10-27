@@ -1,3 +1,4 @@
+/* eslint-disable n/no-missing-import */
 // @ts-nocheck
 
 import "@tensorflow/tfjs-node"; // @tensorflow/tfjs-node@1.2.1
@@ -69,9 +70,9 @@ async function detect(tensor) {
         // .withAgeAndGender()
         .withFaceDescriptors(),
     );
-  } catch (e) {
-    console.error("Detect error", e.message);
-    return Err(`Detect error: ${e.message}`, { error: e });
+  } catch (error) {
+    console.error("Detect error", error.message);
+    return Err(`Detect error: ${error.message}`, { error: error });
   }
 }
 
@@ -92,7 +93,7 @@ async function createFaceMatcher(modelPath, distanceThreshold) {
   if (cached !== undefined) return Ok(cached);
 
   try {
-    const descriptorsJson = JSON.parse(await fs.promises.readFile(`./model/${modelPath}`, "utf-8"));
+    const descriptorsJson = JSON.parse(await fs.promises.readFile(`./model/${modelPath}`, "utf8"));
     const descriptors = descriptorsJson.map((x) => faceapi.LabeledFaceDescriptors.fromJSON(x));
     const faceMatcher = new faceapi.FaceMatcher(descriptors, distanceThreshold);
     faceMatchers.set(key, faceMatcher);
@@ -150,10 +151,10 @@ export async function checkFaceMatch(url, modelName, distanceThreshold) {
       label,
       distance: Number(distance.toFixed(4)),
       box: {
-        x: parseInt(aligned_box._x, 10),
-        y: parseInt(aligned_box._y, 10),
-        width: parseInt(aligned_box._width, 10),
-        height: parseInt(aligned_box._height, 10),
+        x: Number.parseInt(aligned_box._x, 10),
+        y: Number.parseInt(aligned_box._y, 10),
+        width: Number.parseInt(aligned_box._width, 10),
+        height: Number.parseInt(aligned_box._height, 10),
       },
     })),
   );

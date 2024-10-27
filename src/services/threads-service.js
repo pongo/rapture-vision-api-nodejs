@@ -43,8 +43,7 @@ export async function viaThreadsAPI(url) {
 function getWebId(url) {
   const regex = /https?:\/\/(?:www\.)?threads\.net\/t\/([A-Za-z0-9]+)/i;
   const match = url.match(regex);
-  if (match) return match[1];
-  else return undefined;
+  return match ? match[1] : undefined;
 }
 
 export async function viaRocketCavsn(url) {
@@ -62,8 +61,8 @@ export async function viaRocketCavsn(url) {
   };
 
   try {
-    const data = (await axios.request(options)).data;
-    // const data = JSON.parse(await fs.readFile("./tmp/threads/cavsn/CuWgZVFIu75.json", "utf-8"));
+    const { data } = await axios.request(options);
+    // const data = JSON.parse(await fs.readFile("./tmp/threads/cavsn/CuWgZVFIu75.json", "utf8"));
     return await checkResult(extractPost(data[0].post), "cavsn", webId, data);
   } catch (error) {
     return Err(`[viaRocketCavsn] error: ${error.message}`, { error });

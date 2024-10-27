@@ -4,7 +4,6 @@ import {
   TwitterFactory,
   parseAbcdsxg1TweetResultByRestId,
   parseDavethebeast241,
-  parseGlavierTweet,
   parseThreadedConversationV2,
 } from "./shared.js";
 
@@ -134,8 +133,8 @@ export const fetchRestocked47 = TwitterFactory("twitter/restocked47", {
 //           response.headers["x-ratelimit-requests-reset"],
 //         );
 //         return {
-//           remaining: parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
-//           reset: parseInt(response.headers["x-ratelimit-requests-reset"], 10),
+//           remaining: Number.parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
+//           reset: Number.parseInt(response.headers["x-ratelimit-requests-reset"], 10),
 //         };
 //       },
 //     });

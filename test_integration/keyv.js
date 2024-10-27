@@ -13,7 +13,7 @@ test.skip("keyv should create file with limits", async () => {
   await balancer.callOneRound("test");
 
   assert.ok(existsSync(FILENAME));
-  const content = readFileSync(FILENAME, "utf-8");
+  const content = readFileSync(FILENAME, "utf8");
   // console.log(content);
   const data = JSON.parse(content);
   // console.dir(data, { depth: null });

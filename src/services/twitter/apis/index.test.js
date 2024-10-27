@@ -103,7 +103,7 @@ describe("twitter apis", () => {
   const skip = new Set(["Glavier135TweetDetail", "Restocked47"]);
   for (const [name, twitterFetchFn] of apis) {
     if (skip.has(name)) {
-      console.log("skip ", name);
+      console.log("skip", name);
       continue;
     }
     testTwitter(name, twitterFetchFn);
@@ -117,8 +117,8 @@ function testTwitter(name, twitterFetchFn) {
       it(id, async () => {
         const actual = await twitterFetchFn(id, { loadFromDisk: true });
         assert.ok(actual.isOk, actual.error);
-        delete actual.value.reset;
-        delete actual.value.remaining;
+        actual.value.reset = undefined;
+        actual.value.remaining = undefined;
         if (expected.text instanceof RegExp) {
           assert.match(actual.value.text, expected.text);
         } else {
