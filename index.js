@@ -1,5 +1,6 @@
 import "dotenv/config";
 //
+import * as v from "@badrap/valita";
 import express from "express";
 import {
   getInstagram,
@@ -13,17 +14,25 @@ import { Err } from "./src/utils/result.js";
 import { timeStart } from "./src/utils/time-start.js";
 const { checkSenya } = await initCheckSenya();
 
+const TrimmedString = v.string().map((x) => x.trim());
+const NonEmptyString = TrimmedString.assert((s) => s.length > 0, "empty");
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+const SenyaScheme = v.object({
+  url: NonEmptyString,
+});
+
 app.post("/api/senya", async (req, res) => {
-  const url = req.body?.url?.trim();
-  if (!url) {
-    return void res.status(400).json({ ok: false, error: { code: 400, message: "Url is empty" } });
+  const validationResult = SenyaScheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const { url } = validationResult.value;
   const elapsed = timeStart();
   const senyaResult = await checkSenya(url);
   if (senyaResult.isErr) {
@@ -35,15 +44,17 @@ app.post("/api/senya", async (req, res) => {
   res.json({ ok: true, is_senya: senyaResult.value });
 });
 
-app.post("/api/v1/tiktok-video", async (req, res) => {
-  const { video: videoUrl } = req.body;
+const TiktokScheme = v.object({
+  video: NonEmptyString,
+});
 
-  if (typeof videoUrl !== "string") {
-    return void res
-      .status(400)
-      .json({ ok: false, error: { code: 400, message: "'video' is not a string" } });
+app.post("/api/v1/tiktok-video", async (req, res) => {
+  const validationResult = TiktokScheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const videoUrl = validationResult.value.video;
   const elapsed = timeStart();
   const result = await getTiktok(videoUrl);
   if (result.isErr) {
@@ -56,15 +67,20 @@ app.post("/api/v1/tiktok-video", async (req, res) => {
   res.json({ ok: true, value: result.value });
 });
 
+const Instagram1Scheme = v
+  .object({
+    url: TrimmedString.optional(),
+    post_id: TrimmedString.optional(),
+  })
+  .assert((x) => x.url || x.post_id);
+
 app.post("/api/v1/instagram", async (req, res) => {
-  const url = req.body?.url?.trim();
-  const post_id = req.body?.post_id?.trim();
-  if (!url && !post_id) {
-    return void res
-      .status(400)
-      .json({ ok: false, error: { code: 400, message: "Should be url or post_id" } });
+  const validationResult = Instagram1Scheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const { url, post_id } = validationResult.value;
   const elapsed = timeStart();
   const igResult = await getInstagram_v1({ post_id, url });
   if (igResult.isErr) {
@@ -78,14 +94,17 @@ app.post("/api/v1/instagram", async (req, res) => {
   res.json({ ok: true, links: igResult.value });
 });
 
+const Instagram2Scheme = v.object({
+  post_id: NonEmptyString,
+});
+
 app.post("/api/v2/instagram", async (req, res) => {
-  const post_id = req.body?.post_id?.trim();
-  if (!post_id) {
-    return void res
-      .status(400)
-      .json({ ok: false, error: { code: 400, message: "Should be post_id" } });
+  const validationResult = Instagram2Scheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const { post_id } = validationResult.value;
   const elapsed = timeStart();
   const igResult = await getInstagram(post_id);
   if (igResult.isErr) {
@@ -97,15 +116,20 @@ app.post("/api/v2/instagram", async (req, res) => {
   res.json({ ok: true, value: igResult.value });
 });
 
+const InstagramStoryScheme = v
+  .object({
+    url: TrimmedString.optional(),
+    id: TrimmedString.optional(),
+  })
+  .assert((x) => x.url || x.id);
+
 app.post("/api/v1/instagram_story", async (req, res) => {
-  const url = req.body?.url?.trim();
-  const id = req.body?.id?.trim();
-  if (!url && !id) {
-    return void res
-      .status(400)
-      .json({ ok: false, error: { code: 400, message: "Should be url or id" } });
+  const validationResult = InstagramStoryScheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const { url, id } = validationResult.value;
   const elapsed = timeStart();
   const igResult = await getInstagramStory({ id, url });
   if (igResult.isErr) {
@@ -119,12 +143,17 @@ app.post("/api/v1/instagram_story", async (req, res) => {
   res.json({ ok: true, links: igResult.value });
 });
 
+const ThreadsScheme = v.object({
+  url: NonEmptyString,
+});
+
 app.post("/api/v1/threads", async (req, res) => {
-  const url = req.body?.url?.trim();
-  if (!url) {
-    return void res.status(400).json({ ok: false, error: { code: 400, message: "Should be url" } });
+  const validationResult = ThreadsScheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const { url } = validationResult.value;
   const elapsed = timeStart();
   const reqResult = await getThreads(url);
   if (reqResult.isErr) {
@@ -136,14 +165,17 @@ app.post("/api/v1/threads", async (req, res) => {
   res.json({ ok: true, value: reqResult.value });
 });
 
+const TwitterScheme = v.object({
+  id: NonEmptyString,
+});
+
 app.post("/api/v1/twitter", async (req, res) => {
-  const id = req.body?.id?.trim();
-  if (!id) {
-    return void res
-      .status(400)
-      .json({ ok: false, error: { code: 400, message: "Should be tweet id" } });
+  const validationResult = TwitterScheme.try(req.body);
+  if (!validationResult.ok) {
+    return void sendValidationError(res, validationResult);
   }
 
+  const { id } = validationResult.value;
   const elapsed = timeStart();
   const reqResult = await getTwitter(id);
   if (reqResult.isErr) {
@@ -163,6 +195,10 @@ async function initCheckSenya() {
   }
 
   return await import("./src/services/senya/senya-service.js");
+}
+
+function sendValidationError(res, validationResult) {
+  res.status(400).json({ ok: false, error: { code: 400, message: validationResult.message } });
 }
 
 app.listen(port, () => {

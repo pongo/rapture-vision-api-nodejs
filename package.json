@@ -22,6 +22,7 @@
     "node": ">=20.2"
   },
   "dependencies": {
+    "@badrap/valita": "^0.3.11",
     "@prevter/tiktok-scraper": "1.0.1",
     "@tobyg74/tiktok-api-dl": "1.2.0",
     "axios": "^1.6.8",
