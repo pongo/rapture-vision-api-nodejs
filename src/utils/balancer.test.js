@@ -1,9 +1,7 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { describe, it } = require("node:test");
-const { Err, Ok, isOk } = require("./result");
-const { parseLimits } = require("./balancer");
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { parseLimits } from "./balancer.js";
+import { Err, Ok } from "./result.js";
 
 describe("parseLimits", () => {
   it("should parse Ok with limits data", () => {

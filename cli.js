@@ -1,23 +1,22 @@
-"use strict";
+/* eslint-disable no-unused-vars */
+import "dotenv/config";
+import { setTimeout as delay } from "node:timers/promises";
 
-require("dotenv").config();
-const delay = require("node:timers/promises").setTimeout;
-
-main().catch(console.error);
+await main().catch(console.error);
 
 async function main() {
-  // await tiktok();
+  await tiktok();
   // await twitter();
   // getTwitter("1679529814212894723").then(console.log);
   // await analyticsTest();
-  await tiktokService();
+  // await tiktokService();
   // await instagram();
   // await instagramService();
 }
 
 async function instagram() {
-  const apis = require("./src/services/instagram/apis/npm-libs");
-  // const apis = require("./src/services/instagram/apis/rapidapis");
+  // const apis = await import("./src/services/instagram/apis/npm-libs.js");
+  const apis = await import("./src/services/instagram/apis/rapidapis.js");
 
   const image = "Cf4PRxnlMUa";
   const image2 = "DAN98w7zs0j";
@@ -29,7 +28,7 @@ async function instagram() {
 
   const loadFromDisk = true;
   console.log(
-    await apis.fetchInstagramUrlDirect(image_and_video, {
+    await apis.fetchLooter2(image, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
@@ -37,27 +36,27 @@ async function instagram() {
 }
 
 async function tiktokService() {
-  const { getTiktok } = require("./src/services/tiktok/tiktok-service");
+  const { getTiktok } = await import("./src/services/tiktok/tiktok-service.js");
 
   console.log(await getTiktok("https://vt.tiktok.com/ZSNwYG2DD/"));
 }
 
 async function instagramService() {
-  const { getInstagram } = require("./src/services/instagram/instagram-service");
+  const { getInstagram } = await import("./src/services/instagram/instagram-service.js");
 
   console.log(await getInstagram("CnpKCjYPyd6"));
 }
 
 async function analyticsTest() {
-  const { CsvWriter } = require("./src/analytics/csv-writer");
+  const { CsvWriter } = await import("./src/analytics/csv-writer.js");
 
   const csv = new CsvWriter("analytics-test.csv", "header");
   csv.writeRow("1");
 }
 
 async function tiktok() {
-  const tiktokApis = require("./src/services/tiktok/apis/npm-libs");
-  // const tiktokApis = require("./src/services/tiktok/apis/rapidapis");
+  const apis = await import("./src/services/tiktok/apis/npm-libs.js");
+  // const apis = await import("./src/services/tiktok/apis/rapidapis.js");
 
   const fail = "https://vm.tiktok.com/ZSjZpJ/";
   const ok = "https://www.tiktok.com/@andakitty/video/7295937209176214816";
@@ -66,7 +65,7 @@ async function tiktok() {
 
   const loadFromDisk = false;
   console.log(
-    await tiktokApis.fetchTiktokScraperNowatermarks(ok3, {
+    await apis.fetchTiklydownSanzy1(ok3, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
@@ -77,8 +76,8 @@ async function tiktok() {
 }
 
 async function twitter() {
-  const twitterApis = require("./src/services/twitter/apis/rapidapis");
-  const { getTwitter } = require("./src/services/twitter/twitter-service");
+  const twitterApis = await import("./src/services/twitter/apis/rapidapis.js");
+  const { getTwitter } = await import("./src/services/twitter/twitter-service.js");
 
   const ids = ["1679529814212894723"];
   const ids2 = [
@@ -95,7 +94,7 @@ async function twitter() {
   const loadFromDisk = false;
   for (const id of ids2) {
     console.log(
-      await twitterApis.fetchSmth(id, {
+      await twitterApis.fetchAbcdsxg1TweetResultByRestId(id, {
         loadFromDisk,
         saveToDisk: !loadFromDisk,
       }),

@@ -1,11 +1,9 @@
-"use strict";
-
-const instagramGetUrl = require("instagram-url-direct");
-const { Ok, Err } = require("../../utils/result");
-const axios = require("axios").default;
-const { Balancer } = require("../../utils/balancer");
-const { apis } = require("./apis");
-const { analytics } = require("../../analytics/analytics");
+import axios from "axios";
+import instagramGetUrl from "instagram-url-direct";
+import { analytics } from "../../analytics/analytics.js";
+import { Balancer } from "../../utils/balancer.js";
+import { Err, Ok } from "../../utils/result.js";
+import { apis } from "./apis/index.js";
 
 const balancer = new Balancer({
   name: "instagram",
@@ -15,7 +13,7 @@ const balancer = new Balancer({
   analytics,
 });
 
-async function getInstagram(post_id) {
+export async function getInstagram(post_id) {
   try {
     return await balancer.callOneRound(post_id, { loadFromDisk: false });
   } catch (error) {
@@ -72,7 +70,7 @@ async function getRocketApi(post_id, story = false) {
   }
 }
 
-async function getInstagram_v1({ post_id, url }) {
+export async function getInstagram_v1({ post_id, url }) {
   let result;
 
   if (post_id) {
@@ -94,7 +92,7 @@ async function getInstagram_v1({ post_id, url }) {
   return Err(`All instagram services failed`);
 }
 
-async function getInstagramStory({ id, url }) {
+export async function getInstagramStory({ id, url }) {
   let result;
 
   if (id) {
@@ -107,5 +105,3 @@ async function getInstagramStory({ id, url }) {
 
   return Err(`All instagram_story services failed`);
 }
-
-module.exports = { getInstagram_v1, getInstagram, getInstagramStory };

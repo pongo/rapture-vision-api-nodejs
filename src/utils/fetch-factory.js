@@ -1,11 +1,9 @@
-"use strict";
-
-const fs = require("node:fs/promises");
-const { Ok, Err, isErr, isResult } = require("./result");
-const { StacklessError } = require("./stackless-error");
-const { sanitizeFilename } = require("./sanitize-filename");
-const writeJsonFile = require("write-json-file");
-const assert = require("node:assert/strict");
+import assert from "node:assert/strict";
+import * as fs from "node:fs/promises";
+import { writeJsonFile } from "write-json-file";
+import { Err, isErr, isResult, Ok } from "./result.js";
+import { sanitizeFilename } from "./sanitize-filename.js";
+import { StacklessError } from "./stackless-error.js";
 
 class FetchCatchError extends Error {
   constructor(url, catchedError) {
@@ -26,10 +24,10 @@ class FetchEmpty extends StacklessError {
  * @template T
  * @template F
  * @param {string} apiName
- * @param {import("./fetch-factory").FactoryOptions<T, F>} factoryOptions
- * @returns {import("./fetch-factory").FetchFn<T>}
+ * @param {import("./fetch-factory.d.ts").FactoryOptions<T, F>} factoryOptions
+ * @returns {import("./fetch-factory.d.ts").FetchFn<T>}
  */
-function FetchFactory(apiName, factoryOptions) {
+export function FetchFactory(apiName, factoryOptions) {
   const {
     fetchFn,
     parseFn,
@@ -116,8 +114,6 @@ async function loadJson(path) {
  * @param {string} filename
  * @returns {string}
  */
-function getTmpFilePath(apiName, filename) {
+export function getTmpFilePath(apiName, filename) {
   return `./tmp/${apiName}/${sanitizeFilename(filename)}.json`;
 }
-
-module.exports = { FetchFactory, getTmpFilePath };

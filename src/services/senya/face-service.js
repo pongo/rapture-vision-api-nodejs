@@ -1,12 +1,11 @@
 // @ts-nocheck
-"use strict";
 
-const canvas = require("canvas");
-const tf = require("@tensorflow/tfjs-node"); // @tensorflow/tfjs-node@1.2.1
-const faceapi = require("@vladmandic/face-api");
-const fs = require("fs");
-const { timeStart } = require("../../utils/time-start");
-const { Ok, Err, isErr } = require("../../utils/result");
+import "@tensorflow/tfjs-node"; // @tensorflow/tfjs-node@1.2.1
+import * as faceapi from "@vladmandic/face-api";
+import * as canvas from "canvas";
+import * as fs from "node:fs";
+import { Err, isErr, Ok } from "../../utils/result.js";
+import { timeStart } from "../../utils/time-start.js";
 
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
@@ -121,7 +120,7 @@ async function detectFaces(url) {
   return Ok({ faces: detectResult.value, c });
 }
 
-async function checkFaceMatch(url, modelName, distanceThreshold) {
+export async function checkFaceMatch(url, modelName, distanceThreshold) {
   const facesResult = await detectFaces(url);
   if (isErr(facesResult)) return facesResult;
   const { faces, c } = facesResult.value;
@@ -181,5 +180,3 @@ function drawBoxesAndSaveFile(matches, c) {
     );
   }
 }
-
-module.exports.checkFaceMatch = checkFaceMatch;

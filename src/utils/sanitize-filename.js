@@ -1,6 +1,4 @@
-"use strict";
-
-function sanitizeFilename(input, options) {
+export function sanitizeFilename(input, options) {
   const replacement = (options && options.replacement) || "";
   const output = sanitize(input, replacement);
   if (replacement === "") {
@@ -29,7 +27,3 @@ function truncate(sanitized, length) {
   const truncated = uint8Array.slice(0, length);
   return new TextDecoder().decode(truncated);
 }
-
-module.exports = {
-  sanitizeFilename,
-};

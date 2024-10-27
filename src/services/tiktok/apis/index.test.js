@@ -1,11 +1,9 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { describe, it } = require("node:test");
-const { apis } = require(".");
-const { startsWithHttp } = require("../../../utils/api-utils");
-const { formatErr } = require("../../../utils/testing-utils");
-const { Ok } = require("../../../utils/result");
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { Ok } from "../../../utils/result.js";
+import { formatErr } from "../../../utils/testing-utils.js";
+import { apis } from "./index.js";
 
 describe("tiktok apis", () => {
   for (const [name, apiFn] of apis) {

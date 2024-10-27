@@ -1,11 +1,9 @@
-"use strict";
-
-const { requestRapidApiFetch } = require("../../../utils/rapidapi");
-const { startsWithHttp } = require("../../../utils/api-utils");
-const { InstagramFactory, urlFromId } = require("./shared");
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { requestRapidApiFetch } from "../../../utils/rapidapi.js";
+import { InstagramFactory, urlFromId } from "./shared.js";
 
 // https://rapidapi.com/rocketapi/api/rocketapi-for-instagram
-const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
+export const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
   async fetchFn(id) {
     return await requestRapidApiFetch(
       "POST",
@@ -48,7 +46,7 @@ const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
 });
 
 // https://rapidapi.com/iq.faceok/api/instagram-looter2
-const fetchLooter2 = InstagramFactory("instagram/looter2", {
+export const fetchLooter2 = InstagramFactory("instagram/looter2", {
   async fetchFn(id) {
     return await requestRapidApiFetch("GET", "https://instagram-looter2.p.rapidapi.com/post-dl", {
       host: "instagram-looter2.p.rapidapi.com",
@@ -76,8 +74,3 @@ const fetchLooter2 = InstagramFactory("instagram/looter2", {
     }
   },
 });
-
-module.exports = {
-  fetchRocketApi,
-  fetchLooter2,
-};

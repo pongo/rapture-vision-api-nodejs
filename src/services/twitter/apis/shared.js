@@ -1,7 +1,5 @@
-"use strict";
-
-const { FetchFactory } = require("../../../utils/fetch-factory");
-const { startsWithHttp } = require("../../../utils/api-utils");
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { FetchFactory } from "../../../utils/fetch-factory.js";
 
 function tmpFileNameFn(id) {
   return id;
@@ -22,7 +20,7 @@ function checkUrlsArray(urls) {
   return urls.filter(startsWithHttp).length > 0;
 }
 
-function parseThreadedConversationV2(tweet_id, data) {
+export function parseThreadedConversationV2(tweet_id, data) {
   const result1 = getResult1(data);
   const post = getPost(result1);
   const text = post?.full_text ?? "";
@@ -85,7 +83,7 @@ function getVideos(mediaDetails) {
     .map((variants) => variants.map((variant) => variant.url));
 }
 
-function parseGlavierTweet(data) {
+export function parseGlavierTweet(data) {
   const text = data?.text ?? "";
   const quotedMedia = data?.quoted_tweet?.mediaDetails ?? [];
   const origMedia = data?.mediaDetails ?? [];
@@ -96,7 +94,7 @@ function parseGlavierTweet(data) {
   return { text, images, videos };
 }
 
-function parseDavethebeast241(data, id) {
+export function parseDavethebeast241(data, id) {
   if (data.data && "threaded_conversation_with_injections_v2" in data.data) {
     return parseThreadedConversationV2(id, data.data);
   }
@@ -111,7 +109,7 @@ function parseDavethebeast241(data, id) {
   return { text, images, videos, quote_id };
 }
 
-function parseAbcdsxg1TweetResultByRestId(data, id) {
+export function parseAbcdsxg1TweetResultByRestId(data, id) {
   const result = data.data.tweetResult.result;
   const post = result.legacy;
   const text = post.full_text ?? "";
@@ -126,14 +124,6 @@ function parseAbcdsxg1TweetResultByRestId(data, id) {
   return { text, images, videos };
 }
 
-function TwitterFactory(apiName, options) {
+export function TwitterFactory(apiName, options) {
   return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
 }
-
-module.exports = {
-  parseThreadedConversationV2,
-  parseGlavierTweet,
-  parseDavethebeast241,
-  parseAbcdsxg1TweetResultByRestId,
-  TwitterFactory,
-};

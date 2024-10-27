@@ -1,18 +1,16 @@
-"use strict";
-
-require("dotenv").config();
-const express = require("express");
-const { getTiktok } = require("./src/services/tiktok/tiktok-service");
-const { timeStart } = require("./src/utils/time-start");
-const {
+import "dotenv/config";
+import express from "express";
+import {
   getInstagram,
   getInstagram_v1,
   getInstagramStory,
-} = require("./src/services/instagram/instagram-service");
-const { getThreads } = require("./src/services/threads-service");
-const { getTwitter } = require("./src/services/twitter/twitter-service");
-const { checkSenya } = initCheckSenya();
-const { Err } = require("./src/utils/result");
+} from "./src/services/instagram/instagram-service.js";
+import { getThreads } from "./src/services/threads-service.js";
+import { getTiktok } from "./src/services/tiktok/tiktok-service.js";
+import { getTwitter } from "./src/services/twitter/twitter-service.js";
+import { Err } from "./src/utils/result.js";
+import { timeStart } from "./src/utils/time-start.js";
+const { checkSenya } = await initCheckSenya();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -156,14 +154,14 @@ app.post("/api/v1/twitter", async (req, res) => {
   res.json({ ok: true, value: reqResult.value });
 });
 
-function initCheckSenya() {
+async function initCheckSenya() {
   if (process.env.DISABLE_CHECK_SENYA === "on") {
     return {
       checkSenya: async () => Err("checkSenya disabled by environment variable"),
     };
   }
 
-  return require("./src/services/senya/senya-service");
+  return await import("./src/services/senya/senya-service.js");
 }
 
 app.listen(port, () => {

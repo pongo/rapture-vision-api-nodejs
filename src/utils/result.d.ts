@@ -1,4 +1,4 @@
-import { StacklessError } from "./stackless-error";
+import type { StacklessError } from "./stackless-error.d.ts";
 
 type Ok<T> = {
   readonly isOk: true;

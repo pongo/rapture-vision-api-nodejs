@@ -1,6 +1,4 @@
-"use strict";
-
-const { CsvWriter } = require("./csv-writer");
+import { CsvWriter } from "./csv-writer.js";
 
 class Analytics {
   constructor() {
@@ -21,6 +19,4 @@ class Analytics {
   }
 }
 
-const analytics = new Analytics();
-
-module.exports = { analytics };
+export const analytics = new Analytics();

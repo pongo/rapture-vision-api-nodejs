@@ -1,20 +1,20 @@
-"use strict";
+import { fetchVideo as prevter } from "@prevter/tiktok-scraper";
+import tobyg74 from "@tobyg74/tiktok-api-dl";
+import { ttdl as BtchDownloader } from "btch-downloader";
+import nayanPkg from "nayan-media-downloader";
+import Snaptik from "snaptik";
+import TikChan from "tikchan";
+import tiklydownSanzy from "tiklydown-sanzy";
+import { download as tiktod } from "tiktod";
+import TikTokNoWatermark from "tiktok-no-watermark-api";
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { TiktokFactory } from "./shared.js";
 
-const Snaptik = require("snaptik");
-const tobyg74 = require("@tobyg74/tiktok-api-dl");
-const TikChan = require("tikchan");
-const prevter = require("@prevter/tiktok-scraper").fetchVideo;
-const BtchDownloader = require("btch-downloader").ttdl;
-const tiklydownSanzy = require("tiklydown-sanzy");
-const tiktod = require("tiktod").download;
-const TikTokNoWatermark = require("tiktok-no-watermark-api");
-const { TiktokFactory } = require("./shared");
-const nayan = require("nayan-media-downloader").tikdown;
-const { startsWithHttp } = require("../../../utils/api-utils");
+const nayan = nayanPkg.tikdown;
 
 const emptyResult = { videos: [] };
 
-const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
+export const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
   async fetchFn(url) {
     const snaptik = new Snaptik(url);
     return await snaptik.download();
@@ -27,7 +27,7 @@ const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
   },
 });
 
-const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
+export const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   async fetchFn(url) {
     return await tobyg74.Downloader(url, { version: "v1" });
   },
@@ -40,7 +40,7 @@ const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   },
 });
 
-const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
+export const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
   async fetchFn(url) {
     return await tobyg74.Downloader(url, { version: "v2" });
   },
@@ -52,7 +52,7 @@ const fetchTobyg74_v2 = TiktokFactory("tiktok/tobyg74_v2", {
   },
 });
 
-const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
+export const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   async fetchFn(url) {
     return await tobyg74.Downloader(url, { version: "v3" });
   },
@@ -71,7 +71,7 @@ const fetchTobyg74_v3 = TiktokFactory("tiktok/tobyg74_v3", {
   },
 });
 
-const fetchTikChan = TiktokFactory("tiktok/TikChan", {
+export const fetchTikChan = TiktokFactory("tiktok/TikChan", {
   async fetchFn(url) {
     return await TikChan.download(url);
   },
@@ -80,7 +80,7 @@ const fetchTikChan = TiktokFactory("tiktok/TikChan", {
   },
 });
 
-const fetchPrevter = TiktokFactory("tiktok/prevter", {
+export const fetchPrevter = TiktokFactory("tiktok/prevter", {
   async fetchFn(url) {
     return await prevter(url);
   },
@@ -91,7 +91,7 @@ const fetchPrevter = TiktokFactory("tiktok/prevter", {
   },
 });
 
-const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
+export const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
   async fetchFn(url) {
     return await BtchDownloader(url);
   },
@@ -100,7 +100,7 @@ const fetchBtchDownloader = TiktokFactory("tiktok/BtchDownloader", {
   },
 });
 
-const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
+export const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
   async fetchFn(url) {
     return await tiklydownSanzy.v1(url);
   },
@@ -112,7 +112,7 @@ const fetchTiklydownSanzy1 = TiktokFactory("tiktok/tiklydownSanzy1", {
   },
 });
 
-const fetchTiktod = TiktokFactory("tiktok/tiktod", {
+export const fetchTiktod = TiktokFactory("tiktok/tiktod", {
   async fetchFn(url) {
     return await tiktod(url);
   },
@@ -124,7 +124,7 @@ const fetchTiktod = TiktokFactory("tiktok/tiktod", {
   },
 });
 
-const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
+export const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
   async fetchFn(url) {
     return await TikTokNoWatermark(url, true);
   },
@@ -136,7 +136,7 @@ const fetchTikTokNoWatermark = TiktokFactory("tiktok/TikTokNoWatermark", {
   },
 });
 
-const fetchNayan = TiktokFactory("tiktok/nayan", {
+export const fetchNayan = TiktokFactory("tiktok/nayan", {
   async fetchFn(url) {
     return await nayan(url);
   },
@@ -147,17 +147,3 @@ const fetchNayan = TiktokFactory("tiktok/nayan", {
     return { ...emptyResult };
   },
 });
-
-module.exports = {
-  fetchSnaptik,
-  fetchTobyg74_v1,
-  fetchTobyg74_v2,
-  fetchTobyg74_v3,
-  fetchTikChan,
-  fetchPrevter,
-  fetchBtchDownloader,
-  fetchTiklydownSanzy1,
-  fetchTiktod,
-  fetchTikTokNoWatermark,
-  fetchNayan,
-};

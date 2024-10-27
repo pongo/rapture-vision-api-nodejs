@@ -1,17 +1,15 @@
-"use strict";
-
-const delay = require("node:timers/promises").setTimeout;
-const { requestRapidApi } = require("../../../utils/rapidapi");
-const {
+import { setTimeout as delay } from "node:timers/promises";
+import { requestRapidApi } from "../../../utils/rapidapi.js";
+import {
   TwitterFactory,
-  parseThreadedConversationV2,
-  parseGlavierTweet,
-  parseDavethebeast241,
   parseAbcdsxg1TweetResultByRestId,
-} = require("./shared");
+  parseDavethebeast241,
+  parseGlavierTweet,
+  parseThreadedConversationV2,
+} from "./shared.js";
 
 // https://rapidapi.com/omarmhaimdat/api/twitter-v24/
-const fetchOmarmhaimdat24 = TwitterFactory("twitter/omarmhaimdat24", {
+export const fetchOmarmhaimdat24 = TwitterFactory("twitter/omarmhaimdat24", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter-v24.p.rapidapi.com/tweet/details", {
       host: "twitter-v24.p.rapidapi.com",
@@ -24,7 +22,7 @@ const fetchOmarmhaimdat24 = TwitterFactory("twitter/omarmhaimdat24", {
 });
 
 // https://rapidapi.com/Glavier/api/twitter135
-const fetchGlavier135TweetDetail = TwitterFactory("twitter/Glavier135/TweetDetail", {
+export const fetchGlavier135TweetDetail = TwitterFactory("twitter/Glavier135/TweetDetail", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter135.p.rapidapi.com/v2/TweetDetail/", {
       host: "twitter135.p.rapidapi.com",
@@ -37,20 +35,20 @@ const fetchGlavier135TweetDetail = TwitterFactory("twitter/Glavier135/TweetDetai
 });
 
 // https://rapidapi.com/Glavier/api/twitter135
-const fetchGlavier135Tweet = TwitterFactory("twitter/Glavier135/Tweet", {
-  async fetchFn(id) {
-    return await requestRapidApi("GET", "https://twitter135.p.rapidapi.com/v2/Tweet/", {
-      host: "twitter135.p.rapidapi.com",
-      params: { id },
-    });
-  },
-  parseFn({ remaining, reset, data }) {
-    return { ...parseGlavierTweet(data), remaining, reset };
-  },
-});
+// const fetchGlavier135Tweet = TwitterFactory("twitter/Glavier135/Tweet", {
+//   async fetchFn(id) {
+//     return await requestRapidApi("GET", "https://twitter135.p.rapidapi.com/v2/Tweet/", {
+//       host: "twitter135.p.rapidapi.com",
+//       params: { id },
+//     });
+//   },
+//   parseFn({ remaining, reset, data }) {
+//     return { ...parseGlavierTweet(data), remaining, reset };
+//   },
+// });
 
 // https://rapidapi.com/davethebeast/api/twitter241
-const fetchDavethebeast241 = TwitterFactory("twitter/davethebeast241", {
+export const fetchDavethebeast241 = TwitterFactory("twitter/davethebeast241", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter241.p.rapidapi.com/tweet", {
       host: "twitter241.p.rapidapi.com",
@@ -82,34 +80,37 @@ const fetchDavethebeast241 = TwitterFactory("twitter/davethebeast241", {
 });
 
 // https://rapidapi.com/abcdsxg/api/twitter-v1-1-v2-api
-const fetchAbcdsxg1TweetResultByRestId = TwitterFactory("twitter/abcdsxg1/TweetResultByRestId", {
-  async fetchFn(id) {
-    return await requestRapidApi(
-      "GET",
-      "https://twitter-v1-1-v2-api.p.rapidapi.com/graphql/TweetResultByRestId",
-      {
-        host: "twitter-v1-1-v2-api.p.rapidapi.com",
-        params: {
-          variables: JSON.stringify({
-            tweetId: id,
-            withHighlightedLabel: true,
-            withTweetQuoteCount: true,
-            includePromotedContent: true,
-            withBirdwatchPivots: true,
-            withVoice: true,
-            withReactions: true,
-          }),
+export const fetchAbcdsxg1TweetResultByRestId = TwitterFactory(
+  "twitter/abcdsxg1/TweetResultByRestId",
+  {
+    async fetchFn(id) {
+      return await requestRapidApi(
+        "GET",
+        "https://twitter-v1-1-v2-api.p.rapidapi.com/graphql/TweetResultByRestId",
+        {
+          host: "twitter-v1-1-v2-api.p.rapidapi.com",
+          params: {
+            variables: JSON.stringify({
+              tweetId: id,
+              withHighlightedLabel: true,
+              withTweetQuoteCount: true,
+              includePromotedContent: true,
+              withBirdwatchPivots: true,
+              withVoice: true,
+              withReactions: true,
+            }),
+          },
         },
-      },
-    );
+      );
+    },
+    parseFn({ remaining, reset, data }, id) {
+      return { ...parseAbcdsxg1TweetResultByRestId(data, id), remaining, reset };
+    },
   },
-  parseFn({ remaining, reset, data }, id) {
-    return { ...parseAbcdsxg1TweetResultByRestId(data, id), remaining, reset };
-  },
-});
+);
 
 // https://rapidapi.com/restocked-gAGxip8a_/api/twitter-api47
-const fetchRestocked47 = TwitterFactory("twitter/restocked47", {
+export const fetchRestocked47 = TwitterFactory("twitter/restocked47", {
   async fetchFn(id) {
     return await requestRapidApi("GET", "https://twitter-api47.p.rapidapi.com/v1/tweet-details", {
       host: "twitter-api47.p.rapidapi.com",
@@ -144,13 +145,3 @@ const fetchRestocked47 = TwitterFactory("twitter/restocked47", {
 //     // return { videos, remaining, reset };
 //   },
 // });
-
-module.exports = {
-  // fetchSmth,
-  fetchOmarmhaimdat24,
-  fetchGlavier135TweetDetail,
-  // fetchGlavier135Tweet,
-  fetchDavethebeast241,
-  fetchAbcdsxg1TweetResultByRestId,
-  fetchRestocked47,
-};

@@ -1,6 +1,4 @@
-"use strict";
-
-const { performance } = require("perf_hooks");
+import { performance } from "node:perf_hooks";
 
 /**
  * @example
@@ -8,9 +6,7 @@ const { performance } = require("perf_hooks");
  * // ...
  * console.log(`elapsed: ${elapsed()} ms`);
  */
-function timeStart() {
+export function timeStart() {
   const start = performance.now();
   return () => Math.round(performance.now() - start);
 }
-
-module.exports.timeStart = timeStart;

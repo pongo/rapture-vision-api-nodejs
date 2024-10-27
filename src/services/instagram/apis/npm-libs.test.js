@@ -1,9 +1,7 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { test } = require("node:test");
-const { fetchInstagramUrlDirect, fetchRuhend, fetchNayan, fetchBtch } = require("./npm-libs");
-const { formatErr } = require("../../../utils/testing-utils");
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { formatErr } from "../../../utils/testing-utils.js";
+import { fetchBtch, fetchInstagramUrlDirect, fetchNayan, fetchRuhend } from "./npm-libs.js";
 
 const image_and_video = "CnpKCjYPyd6";
 const reCdnInstagram = /^https\:\/\/scontent\.cdninstagram\.com/;

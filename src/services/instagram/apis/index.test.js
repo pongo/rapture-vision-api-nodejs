@@ -1,9 +1,7 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { describe, it } = require("node:test");
-const { apis } = require(".");
-const { Ok } = require("../../../utils/result");
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { Ok } from "../../../utils/result.js";
+import { apis } from "./index.js";
 
 const posts = {
   Cf4PRxnlMUa: { images: 1, videos: 0 },

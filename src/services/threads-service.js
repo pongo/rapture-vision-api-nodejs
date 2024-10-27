@@ -1,16 +1,14 @@
-"use strict";
+import axios from "axios";
+import ThreadsAPIPkg from "threads-api";
+import { writeJsonFile } from "write-json-file";
+import { Err, Ok } from "../utils/result.js";
+import { SimpleMemCache } from "../utils/simple-mem-cache.js";
 
-const ThreadsAPI = require("threads-api").ThreadsAPI;
-const { Ok, Err } = require("../utils/result");
-const axios = require("axios").default;
-const writeJsonFile = require("write-json-file");
-const fs = require("node:fs/promises");
-const SimpleMemCache = require("../utils/simple-mem-cache").SimpleMemCache;
-
+const { ThreadsAPI } = ThreadsAPIPkg;
 const cache = new SimpleMemCache();
 const EXPIRE = 24 * 60 * 60 * 1000;
 
-async function getThreads(url) {
+export async function getThreads(url) {
   try {
     const cached = cache.get(url);
     if (cached) {
@@ -28,7 +26,7 @@ async function getThreads(url) {
   }
 }
 
-async function viaThreadsAPI(url) {
+export async function viaThreadsAPI(url) {
   try {
     const threadsAPI = new ThreadsAPI();
     const postID = await threadsAPI.getPostIDfromURL(url);
@@ -49,7 +47,7 @@ function getWebId(url) {
   else return undefined;
 }
 
-async function viaRocketCavsn(url) {
+export async function viaRocketCavsn(url) {
   const webId = getWebId(url);
   const options = {
     method: "GET",
@@ -112,5 +110,3 @@ function extractPost(post) {
     }
   }
 }
-
-module.exports = { getThreads, viaThreadsAPI, viaRocketCavsn };

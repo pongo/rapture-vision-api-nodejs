@@ -1,10 +1,8 @@
-"use strict";
-
-const { Keyv } = require("keyv");
-const { KeyvFile } = require("keyv-file");
-const pTimeout = require("p-timeout");
-const { Err, isOk } = require("./result");
-const { timeStart } = require("./time-start");
+import { Keyv } from "keyv";
+import { KeyvFile } from "keyv-file";
+import pTimeout from "p-timeout";
+import { Err, isOk } from "./result.js";
+import { timeStart } from "./time-start.js";
 
 // https://stackoverflow.com/a/12646864/136559
 function shuffleArrayInplace(array) {
@@ -60,7 +58,7 @@ function createIterableList(items, shuffle = true) {
   }
 }
 
-/** @type {import("./balancer").IAnalytics} */
+/** @type {import("./balancer.d.ts").IAnalytics} */
 const nullAnalytics = {
   trackApiCall: async () => {},
 };
@@ -69,9 +67,9 @@ const nullAnalytics = {
  * @template T
  * @template TParams
  */
-class Balancer {
+export class Balancer {
   /**
-   * @param {import("./balancer").BalancerOptions<T, TParams>} options
+   * @param {import("./balancer.d.ts").BalancerOptions<T, TParams>} options
    */
   constructor(options) {
     const { name, apis, shuffle = true, strategy = "last" } = options;
@@ -112,7 +110,7 @@ class Balancer {
       console.log(`[Balancer] Call api "${apiName}"...`);
       const elapsed = timeStart();
       try {
-        const result = await pTimeout(call(...payload), 30_000);
+        const result = await pTimeout(call(...payload), { milliseconds: 30_000 });
         const elapsedMs = elapsed();
         await this._setRemaining(apiName, result);
 
@@ -155,10 +153,8 @@ class Balancer {
   }
 }
 
-function parseLimits(result) {
+export function parseLimits(result) {
   const remaining = (isOk(result) ? result.value.remaining : result.error.data?.remaining) ?? -1;
   const reset = (isOk(result) ? result.value.reset : result.error.data?.reset) ?? 0;
   return { remaining, reset };
 }
-
-module.exports = { Balancer, parseLimits };

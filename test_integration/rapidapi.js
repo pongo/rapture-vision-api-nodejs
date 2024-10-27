@@ -1,10 +1,9 @@
-"use strict";
+import "dotenv/config";
 
-require("dotenv").config();
-const assert = require("node:assert/strict");
-const { describe, it, test } = require("node:test");
-const { requestRapidApiFetch } = require("../src/utils/rapidapi");
-const { formatErr } = require("../src/utils/testing-utils");
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { requestRapidApiFetch } from "../src/utils/rapidapi.js";
+import { formatErr } from "../src/utils/testing-utils.js";
 
 describe("requestRapidApi", () => {
   it.skip("GET with params", async () => {

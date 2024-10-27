@@ -1,12 +1,10 @@
-"use strict";
-
-const axios = require("axios").default;
-const { Ok, Err } = require("./result");
+import axios from "axios";
+import { Err, Ok } from "./result.js";
 
 const HOUR = 3600;
 
 /** @type {import("./rapidapi.d.ts").requestRapidApi}  */
-async function requestRapidApi(method, url, { host, params, parseLimitsFn = undefined }) {
+export async function requestRapidApi(method, url, { host, params, parseLimitsFn = undefined }) {
   const parseLimits = parseLimitsFn ?? _parseLimits;
   try {
     const response = await axios.request({
@@ -47,7 +45,7 @@ async function requestRapidApi(method, url, { host, params, parseLimitsFn = unde
 }
 
 /** @type {import("./rapidapi.d.ts").requestRapidApiFetch}  */
-async function requestRapidApiFetch(
+export async function requestRapidApiFetch(
   method,
   url,
   { host, params = undefined, body = undefined, parseLimitsFn = undefined, parseJSON = true },
@@ -104,5 +102,3 @@ async function requestRapidApiFetch(
     };
   }
 }
-
-module.exports = { requestRapidApi, requestRapidApiFetch };

@@ -1,4 +1,4 @@
-import type { ApiFn } from "./balancer.d";
+import type { ApiFn } from "./balancer.d.ts";
 
 export declare function apiList<T, TParams>(
   apis: Record<string, ApiFn<T, TParams>>,

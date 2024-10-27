@@ -1,4 +1,4 @@
-import { Result } from "./result.d";
+import type { Result } from "./result.d.ts";
 
 type Limits = {
   reset?: number;

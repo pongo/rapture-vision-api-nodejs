@@ -1,5 +1,5 @@
-import type { Result, Ok } from "./result.d";
-import { StacklessError } from "./stackless-error";
+import type { Ok, Result } from "./result.d.ts";
+import type { StacklessError } from "./stackless-error.d.ts";
 
 export declare class FetchCatchError extends Error {
   readonly catchedError: Error;
