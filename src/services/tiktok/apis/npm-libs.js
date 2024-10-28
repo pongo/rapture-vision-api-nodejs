@@ -20,7 +20,7 @@ export const fetchSnaptik = TiktokFactory("tiktok/snaptik", {
     return await snaptik.download();
   },
   parseFn(data) {
-    if (data?.status === 200 && data?.link_1?.startsWith("http")) {
+    if (data?.status === 200) {
       return { videos: [data.link_1, data.link_2, data.link_3].filter(startsWithHttp) };
     }
     return { ...emptyResult };
@@ -33,8 +33,8 @@ export const fetchTobyg74_v1 = TiktokFactory("tiktok/tobyg74_v1", {
   },
   /** @param {object} data */
   parseFn(data) {
-    if (data?.status === "success" && data?.result?.video?.length > 0) {
-      return { videos: data?.result?.video.filter(startsWithHttp) };
+    if (data?.status === "success" && Array.isArray(data?.result?.video)) {
+      return { videos: data.result.video.filter(startsWithHttp) };
     }
     return { ...emptyResult };
   },
