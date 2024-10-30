@@ -1,21 +1,19 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { test } = require("node:test");
-const {
-  fetchSnaptik,
-  fetchTobyg74_v1,
-  fetchTobyg74_v2,
-  fetchTobyg74_v3,
-  fetchTikChan,
-  fetchPrevter,
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { formatErr } from "../../../utils/testing-utils.js";
+import {
   fetchBtchDownloader,
+  fetchNayan,
+  fetchPrevter,
+  fetchSnaptik,
+  fetchTikChan,
   fetchTiklydownSanzy1,
   fetchTiktod,
   fetchTikTokNoWatermark,
-  fetchNayan,
-} = require("./npm-libs");
-const { formatErr } = require("../../../utils/testing-utils");
+  fetchTobyg74_v1,
+  fetchTobyg74_v2,
+  fetchTobyg74_v3,
+} from "./npm-libs.js";
 
 test("fetchSnaptik", async () => {
   const res = await fetchSnaptik("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });

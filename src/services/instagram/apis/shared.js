@@ -1,7 +1,5 @@
-"use strict";
-
-const { FetchFactory } = require("../../../utils/fetch-factory");
-const { startsWithHttp } = require("../../../utils/api-utils");
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { FetchFactory } from "../../../utils/fetch-factory.js";
 
 function tmpFileNameFn(id) {
   return id;
@@ -22,25 +20,25 @@ function checkUrlsArray(urls) {
   if (!Array.isArray(urls)) return false;
   if (urls.length === 0) return true;
   if (Array.isArray(urls[0])) return urls.map(checkUrlsArray).every(isTrue);
-  return urls.filter(startsWithHttp).length > 0;
+  return urls.some(startsWithHttp);
 }
 
-function InstagramFactory(apiName, options) {
+export function InstagramFactory(apiName, options) {
   return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
 }
 
-function urlFromId(id) {
+export function urlFromId(id) {
   return `https://www.instagram.com/p/${id}/`;
 }
 
 const reImage = /\.(webp|jpe?g|png|avif|jfif|jxl|hei[cf]|jpe)/i;
 
-function splitUrls(urls) {
-  urls = [...new Set(urls)];
+export function splitUrls(urls) {
+  const uniqUrls = [...new Set(urls)];
 
   const images = [];
   const videos = [];
-  for (const url of urls) {
+  for (const url of uniqUrls) {
     if (!startsWithHttp(url)) {
       continue;
     }
@@ -53,9 +51,3 @@ function splitUrls(urls) {
   }
   return { images, videos };
 }
-
-module.exports = {
-  InstagramFactory,
-  urlFromId,
-  splitUrls,
-};

@@ -1,11 +1,9 @@
-"use strict";
-
-const fs = require("node:fs/promises");
-const { Ok, Err, isErr, isResult } = require("./result");
-const { StacklessError } = require("./stackless-error");
-const { sanitizeFilename } = require("./sanitize-filename");
-const writeJsonFile = require("write-json-file");
-const assert = require("node:assert/strict");
+import assert from "node:assert/strict";
+import * as fs from "node:fs/promises";
+import { writeJsonFile } from "write-json-file";
+import { Err, isErr, isResult, Ok } from "./result.js";
+import { sanitizeFilename } from "./sanitize-filename.js";
+import { StacklessError } from "./stackless-error.js";
 
 class FetchCatchError extends Error {
   constructor(url, catchedError) {
@@ -26,10 +24,10 @@ class FetchEmpty extends StacklessError {
  * @template T
  * @template F
  * @param {string} apiName
- * @param {import("./fetch-factory").FactoryOptions<T, F>} factoryOptions
- * @returns {import("./fetch-factory").FetchFn<T>}
+ * @param {import("./fetch-factory.d.ts").FactoryOptions<T, F>} factoryOptions
+ * @returns {import("./fetch-factory.d.ts").FetchFn<T>}
  */
-function FetchFactory(apiName, factoryOptions) {
+export function FetchFactory(apiName, factoryOptions) {
   const {
     fetchFn,
     parseFn,
@@ -58,13 +56,9 @@ function FetchFactory(apiName, factoryOptions) {
       }
 
       const result = await parseFn(data, url, options);
-      if (checkFn(result)) {
-        return Ok(result);
-      } else {
-        return Err(new FetchEmpty(url));
-      }
-    } catch (e) {
-      return Err(new FetchCatchError(url, e));
+      return checkFn(result) ? Ok(result) : Err(new FetchEmpty(url));
+    } catch (error) {
+      return Err(new FetchCatchError(url, error));
     }
 
     function _tmpFilePath() {
@@ -89,7 +83,8 @@ function FetchFactory(apiName, factoryOptions) {
           return options.fakeLoadFromDiskData;
         }
         const load = loadFn ?? loadJson;
-        const data = (await load(_tmpFilePath()))?.data;
+        const loadedData = await load(_tmpFilePath());
+        const data = loadedData?.data;
         if (!data) {
           throw new StacklessError(`Empty data in ${_tmpFilePath()}`, { url });
         }
@@ -103,9 +98,9 @@ function FetchFactory(apiName, factoryOptions) {
 }
 
 async function loadJson(path) {
-  return JSON.parse(await fs.readFile(path, "utf-8"));
+  return JSON.parse(await fs.readFile(path, "utf8"));
   // try {
-  //   return JSON.parse(await fs.readFile(path, "utf-8"));
+  //   return JSON.parse(await fs.readFile(path, "utf8"));
   // } catch {
   //   return undefined;
   // }
@@ -116,8 +111,6 @@ async function loadJson(path) {
  * @param {string} filename
  * @returns {string}
  */
-function getTmpFilePath(apiName, filename) {
+export function getTmpFilePath(apiName, filename) {
   return `./tmp/${apiName}/${sanitizeFilename(filename)}.json`;
 }
-
-module.exports = { FetchFactory, getTmpFilePath };

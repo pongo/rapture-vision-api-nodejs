@@ -1,16 +1,14 @@
-"use strict";
+import axios from "axios";
+import ThreadsAPIPkg from "threads-api";
+import { writeJsonFile } from "write-json-file";
+import { Err, Ok } from "../utils/result.js";
+import { SimpleMemCache } from "../utils/simple-mem-cache.js";
 
-const ThreadsAPI = require("threads-api").ThreadsAPI;
-const { Ok, Err } = require("../utils/result");
-const axios = require("axios").default;
-const writeJsonFile = require("write-json-file");
-const fs = require("node:fs/promises");
-const SimpleMemCache = require("../utils/simple-mem-cache").SimpleMemCache;
-
+const { ThreadsAPI } = ThreadsAPIPkg;
 const cache = new SimpleMemCache();
 const EXPIRE = 24 * 60 * 60 * 1000;
 
-async function getThreads(url) {
+export async function getThreads(url) {
   try {
     const cached = cache.get(url);
     if (cached) {
@@ -28,7 +26,7 @@ async function getThreads(url) {
   }
 }
 
-async function viaThreadsAPI(url) {
+export async function viaThreadsAPI(url) {
   try {
     const threadsAPI = new ThreadsAPI();
     const postID = await threadsAPI.getPostIDfromURL(url);
@@ -45,11 +43,10 @@ async function viaThreadsAPI(url) {
 function getWebId(url) {
   const regex = /https?:\/\/(?:www\.)?threads\.net\/t\/([A-Za-z0-9]+)/i;
   const match = url.match(regex);
-  if (match) return match[1];
-  else return undefined;
+  return match ? match[1] : undefined;
 }
 
-async function viaRocketCavsn(url) {
+export async function viaRocketCavsn(url) {
   const webId = getWebId(url);
   const options = {
     method: "GET",
@@ -64,8 +61,8 @@ async function viaRocketCavsn(url) {
   };
 
   try {
-    const data = (await axios.request(options)).data;
-    // const data = JSON.parse(await fs.readFile("./tmp/threads/cavsn/CuWgZVFIu75.json", "utf-8"));
+    const { data } = await axios.request(options);
+    // const data = JSON.parse(await fs.readFile("./tmp/threads/cavsn/CuWgZVFIu75.json", "utf8"));
     return await checkResult(extractPost(data[0].post), "cavsn", webId, data);
   } catch (error) {
     return Err(`[viaRocketCavsn] error: ${error.message}`, { error });
@@ -112,5 +109,3 @@ function extractPost(post) {
     }
   }
 }
-
-module.exports = { getThreads, viaThreadsAPI, viaRocketCavsn };

@@ -1,12 +1,12 @@
+/* eslint-disable n/no-missing-import */
 // @ts-nocheck
-"use strict";
 
-const canvas = require("canvas");
-const tf = require("@tensorflow/tfjs-node"); // @tensorflow/tfjs-node@1.2.1
-const faceapi = require("@vladmandic/face-api");
-const fs = require("fs");
-const { timeStart } = require("../../utils/time-start");
-const { Ok, Err, isErr } = require("../../utils/result");
+import "@tensorflow/tfjs-node"; // @tensorflow/tfjs-node@1.2.1
+import * as faceapi from "@vladmandic/face-api";
+import * as canvas from "canvas";
+import * as fs from "node:fs";
+import { Err, isErr, Ok } from "../../utils/result.js";
+import { timeStart } from "../../utils/time-start.js";
 
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
@@ -70,9 +70,9 @@ async function detect(tensor) {
         // .withAgeAndGender()
         .withFaceDescriptors(),
     );
-  } catch (e) {
-    console.error("Detect error", e.message);
-    return Err(`Detect error: ${e.message}`, { error: e });
+  } catch (error) {
+    console.error("Detect error", error.message);
+    return Err(`Detect error: ${error.message}`, { error: error });
   }
 }
 
@@ -93,7 +93,7 @@ async function createFaceMatcher(modelPath, distanceThreshold) {
   if (cached !== undefined) return Ok(cached);
 
   try {
-    const descriptorsJson = JSON.parse(await fs.promises.readFile(`./model/${modelPath}`, "utf-8"));
+    const descriptorsJson = JSON.parse(await fs.promises.readFile(`./model/${modelPath}`, "utf8"));
     const descriptors = descriptorsJson.map((x) => faceapi.LabeledFaceDescriptors.fromJSON(x));
     const faceMatcher = new faceapi.FaceMatcher(descriptors, distanceThreshold);
     faceMatchers.set(key, faceMatcher);
@@ -121,7 +121,7 @@ async function detectFaces(url) {
   return Ok({ faces: detectResult.value, c });
 }
 
-async function checkFaceMatch(url, modelName, distanceThreshold) {
+export async function checkFaceMatch(url, modelName, distanceThreshold) {
   const facesResult = await detectFaces(url);
   if (isErr(facesResult)) return facesResult;
   const { faces, c } = facesResult.value;
@@ -151,10 +151,10 @@ async function checkFaceMatch(url, modelName, distanceThreshold) {
       label,
       distance: Number(distance.toFixed(4)),
       box: {
-        x: parseInt(aligned_box._x, 10),
-        y: parseInt(aligned_box._y, 10),
-        width: parseInt(aligned_box._width, 10),
-        height: parseInt(aligned_box._height, 10),
+        x: Number.parseInt(aligned_box._x, 10),
+        y: Number.parseInt(aligned_box._y, 10),
+        width: Number.parseInt(aligned_box._width, 10),
+        height: Number.parseInt(aligned_box._height, 10),
       },
     })),
   );
@@ -181,5 +181,3 @@ function drawBoxesAndSaveFile(matches, c) {
     );
   }
 }
-
-module.exports.checkFaceMatch = checkFaceMatch;

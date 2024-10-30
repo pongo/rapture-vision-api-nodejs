@@ -1,11 +1,9 @@
-"use strict";
-
-const { requestRapidApiFetch } = require("../../../utils/rapidapi");
-const { startsWithHttp } = require("../../../utils/api-utils");
-const { InstagramFactory, urlFromId } = require("./shared");
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { requestRapidApiFetch } from "../../../utils/rapidapi.js";
+import { InstagramFactory, urlFromId } from "./shared.js";
 
 // https://rapidapi.com/rocketapi/api/rocketapi-for-instagram
-const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
+export const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
   async fetchFn(id) {
     return await requestRapidApiFetch(
       "POST",
@@ -42,13 +40,13 @@ const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
         videos.push(obj.video_versions[0].url);
         return;
       }
-      throw Error("unknown media_type: " + obj.media_type);
+      throw new Error(`unknown media_type: ${obj.media_type}`);
     }
   },
 });
 
 // https://rapidapi.com/iq.faceok/api/instagram-looter2
-const fetchLooter2 = InstagramFactory("instagram/looter2", {
+export const fetchLooter2 = InstagramFactory("instagram/looter2", {
   async fetchFn(id) {
     return await requestRapidApiFetch("GET", "https://instagram-looter2.p.rapidapi.com/post-dl", {
       host: "instagram-looter2.p.rapidapi.com",
@@ -59,25 +57,20 @@ const fetchLooter2 = InstagramFactory("instagram/looter2", {
     if (data?.data?.medias && data.data.medias.length > 0) {
       const medias = data.data.medias;
       return {
-        images: filterMedia(medias, "image"),
-        videos: filterMedia(medias, "video"),
+        images: filterMediaLooter2(medias, "image"),
+        videos: filterMediaLooter2(medias, "video"),
         remaining,
         reset,
       };
     }
 
     return { remaining, reset, images: [], videos: [] };
-
-    function filterMedia(medias, mediaType) {
-      return medias
-        .filter((x) => x.type === mediaType)
-        .map((x) => x.link)
-        .filter(startsWithHttp);
-    }
   },
 });
 
-module.exports = {
-  fetchRocketApi,
-  fetchLooter2,
-};
+function filterMediaLooter2(medias, mediaType) {
+  return medias
+    .filter((x) => x.type === mediaType)
+    .map((x) => x.link)
+    .filter(startsWithHttp);
+}

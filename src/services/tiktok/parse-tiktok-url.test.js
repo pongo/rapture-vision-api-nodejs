@@ -1,8 +1,7 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { describe, it } = require("node:test");
-const { parseTiktokUrl } = require("./parse-tiktok-url");
+/* eslint-disable unicorn/consistent-function-scoping */
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { parseTiktokUrl } from "./parse-tiktok-url.js";
 
 describe("parseTiktokUrl()", () => {
   it("should parse shortcode", () => {

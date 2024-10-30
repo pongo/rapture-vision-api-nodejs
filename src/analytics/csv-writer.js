@@ -1,8 +1,6 @@
-"use strict";
+import { createWriteStream, existsSync } from "node:fs";
 
-const { createWriteStream, existsSync } = require("node:fs");
-
-class CsvWriter {
+export class CsvWriter {
   constructor(fileName, header = "") {
     this.fileName = fileName;
     this.stream = createWriteStream(fileName, { flags: "a" });
@@ -13,8 +11,6 @@ class CsvWriter {
 
   writeRow(row) {
     const _row = Array.isArray(row) ? row.join(",") : row;
-    this.stream.write(_row + "\n");
+    this.stream.write(`${_row}\n`);
   }
 }
-
-module.exports = { CsvWriter };

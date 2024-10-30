@@ -1,9 +1,7 @@
-"use strict";
-
-const { Balancer } = require("../../utils/balancer");
-const { Err } = require("../../utils/result");
-const { apis } = require("./apis");
-const { analytics } = require("../../analytics/analytics");
+import { analytics } from "../../analytics/analytics.js";
+import { Balancer } from "../../utils/balancer.js";
+import { Err } from "../../utils/result.js";
+import { apis } from "./apis/index.js";
 
 const balancer = new Balancer({
   name: "twitter",
@@ -13,12 +11,10 @@ const balancer = new Balancer({
   analytics,
 });
 
-async function getTwitter(id) {
+export async function getTwitter(id) {
   try {
     return await balancer.callOneRound(id, { loadFromDisk: false });
   } catch (error) {
     return Err(`getTwitter error: ${error.message}`, { error });
   }
 }
-
-module.exports = { getTwitter };

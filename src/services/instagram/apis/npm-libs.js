@@ -1,15 +1,14 @@
-"use strict";
+import { igdl as btch } from "btch-downloader";
+import instagramUrlDirect from "instagram-url-direct";
+import nayanPkg from "nayan-media-downloader";
+import { igdl as ruhend } from "ruhend-scraper";
 
-const instagramUrlDirect = require("instagram-url-direct");
-const { igdl: ruhend } = require("ruhend-scraper");
-const { ndown } = require("nayan-media-downloader");
-const { igdl: btch } = require("btch-downloader");
+import { InstagramFactory, splitUrls, urlFromId } from "./shared.js";
 
-const { InstagramFactory, urlFromId, splitUrls } = require("./shared");
-
+const { ndown } = nayanPkg;
 const emptyResult = { images: [], videos: [] };
 
-const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url-direct", {
+export const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url-direct", {
   /** @returns {Promise<{url_list?: string[]}>} */
   async fetchFn(id) {
     return await instagramUrlDirect(urlFromId(id));
@@ -22,7 +21,7 @@ const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url-direct
   },
 });
 
-const fetchRuhend = InstagramFactory("instagram/ruhend", {
+export const fetchRuhend = InstagramFactory("instagram/ruhend", {
   async fetchFn(id) {
     return await ruhend(urlFromId(id));
   },
@@ -34,7 +33,7 @@ const fetchRuhend = InstagramFactory("instagram/ruhend", {
   },
 });
 
-const fetchNayan = InstagramFactory("instagram/nayan", {
+export const fetchNayan = InstagramFactory("instagram/nayan", {
   async fetchFn(id) {
     return await ndown(urlFromId(id));
   },
@@ -46,7 +45,7 @@ const fetchNayan = InstagramFactory("instagram/nayan", {
   },
 });
 
-const fetchBtch = InstagramFactory("instagram/btch", {
+export const fetchBtch = InstagramFactory("instagram/btch", {
   async fetchFn(id) {
     return await btch(urlFromId(id));
   },
@@ -57,10 +56,3 @@ const fetchBtch = InstagramFactory("instagram/btch", {
     return { ...emptyResult };
   },
 });
-
-module.exports = {
-  fetchInstagramUrlDirect,
-  fetchRuhend,
-  fetchNayan,
-  fetchBtch,
-};

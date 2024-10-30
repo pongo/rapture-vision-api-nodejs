@@ -1,9 +1,9 @@
-"use strict";
+import { inherits } from "node:util";
 
 /**
  * Аналог ошибки, но без сбора стектрейса (его сбор занимает много времени, а нужен не всегда).
  */
-class StacklessError {
+export class StacklessError {
   constructor(message = "", data = undefined) {
     this.data = data;
     this.message = message;
@@ -14,7 +14,8 @@ class StacklessError {
 }
 
 // new StacklessError('') instanceof Error === true
-require("util").inherits(StacklessError, Error);
+
+inherits(StacklessError, Error);
 
 // Object.prototype.toString.call(new StacklessError) === '[object Error]'
 Object.defineProperty(StacklessError.prototype, Symbol.toStringTag, {
@@ -23,5 +24,3 @@ Object.defineProperty(StacklessError.prototype, Symbol.toStringTag, {
   configurable: false,
   enumerable: false,
 });
-
-module.exports.StacklessError = StacklessError;

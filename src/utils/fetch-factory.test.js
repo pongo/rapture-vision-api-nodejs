@@ -1,13 +1,11 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { describe, it, mock, test } = require("node:test");
-const { Ok } = require("./result");
-const { FetchFactory, getTmpFilePath } = require("./fetch-factory");
-const { formatErr } = require("./testing-utils");
+import assert from "node:assert/strict";
+import { describe, it, mock, test } from "node:test";
+import { FetchFactory, getTmpFilePath } from "./fetch-factory.js";
+import { Ok } from "./result.js";
+import { formatErr } from "./testing-utils.js";
 
 const throwNotImplemented = () => {
-  throw Error("Not implemented");
+  throw new Error("Not implemented");
 };
 
 describe("FetchFactory", () => {
@@ -62,7 +60,7 @@ describe("FetchFactory", () => {
 
     it("throwing error", async () => {
       const fetchFn = mock.fn(() => {
-        throw Error("oops");
+        throw new Error("oops");
       });
       const parseFn = mock.fn(() => undefined);
       const smth = FetchFactory("tiktok/smth", {

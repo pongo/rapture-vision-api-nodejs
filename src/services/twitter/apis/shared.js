@@ -1,7 +1,5 @@
-"use strict";
-
-const { FetchFactory } = require("../../../utils/fetch-factory");
-const { startsWithHttp } = require("../../../utils/api-utils");
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { FetchFactory } from "../../../utils/fetch-factory.js";
 
 function tmpFileNameFn(id) {
   return id;
@@ -19,12 +17,12 @@ function checkUrlsArray(urls) {
   if (!Array.isArray(urls)) return false;
   if (urls.length === 0) return true;
   if (Array.isArray(urls[0])) return urls.map(checkUrlsArray).every(isTrue);
-  return urls.filter(startsWithHttp).length > 0;
+  return urls.some(startsWithHttp);
 }
 
-function parseThreadedConversationV2(tweet_id, data) {
+export function parseThreadedConversationV2(tweet_id, data) {
   const result1 = getResult1(data);
-  const post = getPost(result1);
+  const post = getPostFromThreadedConversationV2(result1);
   const text = post?.full_text ?? "";
   const mediaDetails = getMedia(result1, post);
   const images = getImages(mediaDetails);
@@ -35,7 +33,7 @@ function parseThreadedConversationV2(tweet_id, data) {
   function getMedia(result, post) {
     let quotedMedia = [];
     if ("quoted_status_result" in result) {
-      const quotedPost = getPost(result.quoted_status_result.result);
+      const quotedPost = getPostFromThreadedConversationV2(result.quoted_status_result.result);
       quotedMedia = quotedPost?.extended_entities?.media ?? [];
     }
     const originalMedia = post?.extended_entities?.media ?? [];
@@ -43,7 +41,7 @@ function parseThreadedConversationV2(tweet_id, data) {
   }
 
   function getResult1(data) {
-    const entries = getEntries(data);
+    const entries = getEntriesFromThreadedConversationV2(data);
     for (const entry of entries) {
       if (entry.entryId !== `tweet-${tweet_id}`) {
         continue;
@@ -54,23 +52,23 @@ function parseThreadedConversationV2(tweet_id, data) {
     }
     return undefined;
   }
+}
 
-  function getPost(result) {
-    if ("legacy" in result) return result.legacy;
-    if ("tweet" in result && "legacy" in result.tweet) return result.tweet.legacy;
-    return undefined;
-  }
+function getPostFromThreadedConversationV2(result) {
+  if ("legacy" in result) return result.legacy;
+  if ("tweet" in result && "legacy" in result.tweet) return result.tweet.legacy;
+  return undefined;
+}
 
-  function getEntries(data) {
-    if ("entries" in data) {
-      return data.entries;
-    }
-    if ("threaded_conversation_with_injections_v2" in data) {
-      return data.threaded_conversation_with_injections_v2?.instructions?.at(0)?.entries;
-    }
-    // data['data']['threaded_conversation_with_injections']['instructions'][0]['entries']
-    return undefined;
+function getEntriesFromThreadedConversationV2(data) {
+  if ("entries" in data) {
+    return data.entries;
   }
+  if ("threaded_conversation_with_injections_v2" in data) {
+    return data.threaded_conversation_with_injections_v2?.instructions?.at(0)?.entries;
+  }
+  // data['data']['threaded_conversation_with_injections']['instructions'][0]['entries']
+  return undefined;
 }
 
 function getImages(mediaDetails) {
@@ -85,7 +83,7 @@ function getVideos(mediaDetails) {
     .map((variants) => variants.map((variant) => variant.url));
 }
 
-function parseGlavierTweet(data) {
+export function parseGlavierTweet(data) {
   const text = data?.text ?? "";
   const quotedMedia = data?.quoted_tweet?.mediaDetails ?? [];
   const origMedia = data?.mediaDetails ?? [];
@@ -96,7 +94,7 @@ function parseGlavierTweet(data) {
   return { text, images, videos };
 }
 
-function parseDavethebeast241(data, id) {
+export function parseDavethebeast241(data, id) {
   if (data.data && "threaded_conversation_with_injections_v2" in data.data) {
     return parseThreadedConversationV2(id, data.data);
   }
@@ -111,7 +109,7 @@ function parseDavethebeast241(data, id) {
   return { text, images, videos, quote_id };
 }
 
-function parseAbcdsxg1TweetResultByRestId(data, id) {
+export function parseAbcdsxg1TweetResultByRestId(data, _id) {
   const result = data.data.tweetResult.result;
   const post = result.legacy;
   const text = post.full_text ?? "";
@@ -126,14 +124,6 @@ function parseAbcdsxg1TweetResultByRestId(data, id) {
   return { text, images, videos };
 }
 
-function TwitterFactory(apiName, options) {
+export function TwitterFactory(apiName, options) {
   return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
 }
-
-module.exports = {
-  parseThreadedConversationV2,
-  parseGlavierTweet,
-  parseDavethebeast241,
-  parseAbcdsxg1TweetResultByRestId,
-  TwitterFactory,
-};

@@ -1,15 +1,13 @@
-"use strict";
+import { FetchFactory } from "../../../utils/fetch-factory.js";
+import { StacklessError } from "../../../utils/stackless-error.js";
+import { parseTiktokUrl } from "../parse-tiktok-url.js";
 
-const { StacklessError } = require("../../../utils/stackless-error");
-const { parseTiktokUrl } = require("../parse-tiktok-url");
-const { FetchFactory } = require("../../../utils/fetch-factory");
-
-function tmpFileNameFn(videoUrl) {
+export function tmpFileNameFn(videoUrl) {
   const tiktok = parseTiktokUrl(videoUrl);
   return tiktok?.id ?? tiktok?.shortcode ?? videoUrl.replaceAll("/", "_");
 }
 
-function assertLongUrl(url) {
+export function assertLongUrl(url) {
   const parsed = parseTiktokUrl(url);
   if (parsed.id == null && parsed.username == null) {
     throw new StacklessError("Only supports long url", { url });
@@ -17,7 +15,7 @@ function assertLongUrl(url) {
   return true;
 }
 
-function assertId(url) {
+export function assertId(url) {
   const parsed = parseTiktokUrl(url);
   if (parsed.id == null) {
     throw new StacklessError("Video id not found", { url });
@@ -29,8 +27,6 @@ function checkFn({ videos }) {
   return Array.isArray(videos) && videos.length > 0;
 }
 
-function TiktokFactory(apiName, options) {
+export function TiktokFactory(apiName, options) {
   return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
 }
-
-module.exports = { assertLongUrl, assertId, TiktokFactory, tmpFileNameFn };

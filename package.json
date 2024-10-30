@@ -2,30 +2,38 @@
   "name": "rapture-vision-api-nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./index.js",
   "scripts": {
     "start": "node index.js",
     "test": "node --test",
     "test:bail": "node --test --test-reporter=@reporters/bail --test-reporter-destination=stderr --test-reporter=spec --test-reporter-destination=stdout",
     "test:watch": "node --test --watch",
     "coverage": "c8 --clean --all --src src -r text -r html node --test && echo Report: coverage/index.html",
-    "installation": "npm i --include=optional --include=peer"
+    "installation": "npm i --include=optional --include=peer",
+    "lint:oxlint": "oxlint --tsconfig=./tsconfig.json --disable-react-plugin --import-plugin  --promise-plugin --node-plugin --security-plugin src test_integration cli.js index.js eslint.config.js",
+    "lint:biome": "biome lint",
+    "lint": "eslint"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=20.2"
+  },
   "dependencies": {
+    "@badrap/valita": "^0.3.11",
     "@prevter/tiktok-scraper": "1.0.1",
     "@tobyg74/tiktok-api-dl": "1.2.0",
     "axios": "^1.6.8",
     "btch-downloader": "2.3.2",
     "dotenv": "^16.4.5",
-    "express": "^4.18.3",
+    "express": "^5.0.1",
     "instagram-url-direct": "1.0.21",
     "keyv": "^5.0.3",
     "keyv-file": "^5.0.3",
     "nayan-media-downloader": "2.6.3",
-    "p-timeout": "4.1.0",
+    "p-timeout": "^6.1.3",
     "ruhend-scraper": "8.0.3",
     "snaptik": "1.0.3",
     "threads-api": "1.6.3",
@@ -33,11 +41,16 @@
     "tiklydown-sanzy": "1.0.0",
     "tiktod": "1.0.0",
     "tiktok-no-watermark-api": "1.0.1",
-    "write-json-file": "4.3.0"
+    "write-json-file": "^6.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@reporters/bail": "^1.2.1",
     "@types/node": "^20.17.1",
+    "eslint": "^9.13.0",
+    "eslint-plugin-n": "^17.11.1",
+    "eslint-plugin-unicorn": "^56.0.0",
+    "globals": "^15.11.0",
     "prettier": "^3.3.3"
   },
   "peerDependencies": {

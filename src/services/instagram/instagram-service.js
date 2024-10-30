@@ -1,11 +1,9 @@
-"use strict";
-
-const instagramGetUrl = require("instagram-url-direct");
-const { Ok, Err } = require("../../utils/result");
-const axios = require("axios").default;
-const { Balancer } = require("../../utils/balancer");
-const { apis } = require("./apis");
-const { analytics } = require("../../analytics/analytics");
+import axios from "axios";
+import instagramGetUrl from "instagram-url-direct";
+import { analytics } from "../../analytics/analytics.js";
+import { Balancer } from "../../utils/balancer.js";
+import { Err, Ok } from "../../utils/result.js";
+import { apis } from "./apis/index.js";
 
 const balancer = new Balancer({
   name: "instagram",
@@ -15,7 +13,7 @@ const balancer = new Balancer({
   analytics,
 });
 
-async function getInstagram(post_id) {
+export async function getInstagram(post_id) {
   try {
     return await balancer.callOneRound(post_id, { loadFromDisk: false });
   } catch (error) {
@@ -52,27 +50,25 @@ async function getRocketApi(post_id, story = false) {
   };
 
   try {
-    const data = (await axios.request(options)).data;
+    const { data } = await axios.request(options);
     const items = data?.response?.body?.items;
     if (items == null || items.length === 0) return Err("items is empty");
     const root = items[0];
-    if (root?.carousel_media != null && root.carousel_media.length > 0) {
-      return Ok(root.carousel_media.map(parseOne));
-    } else {
-      return Ok([parseOne(root)]);
-    }
+    return root?.carousel_media != null && root.carousel_media.length > 0
+      ? Ok(root.carousel_media.map(parseOneRocketApi))
+      : Ok([parseOneRocketApi(root)]);
   } catch (error) {
     return Err(`getRocketApi error: ${error.message}`, { error });
   }
-
-  function parseOne(obj) {
-    if (obj.media_type === 1) return obj.image_versions2.candidates[0].url;
-    if (obj.media_type === 2) return obj.video_versions[0].url;
-    throw Error("unknown media_type: " + obj.media_type);
-  }
 }
 
-async function getInstagram_v1({ post_id, url }) {
+function parseOneRocketApi(obj) {
+  if (obj.media_type === 1) return obj.image_versions2.candidates[0].url;
+  if (obj.media_type === 2) return obj.video_versions[0].url;
+  throw new Error(`unknown media_type: ${obj.media_type}`);
+}
+
+export async function getInstagram_v1({ post_id, url }) {
   let result;
 
   if (post_id) {
@@ -91,10 +87,10 @@ async function getInstagram_v1({ post_id, url }) {
     }
   }
 
-  return Err(`All instagram services failed`);
+  return Err("All instagram services failed");
 }
 
-async function getInstagramStory({ id, url }) {
+export async function getInstagramStory({ id, _url }) {
   let result;
 
   if (id) {
@@ -105,7 +101,5 @@ async function getInstagramStory({ id, url }) {
     }
   }
 
-  return Err(`All instagram_story services failed`);
+  return Err("All instagram_story services failed");
 }
-
-module.exports = { getInstagram_v1, getInstagram, getInstagramStory };

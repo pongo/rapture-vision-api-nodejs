@@ -1,13 +1,11 @@
-"use strict";
-
-const { StacklessError } = require("./stackless-error");
+import { StacklessError } from "./stackless-error.js";
 
 // /**
 //  * @param value
 //  * @returns {{isOk: true, isErr: false, value}}
 //  */
 
-function ok(value) {
+export function Ok(value) {
   return {
     isOk: true,
     isErr: false,
@@ -21,7 +19,7 @@ function ok(value) {
 //  * @returns {{isOk: false, isErr: true, error: Error}}
 //  */
 
-function err(error, data) {
+export function Err(error, data) {
   return {
     isOk: false,
     isErr: true,
@@ -29,10 +27,6 @@ function err(error, data) {
   };
 }
 
-// module.exports.Result = { ok, err };
-module.exports.Ok = ok;
-module.exports.Err = err;
-
-module.exports.isErr = (result) => result.isErr;
-module.exports.isOk = (result) => result.isOk;
-module.exports.isResult = (value) => value.isOk || value.isErr;
+export const isErr = (result) => result.isErr;
+export const isOk = (result) => result.isOk;
+export const isResult = (value) => value.isOk || value.isErr;

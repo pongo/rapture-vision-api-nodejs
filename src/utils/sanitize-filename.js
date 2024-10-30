@@ -1,7 +1,5 @@
-"use strict";
-
-function sanitizeFilename(input, options) {
-  const replacement = (options && options.replacement) || "";
+export function sanitizeFilename(input, options) {
+  const replacement = options?.replacement ?? "";
   const output = sanitize(input, replacement);
   if (replacement === "") {
     return output;
@@ -11,14 +9,14 @@ function sanitizeFilename(input, options) {
 
 function sanitize(input, replacement) {
   const illegalRe = /[/?<>\\:*|":]/g;
-  // eslint-disable-next-line no-control-regex
+  // eslint-disable-next-line no-control-regex, unicorn/escape-case, unicorn/no-hex-escape
   const controlRe = /[\x00-\x1f\x80-\x9f]/g;
   const reservedRe = /^\.+$/;
   const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
 
   const sanitized = input
-    .replace(illegalRe, replacement)
-    .replace(controlRe, replacement)
+    .replaceAll(illegalRe, replacement)
+    .replaceAll(controlRe, replacement)
     .replace(reservedRe, replacement)
     .replace(windowsReservedRe, replacement);
   return truncate(sanitized, 255);
@@ -29,7 +27,3 @@ function truncate(sanitized, length) {
   const truncated = uint8Array.slice(0, length);
   return new TextDecoder().decode(truncated);
 }
-
-module.exports = {
-  sanitizeFilename,
-};

@@ -1,10 +1,8 @@
-"use strict";
-
-const { requestRapidApi } = require("../../../utils/rapidapi");
-const { StacklessError } = require("../../../utils/stackless-error");
-const { startsWithHttp } = require("../../../utils/api-utils");
-const { parseTiktokUrl } = require("../parse-tiktok-url");
-const { TiktokFactory, assertLongUrl, assertId } = require("./shared");
+import { startsWithHttp } from "../../../utils/api-utils.js";
+import { requestRapidApi } from "../../../utils/rapidapi.js";
+import { StacklessError } from "../../../utils/stackless-error.js";
+import { parseTiktokUrl } from "../parse-tiktok-url.js";
+import { TiktokFactory, assertId, assertLongUrl } from "./shared.js";
 
 /*
 
@@ -15,7 +13,7 @@ TODO: 404 https://rapidapi.com/tikwm-tikwm-default/api/tiktok-scraper7/
 */
 
 // https://rapidapi.com/maatootz/api/tiktok-full-info-without-watermark/
-const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
+export const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -25,11 +23,11 @@ const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
         params: { url },
         parseLimitsFn(response) {
           return {
-            remaining: parseInt(
+            remaining: Number.parseInt(
               response.headers["x-ratelimit-video-without-watermark-%2f-music-remaining"],
               10,
             ),
-            reset: parseInt(
+            reset: Number.parseInt(
               response.headers["x-ratelimit-video-without-watermark-%2f-music-reset"],
               10,
             ),
@@ -47,7 +45,7 @@ const fetchMaatootz = TiktokFactory("tiktok/maatootz", {
 });
 
 // https://rapidapi.com/maatootz/api/tiktok-downloader-download-tiktok-videos-without-watermark/
-const fetchMaatootz2 = TiktokFactory("tiktok/maatootz2", {
+export const fetchMaatootz2 = TiktokFactory("tiktok/maatootz2", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -67,7 +65,7 @@ const fetchMaatootz2 = TiktokFactory("tiktok/maatootz2", {
 });
 
 // https://rapidapi.com/datauniverse/api/tiktok82/
-const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
+export const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok82.p.rapidapi.com/getDownloadVideo", {
       host: "tiktok82.p.rapidapi.com",
@@ -85,7 +83,7 @@ const fetchTiktok82 = TiktokFactory("tiktok/tiktok82", {
 });
 
 // https://rapidapi.com/yi005/api/tiktok-download-without-watermark/
-const fetchYi005 = TiktokFactory("tiktok/yi005", {
+export const fetchYi005 = TiktokFactory("tiktok/yi005", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -108,7 +106,7 @@ const fetchYi005 = TiktokFactory("tiktok/yi005", {
 });
 
 // https://rapidapi.com/liuzhaolong765481/api/tiktok-video-feature-summary/
-const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
+export const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok-video-feature-summary.p.rapidapi.com/", {
       host: "tiktok-video-feature-summary.p.rapidapi.com",
@@ -127,7 +125,7 @@ const fetchVoyagel = TiktokFactory("tiktok/voyagel", {
 });
 
 // https://rapidapi.com/littlesun123/api/tiktok-video-no-watermark10/
-const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
+export const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -137,8 +135,8 @@ const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
         params: { url, hd: "0" },
         parseLimitsFn(response) {
           return {
-            remaining: parseInt(response.headers["x-ratelimit-request-remaining"], 10),
-            reset: parseInt(response.headers["x-ratelimit-request-reset"], 10),
+            remaining: Number.parseInt(response.headers["x-ratelimit-request-remaining"], 10),
+            reset: Number.parseInt(response.headers["x-ratelimit-request-reset"], 10),
           };
         },
       },
@@ -156,7 +154,7 @@ const fetchLittlesun123 = TiktokFactory("tiktok/littlesun123", {
 });
 
 // https://rapidapi.com/omarmhaimdat/api/tiktok-api6/
-const fetchOmarmhaimdat = TiktokFactory("tiktok/omarmhaimdat", {
+export const fetchOmarmhaimdat = TiktokFactory("tiktok/omarmhaimdat", {
   async fetchFn(url) {
     const parsed = parseTiktokUrl(url);
     if (parsed.id == null) {
@@ -175,7 +173,7 @@ const fetchOmarmhaimdat = TiktokFactory("tiktok/omarmhaimdat", {
 });
 
 // https://rapidapi.com/littlesun123/api/tiktok-api15/
-const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
+export const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -198,7 +196,7 @@ const fetchLittlesun123tapi15 = TiktokFactory("tiktok/littlesun123_tapi15", {
 });
 
 // https://rapidapi.com/llbbmm/api/tiktok-download5/
-const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
+export const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
   async fetchFn(url) {
     return await requestRapidApi("GET", "https://tiktok-download5.p.rapidapi.com/getVideo", {
       host: "tiktok-download5.p.rapidapi.com",
@@ -217,7 +215,7 @@ const fetchLlbbmm = TiktokFactory("tiktok/llbbmm", {
 });
 
 // https://rapidapi.com/JoTucker/api/tiktok-scraper2/
-const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
+export const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
   async fetchFn(url) {
     return await requestRapidApi(
       "GET",
@@ -249,8 +247,8 @@ const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
 //             response.headers["x-ratelimit-requests-reset"],
 //           );
 //           return {
-//             remaining: parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
-//             reset: parseInt(response.headers["x-ratelimit-requests-reset"], 10),
+//             remaining: Number.parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
+//             reset: Number.parseInt(response.headers["x-ratelimit-requests-reset"], 10),
 //           };
 //         },
 //       },
@@ -261,17 +259,3 @@ const fetchJoTucker = TiktokFactory("tiktok/JoTucker", {
 //     // return { videos, remaining, reset };
 //   },
 // });
-
-module.exports = {
-  // fetchSmth,
-  fetchMaatootz,
-  fetchMaatootz2,
-  fetchTiktok82,
-  fetchYi005,
-  fetchVoyagel,
-  fetchLittlesun123,
-  fetchLittlesun123tapi15,
-  fetchOmarmhaimdat,
-  fetchLlbbmm,
-  fetchJoTucker,
-};

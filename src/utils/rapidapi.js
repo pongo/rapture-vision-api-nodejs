@@ -1,13 +1,11 @@
-"use strict";
-
-const axios = require("axios").default;
-const { Ok, Err } = require("./result");
+import axios from "axios";
+import { Err, Ok } from "./result.js";
 
 const HOUR = 3600;
 
 /** @type {import("./rapidapi.d.ts").requestRapidApi}  */
-async function requestRapidApi(method, url, { host, params, parseLimitsFn = undefined }) {
-  const parseLimits = parseLimitsFn ?? _parseLimits;
+export async function requestRapidApi(method, url, { host, params, parseLimitsFn = undefined }) {
+  const parseLimits = parseLimitsFn ?? parseLimitsRapidApi;
   try {
     const response = await axios.request({
       method,
@@ -37,22 +35,22 @@ async function requestRapidApi(method, url, { host, params, parseLimitsFn = unde
 
     return Err(error, parseLimits(error.response));
   }
+}
 
-  function _parseLimits(response) {
-    return {
-      remaining: parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
-      reset: parseInt(response.headers["x-ratelimit-requests-reset"], 10),
-    };
-  }
+function parseLimitsRapidApi(response) {
+  return {
+    remaining: Number.parseInt(response.headers["x-ratelimit-requests-remaining"], 10),
+    reset: Number.parseInt(response.headers["x-ratelimit-requests-reset"], 10),
+  };
 }
 
 /** @type {import("./rapidapi.d.ts").requestRapidApiFetch}  */
-async function requestRapidApiFetch(
+export async function requestRapidApiFetch(
   method,
   url,
   { host, params = undefined, body = undefined, parseLimitsFn = undefined, parseJSON = true },
 ) {
-  const parseLimits = parseLimitsFn ?? _parseLimits;
+  const parseLimits = parseLimitsFn ?? parseLimitsRapidApiFetch;
 
   const options = {
     method,
@@ -96,13 +94,11 @@ async function requestRapidApiFetch(
 
     return Err(error, parseLimits(error.response));
   }
-
-  function _parseLimits(response) {
-    return {
-      remaining: parseInt(response.headers.get("x-ratelimit-requests-remaining"), 10),
-      reset: parseInt(response.headers.get("x-ratelimit-requests-reset"), 10),
-    };
-  }
 }
 
-module.exports = { requestRapidApi, requestRapidApiFetch };
+function parseLimitsRapidApiFetch(response) {
+  return {
+    remaining: Number.parseInt(response.headers.get("x-ratelimit-requests-remaining"), 10),
+    reset: Number.parseInt(response.headers.get("x-ratelimit-requests-reset"), 10),
+  };
+}

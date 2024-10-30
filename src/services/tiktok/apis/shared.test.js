@@ -1,7 +1,6 @@
-"use strict";
-const assert = require("node:assert/strict");
-const { describe, it, test } = require("node:test");
-const { tmpFileNameFn, assertLongUrl } = require("./shared");
+import assert from "node:assert/strict";
+import { describe, it, test } from "node:test";
+import { assertLongUrl, tmpFileNameFn } from "./shared.js";
 
 describe("tmpFileNameFn()", () => {
   it("should parse id from url", () => {

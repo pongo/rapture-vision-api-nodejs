@@ -1,20 +1,18 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { describe, it, test } = require("node:test");
-const {
-  fetchMaatootz,
-  fetchMaatootz2,
-  fetchTiktok82,
-  fetchYi005,
-  fetchVoyagel,
+import assert from "node:assert/strict";
+import { describe, it, test } from "node:test";
+import { formatErr } from "../../../utils/testing-utils.js";
+import {
+  fetchJoTucker,
   fetchLittlesun123,
-  fetchOmarmhaimdat,
   fetchLittlesun123tapi15,
   fetchLlbbmm,
-  fetchJoTucker,
-} = require("./rapidapis");
-const { formatErr } = require("../../../utils/testing-utils");
+  fetchMaatootz,
+  fetchMaatootz2,
+  fetchOmarmhaimdat,
+  fetchTiktok82,
+  fetchVoyagel,
+  fetchYi005,
+} from "./rapidapis.js";
 
 test("fetchMaatootz", async () => {
   const res = await fetchMaatootz("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });

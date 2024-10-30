@@ -1,5 +1,4 @@
 // @ts-nocheck
-"use strict";
 
 /**
  * simple-mem-cache
@@ -10,7 +9,7 @@
  *
  * MIT license
  */
-class SimpleMemCache {
+export class SimpleMemCache {
   constructor(keyManip = null) {
     this._cache = new Map();
     this.misses = 0;
@@ -172,5 +171,3 @@ class SimpleMemCache {
     return value;
   }
 }
-
-exports.SimpleMemCache = SimpleMemCache;
