@@ -9,7 +9,7 @@ export type ApiResult<T> = Result<T & Limits, ErrorWithLimits>;
 export type ApiFn<T, TParams> = (...payload: TParams) => Promise<ApiResult<T>>;
 
 interface IAnalytics {
-  async trackApiCall(service: str, api: str, isOk: bool, elapsedMs: number): Promise<void>;
+  trackApiCall(service: str, api: str, isOk: bool, elapsedMs: number): Promise<void>;
 }
 
 export type BalancerOptions<T, TParams> = {
