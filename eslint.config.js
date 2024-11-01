@@ -32,6 +32,7 @@ export default [
       "unicorn/no-array-for-each": "off",
       "unicorn/no-array-callback-reference": "off",
       "unicorn/switch-case-braces": "off",
+      "unicorn/consistent-function-scoping": ["warn", { checkArrowFunctions: false }],
     },
   },
 

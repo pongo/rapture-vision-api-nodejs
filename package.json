@@ -51,6 +51,7 @@
     "eslint": "^9.13.0",
     "eslint-plugin-n": "^17.11.1",
     "eslint-plugin-unicorn": "^56.0.0",
+    "express-request-mock": "^4.0.0",
     "globals": "^15.11.0",
     "prettier": "^3.3.3"
   },
