@@ -22,7 +22,6 @@
     "node": ">=20.2"
   },
   "dependencies": {
-    "@badrap/valita": "^0.3.11",
     "@prevter/tiktok-scraper": "1.0.1",
     "@tobyg74/tiktok-api-dl": "1.2.0",
     "axios": "^1.6.8",
@@ -41,15 +40,19 @@
     "tiklydown-sanzy": "1.0.0",
     "tiktod": "1.0.0",
     "tiktok-no-watermark-api": "1.0.1",
-    "write-json-file": "^6.0.0"
+    "write-json-file": "^6.0.0",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@reporters/bail": "^1.2.1",
+    "@types/express": "^5.0.0",
     "@types/node": "^20.17.1",
     "eslint": "^9.13.0",
     "eslint-plugin-n": "^17.11.1",
     "eslint-plugin-unicorn": "^56.0.0",
+    "express-request-mock": "^4.0.0",
     "globals": "^15.11.0",
     "prettier": "^3.3.3"
   },
