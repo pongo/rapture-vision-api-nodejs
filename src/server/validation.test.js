@@ -13,7 +13,7 @@ import {
 } from "./validation.js";
 
 describe("validate() middleware", () => {
-  it("should modify request object", async function () {
+  it("should modify request object", async () => {
     const { request, response } = await requestMock(validate(SenyaScheme), {
       body: { url: "     https://example.com    " },
     });
@@ -21,7 +21,7 @@ describe("validate() middleware", () => {
     assert.deepEqual(request.validatedBody, { body: { url: "https://example.com" } });
   });
 
-  it("should return an 400 error", async function () {
+  it("should return an 400 error", async () => {
     const { response } = await requestMock(validate(SenyaScheme), {
       body: { url: "     " },
     });
@@ -35,7 +35,7 @@ describe("validate() middleware", () => {
     });
   });
 
-  it("should catch unexpected errors", async function () {
+  it("should catch unexpected errors", async () => {
     const call = () =>
       requestMock(
         validate({
@@ -56,15 +56,15 @@ checkOneLineScheme("TiktokScheme", TiktokScheme, "video");
 checkOneLineScheme("ThreadsScheme", ThreadsScheme, "url");
 checkOneLineScheme("TwitterScheme", TwitterScheme, "id");
 
-describe("Instagram1Scheme", function () {
-  it("should accept valid input", async function () {
+describe("Instagram1Scheme", () => {
+  it("should accept valid input", async () => {
     await validateOk(Instagram1Scheme, { url: "https://example.com" });
     await validateOk(Instagram1Scheme, { post_id: "12334" });
     await validateOk(Instagram1Scheme, { url: "https://example.com", post_id: "12334" });
     await validateOk(Instagram1Scheme, { url: "https://example.com", post_id: "" });
   });
 
-  it("should return an error on wrong input", async function () {
+  it("should return an error on wrong input", async () => {
     const errorMessage = 'Validation error: should be post_id or url at "body"';
     await validateError(Instagram1Scheme, { url: "      " }, errorMessage);
     await validateError(Instagram1Scheme, { post_id: "" }, errorMessage);
@@ -73,12 +73,12 @@ describe("Instagram1Scheme", function () {
   });
 });
 
-describe("Instagram2Scheme", function () {
-  it("should accept valid input", async function () {
+describe("Instagram2Scheme", () => {
+  it("should accept valid input", async () => {
     await validateOk(Instagram2Scheme, { post_id: "12234" });
   });
 
-  it("should return an error on wrong input", async function () {
+  it("should return an error on wrong input", async () => {
     await validateError(
       Instagram2Scheme,
       { post_id: "      " },
@@ -93,15 +93,15 @@ describe("Instagram2Scheme", function () {
   });
 });
 
-describe("InstagramStoryScheme", function () {
-  it("should accept valid input", async function () {
+describe("InstagramStoryScheme", () => {
+  it("should accept valid input", async () => {
     await validateOk(InstagramStoryScheme, { url: "https://example.com" });
     await validateOk(InstagramStoryScheme, { id: "12334" });
     await validateOk(InstagramStoryScheme, { url: "https://example.com", id: "12334" });
     await validateOk(InstagramStoryScheme, { url: "https://example.com", id: "" });
   });
 
-  it("should return an error on wrong input", async function () {
+  it("should return an error on wrong input", async () => {
     const errorMessage = 'Validation error: should be url or id at "body"';
     await validateError(InstagramStoryScheme, { url: "      " }, errorMessage);
     await validateError(InstagramStoryScheme, { id: "" }, errorMessage);
@@ -123,11 +123,11 @@ async function validateError(scheme, body, errorMessage) {
 
 function checkOneLineScheme(schemeName, scheme, paramName) {
   describe(schemeName, () => {
-    it("should accept valid input", async function () {
+    it("should accept valid input", async () => {
       await validateOk(scheme, { [paramName]: "non empty string" });
     });
 
-    it("should return an error on wrong input", async function () {
+    it("should return an error on wrong input", async () => {
       await validateError(
         scheme,
         { [paramName]: "      " },
