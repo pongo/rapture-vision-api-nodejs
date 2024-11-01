@@ -18,7 +18,7 @@ describe("validate() middleware", () => {
       body: { url: "     https://example.com    " },
     });
     assert.equal(response.statusCode, 200);
-    assert.deepEqual(request.validatedBody, { url: "https://example.com" });
+    assert.deepEqual(request.validatedBody, { body: { url: "https://example.com" } });
   });
 
   it("should return an 400 error", async function () {
@@ -29,7 +29,7 @@ describe("validate() middleware", () => {
     assert.deepEqual(response._getJSONData(), {
       error: {
         code: 400,
-        message: 'Validation error: String must contain at least 1 character(s) at "url"',
+        message: 'Validation error: String must contain at least 1 character(s) at "body.url"',
       },
       ok: false,
     });
@@ -65,7 +65,7 @@ describe("Instagram1Scheme", function () {
   });
 
   it("should return an error on wrong input", async function () {
-    const errorMessage = "Validation error: should be post_id or url";
+    const errorMessage = 'Validation error: should be post_id or url at "body"';
     await validateError(Instagram1Scheme, { url: "      " }, errorMessage);
     await validateError(Instagram1Scheme, { post_id: "" }, errorMessage);
     await validateError(Instagram1Scheme, { url: "      ", post_id: "" }, errorMessage);
@@ -82,14 +82,14 @@ describe("Instagram2Scheme", function () {
     await validateError(
       Instagram2Scheme,
       { post_id: "      " },
-      'Validation error: String must contain at least 1 character(s) at "post_id"',
+      'Validation error: String must contain at least 1 character(s) at "body.post_id"',
     );
     await validateError(
       Instagram2Scheme,
       { post_id: 1 },
-      'Validation error: Expected string, received number at "post_id"',
+      'Validation error: Expected string, received number at "body.post_id"',
     );
-    await validateError(Instagram2Scheme, {}, 'Validation error: Required at "post_id"');
+    await validateError(Instagram2Scheme, {}, 'Validation error: Required at "body.post_id"');
   });
 });
 
@@ -102,7 +102,7 @@ describe("InstagramStoryScheme", function () {
   });
 
   it("should return an error on wrong input", async function () {
-    const errorMessage = "Validation error: should be url or id";
+    const errorMessage = 'Validation error: should be url or id at "body"';
     await validateError(InstagramStoryScheme, { url: "      " }, errorMessage);
     await validateError(InstagramStoryScheme, { id: "" }, errorMessage);
     await validateError(InstagramStoryScheme, { url: "      ", id: "" }, errorMessage);
@@ -131,14 +131,14 @@ function checkOneLineScheme(schemeName, scheme, paramName) {
       await validateError(
         scheme,
         { [paramName]: "      " },
-        `Validation error: String must contain at least 1 character(s) at "${paramName}"`,
+        `Validation error: String must contain at least 1 character(s) at "body.${paramName}"`,
       );
       await validateError(
         scheme,
         { [paramName]: 1 },
-        `Validation error: Expected string, received number at "${paramName}"`,
+        `Validation error: Expected string, received number at "body.${paramName}"`,
       );
-      await validateError(scheme, {}, `Validation error: Required at "${paramName}"`);
+      await validateError(scheme, {}, `Validation error: Required at "body.${paramName}"`);
     });
   });
 }

@@ -5,37 +5,51 @@ const TrimmedString = z.string().trim();
 const NonEmptyString = TrimmedString.min(1);
 
 export const SenyaScheme = z.object({
-  url: NonEmptyString,
+  body: z.object({
+    url: NonEmptyString,
+  }),
 });
 
 export const TiktokScheme = z.object({
-  video: NonEmptyString,
+  body: z.object({
+    video: NonEmptyString,
+  }),
 });
 
-export const Instagram1Scheme = z
-  .object({
-    url: TrimmedString.optional(),
-    post_id: TrimmedString.optional(),
-  })
-  .refine((x) => x.url || x.post_id, "should be post_id or url");
+export const Instagram1Scheme = z.object({
+  body: z
+    .object({
+      url: TrimmedString.optional(),
+      post_id: TrimmedString.optional(),
+    })
+    .refine((x) => x.url || x.post_id, "should be post_id or url"),
+});
 
 export const Instagram2Scheme = z.object({
-  post_id: NonEmptyString,
+  body: z.object({
+    post_id: NonEmptyString,
+  }),
 });
 
-export const InstagramStoryScheme = z
-  .object({
-    url: TrimmedString.optional(),
-    id: TrimmedString.optional(),
-  })
-  .refine((x) => x.url || x.id, "should be url or id");
+export const InstagramStoryScheme = z.object({
+  body: z
+    .object({
+      url: TrimmedString.optional(),
+      id: TrimmedString.optional(),
+    })
+    .refine((x) => x.url || x.id, "should be url or id"),
+});
 
 export const ThreadsScheme = z.object({
-  url: NonEmptyString,
+  body: z.object({
+    url: NonEmptyString,
+  }),
 });
 
 export const TwitterScheme = z.object({
-  id: NonEmptyString,
+  body: z.object({
+    id: NonEmptyString,
+  }),
 });
 
 function sendValidationError(res, validationResult) {
@@ -48,7 +62,11 @@ function sendValidationError(res, validationResult) {
 export function validate(schema) {
   return (req, res, next) => {
     try {
-      const validationResult = schema.safeParse(req.body);
+      const validationResult = schema.safeParse({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      });
       if (!validationResult.success) {
         sendValidationError(res, validationResult);
         return;
