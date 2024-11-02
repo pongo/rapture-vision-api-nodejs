@@ -90,7 +90,7 @@ export async function getInstagram_v1({ post_id, url }) {
   return Err("All instagram services failed");
 }
 
-export async function getInstagramStory({ id, _url }) {
+export async function getInstagramStory({ id }) {
   let result;
 
   if (id) {

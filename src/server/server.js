@@ -84,7 +84,7 @@ app.post("/api/v2/instagram", validate(Instagram2Scheme), async (req, res) => {
 app.post("/api/v1/instagram_story", validate(InstagramStoryScheme), async (req, res) => {
   const { url, id } = req.validatedBody;
   const elapsed = timeStart();
-  const igResult = await getInstagramStory({ id, url });
+  const igResult = await getInstagramStory({ id });
   if (igResult.isErr) {
     console.error(`/instagram_story error: ${igResult.error.message}, elapsed: ${elapsed()} ms`);
     return void res.json({ ok: false, error: igResult.error });

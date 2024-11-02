@@ -20,5 +20,5 @@
     // changing the type of the variable in a catch clause from unknown to any
     "useUnknownInCatchVariables": false
   },
-  "include": ["src/**/*.js", "test/**/*.js", "test_integration/**/*.js", "/cli.js", "/index.js"]
+  "include": ["src/**/*.js", "src/**/*.ts", "test/**/*.js", "test_integration/**/*.js", "/cli.js", "/index.js"]
 }
