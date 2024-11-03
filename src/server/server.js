@@ -1,17 +1,12 @@
 import express from "express";
-import {
-  getInstagram,
-  getInstagram_v1,
-  getInstagramStory,
-} from "../services/instagram/instagram-service.js";
+import { getInstagram, getInstagramStory } from "../services/instagram/instagram-service.js";
 import { getThreads } from "../services/threads-service.js";
 import { getTiktok } from "../services/tiktok/tiktok-service.js";
 import { getTwitter } from "../services/twitter/twitter-service.js";
 import { Err } from "../utils/result.js";
 import { timeStart } from "../utils/time-start.js";
 import {
-  Instagram1Scheme,
-  Instagram2Scheme,
+  InstagramScheme,
   InstagramStoryScheme,
   SenyaScheme,
   ThreadsScheme,
@@ -53,22 +48,7 @@ app.post("/api/v1/tiktok-video", validate(TiktokScheme), async (req, res) => {
   res.json({ ok: true, value: result.value });
 });
 
-app.post("/api/v1/instagram", validate(Instagram1Scheme), async (req, res) => {
-  const { url, post_id } = req.validatedBody;
-  const elapsed = timeStart();
-  const result = await getInstagram_v1({ post_id, url });
-  if (result.isErr) {
-    console.error(`/instagram error: ${result.error.message}, elapsed: ${elapsed()} ms`);
-    return void res.json({ ok: false, error: result.error });
-  }
-
-  console.log(
-    `Fetched instagram. ${result.value.length} links found in ${elapsed()} ms ${post_id} ${url}`,
-  );
-  res.json({ ok: true, links: result.value });
-});
-
-app.post("/api/v2/instagram", validate(Instagram2Scheme), async (req, res) => {
+app.post("/api/v2/instagram", validate(InstagramScheme), async (req, res) => {
   const { post_id } = req.validatedBody;
   const elapsed = timeStart();
   const result = await getInstagram(post_id);

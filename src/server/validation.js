@@ -16,16 +16,7 @@ export const TiktokScheme = z.object({
   }),
 });
 
-export const Instagram1Scheme = z.object({
-  body: z
-    .object({
-      url: TrimmedString.optional(),
-      post_id: TrimmedString.optional(),
-    })
-    .refine((x) => x.url || x.post_id, "should be post_id or url"),
-});
-
-export const Instagram2Scheme = z.object({
+export const InstagramScheme = z.object({
   body: z.object({
     post_id: NonEmptyString,
   }),

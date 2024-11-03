@@ -1,14 +1,13 @@
+import requestMock from "express-request-mock";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import requestMock from "express-request-mock";
 import {
+  InstagramScheme,
   InstagramStoryScheme,
   SenyaScheme,
-  Instagram2Scheme,
-  Instagram1Scheme,
   ThreadsScheme,
-  TwitterScheme,
   TiktokScheme,
+  TwitterScheme,
   validate,
 } from "./validation.js";
 
@@ -56,40 +55,23 @@ checkOneLineScheme("TiktokScheme", TiktokScheme, "video");
 checkOneLineScheme("ThreadsScheme", ThreadsScheme, "url");
 checkOneLineScheme("TwitterScheme", TwitterScheme, "id");
 
-describe("Instagram1Scheme", () => {
+describe("InstagramScheme", () => {
   it("should accept valid input", async () => {
-    await validateOk(Instagram1Scheme, { url: "https://example.com" });
-    await validateOk(Instagram1Scheme, { post_id: "12334" });
-    await validateOk(Instagram1Scheme, { url: "https://example.com", post_id: "12334" });
-    await validateOk(Instagram1Scheme, { url: "https://example.com", post_id: "" });
-  });
-
-  it("should return an error on wrong input", async () => {
-    const errorMessage = 'Validation error: should be post_id or url at "body"';
-    await validateError(Instagram1Scheme, { url: "      " }, errorMessage);
-    await validateError(Instagram1Scheme, { post_id: "" }, errorMessage);
-    await validateError(Instagram1Scheme, { url: "      ", post_id: "" }, errorMessage);
-    await validateError(Instagram1Scheme, {}, errorMessage);
-  });
-});
-
-describe("Instagram2Scheme", () => {
-  it("should accept valid input", async () => {
-    await validateOk(Instagram2Scheme, { post_id: "12234" });
+    await validateOk(InstagramScheme, { post_id: "12234" });
   });
 
   it("should return an error on wrong input", async () => {
     await validateError(
-      Instagram2Scheme,
+      InstagramScheme,
       { post_id: "      " },
       'Validation error: String must contain at least 1 character(s) at "body.post_id"',
     );
     await validateError(
-      Instagram2Scheme,
+      InstagramScheme,
       { post_id: 1 },
       'Validation error: Expected string, received number at "body.post_id"',
     );
-    await validateError(Instagram2Scheme, {}, 'Validation error: Required at "body.post_id"');
+    await validateError(InstagramScheme, {}, 'Validation error: Required at "body.post_id"');
   });
 });
 
