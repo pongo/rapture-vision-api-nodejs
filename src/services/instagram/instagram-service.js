@@ -1,4 +1,5 @@
 import axios from "axios";
+import assert from "node:assert/strict";
 import { analytics } from "../../analytics/analytics.js";
 import { Balancer } from "../../utils/balancer.js";
 import { Err, Ok } from "../../utils/result.js";
@@ -13,6 +14,8 @@ const balancer = new Balancer({
 });
 
 export async function getInstagram(post_id) {
+  assert(typeof post_id === "string");
+
   try {
     return await balancer.callOneRound(post_id, { loadFromDisk: false });
   } catch (error) {

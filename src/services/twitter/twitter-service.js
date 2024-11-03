@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import { analytics } from "../../analytics/analytics.js";
 import { Balancer } from "../../utils/balancer.js";
 import { Err } from "../../utils/result.js";
@@ -12,6 +13,8 @@ const balancer = new Balancer({
 });
 
 export async function getTwitter(id) {
+  assert(typeof id === "string");
+
   try {
     return await balancer.callOneRound(id, { loadFromDisk: false });
   } catch (error) {
