@@ -14,7 +14,7 @@ const balancer = new Balancer({
 });
 
 export async function getInstagram(post_id) {
-  assert(typeof post_id === "string");
+  assert(typeof post_id === "string", post_id);
 
   try {
     return await balancer.callOneRound(post_id, { loadFromDisk: false });

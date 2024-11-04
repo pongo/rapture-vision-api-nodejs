@@ -17,7 +17,7 @@ describe("validate() middleware", () => {
       body: { url: "     https://example.com    " },
     });
     assert.equal(response.statusCode, 200);
-    assert.deepEqual(request.validatedBody, { body: { url: "https://example.com" } });
+    assert.deepEqual(request.safeData, { body: { url: "https://example.com" } });
   });
 
   it("should return an 400 error", async () => {

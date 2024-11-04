@@ -13,7 +13,7 @@ const balancer = new Balancer({
 });
 
 export async function getTwitter(id) {
-  assert(typeof id === "string");
+  assert(typeof id === "string", id);
 
   try {
     return await balancer.callOneRound(id, { loadFromDisk: false });

@@ -1,7 +1,7 @@
 declare global {
   namespace Express {
     interface Request {
-      validatedBody: any;
+      safeData: any;
     }
   }
 }

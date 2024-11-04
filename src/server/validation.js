@@ -63,7 +63,7 @@ export function validate(schema) {
         return;
       }
 
-      req.validatedBody = validationResult.data;
+      req.safeData = validationResult.data;
     } catch (error) {
       console.error(error);
       next(error);

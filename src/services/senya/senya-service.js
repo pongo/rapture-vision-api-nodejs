@@ -1,11 +1,14 @@
-import { checkFaceMatch } from "./face-service.js";
+import assert from "node:assert/strict";
 import { Ok, isErr } from "../../utils/result.js";
+import { checkFaceMatch } from "./face-service.js";
 
 // мало ложных 0.58, по-умолчанию 0.6
 const DISTANCE_THRESHOLD = 0.58;
 const MODEL = "senya/senya_multi.json";
 
 export async function checkSenya(url) {
+  assert(typeof url === "string", url);
+
   const matchesResult = await checkFaceMatch(url, MODEL, DISTANCE_THRESHOLD);
   if (isErr(matchesResult)) return matchesResult;
 

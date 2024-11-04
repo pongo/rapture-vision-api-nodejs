@@ -7,7 +7,7 @@ import { apis } from "./apis/index.js";
 const balancer = new Balancer({ name: "tiktok", apis, shuffle: true, strategy: "last", analytics });
 
 export async function getTiktok(url) {
-  assert(typeof url === "string");
+  assert(typeof url === "string", url);
 
   try {
     return await balancer.callOneRound(url, { loadFromDisk: false });

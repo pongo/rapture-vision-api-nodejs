@@ -22,7 +22,7 @@ const app = express();
 app.use(express.json());
 
 app.post("/api/senya", validate(SenyaScheme), async (req, res) => {
-  const { url } = req.validatedBody;
+  const { url } = req.safeData.body;
   const elapsed = timeStart();
   const result = await checkSenya(url);
   if (result.isErr) {
@@ -35,7 +35,7 @@ app.post("/api/senya", validate(SenyaScheme), async (req, res) => {
 });
 
 app.post("/api/v1/tiktok-video", validate(TiktokScheme), async (req, res) => {
-  const videoUrl = req.validatedBody.video;
+  const videoUrl = req.safeData.body.video;
   const elapsed = timeStart();
   const result = await getTiktok(videoUrl);
   if (result.isErr) {
@@ -49,7 +49,7 @@ app.post("/api/v1/tiktok-video", validate(TiktokScheme), async (req, res) => {
 });
 
 app.post("/api/v2/instagram", validate(InstagramScheme), async (req, res) => {
-  const { post_id } = req.validatedBody;
+  const { post_id } = req.safeData.body;
   const elapsed = timeStart();
   const result = await getInstagram(post_id);
   if (result.isErr) {
@@ -62,7 +62,7 @@ app.post("/api/v2/instagram", validate(InstagramScheme), async (req, res) => {
 });
 
 app.post("/api/v1/instagram_story", validate(InstagramStoryScheme), async (req, res) => {
-  const { url, id } = req.validatedBody;
+  const { url, id } = req.safeData.body;
   const elapsed = timeStart();
   const result = await getInstagramStory({ id });
   if (result.isErr) {
@@ -77,7 +77,7 @@ app.post("/api/v1/instagram_story", validate(InstagramStoryScheme), async (req, 
 });
 
 app.post("/api/v1/threads", validate(ThreadsScheme), async (req, res) => {
-  const { url } = req.validatedBody;
+  const { url } = req.safeData.body;
   const elapsed = timeStart();
   const result = await getThreads(url);
   if (result.isErr) {
@@ -90,7 +90,7 @@ app.post("/api/v1/threads", validate(ThreadsScheme), async (req, res) => {
 });
 
 app.post("/api/v1/twitter", validate(TwitterScheme), async (req, res) => {
-  const { id } = req.validatedBody;
+  const { id } = req.safeData.body;
   const elapsed = timeStart();
   const result = await getTwitter(id);
   if (result.isErr) {
