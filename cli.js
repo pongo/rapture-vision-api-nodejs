@@ -6,8 +6,9 @@ import { setTimeout as delay } from "node:timers/promises";
 await main().catch(console.error);
 
 async function main() {
-  await tiktok();
+  // await tiktok();
   // await twitter();
+  await twitterService();
   // getTwitter("1679529814212894723").then(console.log);
   // await analyticsTest();
   // await tiktokService();
@@ -34,6 +35,12 @@ async function instagram() {
       saveToDisk: !loadFromDisk,
     }),
   );
+}
+
+async function twitterService() {
+  const { getTwitter } = await import("./src/services/twitter/twitter-service.js");
+
+  console.dir(await getTwitter("1853807285618815037"), { depth: null });
 }
 
 async function tiktokService() {
