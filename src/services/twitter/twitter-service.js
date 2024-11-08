@@ -4,7 +4,8 @@ import { Balancer } from "../../utils/balancer.js";
 import { Err } from "../../utils/result.js";
 import { apis } from "./apis/index.js";
 
-const balancer = new Balancer({
+/** @type {import("./twitter-service.d.ts").TwitterBalancer} */
+const defaultBalancer = new Balancer({
   name: "twitter",
   apis,
   shuffle: true,
@@ -12,12 +13,17 @@ const balancer = new Balancer({
   analytics,
 });
 
-export async function getTwitter(id) {
-  assert(typeof id === "string", id);
+/** @type {import("./twitter-service.d.ts").createGetTwitter} */
+export function createGetTwitter(balancer = undefined, balancerCallOptions = undefined) {
+  /** @type {import("./twitter-service.d.ts").TwitterBalancer} */
+  const _balancer = balancer ?? defaultBalancer;
+  return async (id) => {
+    assert(typeof id === "string", id);
 
-  try {
-    return await balancer.callOneRound(id, { loadFromDisk: false });
-  } catch (error) {
-    return Err(`getTwitter error: ${error.message}`, { error });
-  }
+    try {
+      return await _balancer.callOneRound(id, { loadFromDisk: false, ...balancerCallOptions });
+    } catch (error) {
+      return Err(`getTwitter error: ${error.message}`, { error });
+    }
+  };
 }

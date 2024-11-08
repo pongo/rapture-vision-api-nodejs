@@ -1,4 +1,5 @@
 import type { Result } from "./result.d.ts";
+import type { KeyvStoreAdapter } from "keyv";
 
 type Limits = {
   reset?: number;
@@ -18,6 +19,7 @@ export type BalancerOptions<T, TParams> = {
   shuffle?: boolean;
   strategy?: "last" | "again" | "random";
   analytics?: IAnalytics;
+  keyv?: KeyvStoreAdapter;
 };
 
 export declare class Balancer<T, TParams> {

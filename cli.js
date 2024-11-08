@@ -8,11 +8,12 @@ await main().catch(console.error);
 async function main() {
   // await tiktok();
   // await twitter();
-  await twitterService();
-  // getTwitter("1679529814212894723").then(console.log);
-  // await analyticsTest();
-  // await tiktokService();
   // await instagram();
+
+  // await analyticsTest();
+
+  await twitterService();
+  // await tiktokService();
   // await instagramService();
 }
 
@@ -38,21 +39,24 @@ async function instagram() {
 }
 
 async function twitterService() {
-  const { getTwitter } = await import("./src/services/twitter/twitter-service.js");
+  const { createGetTwitter } = await import("./src/services/twitter/twitter-service.js");
+  const getTwitter = createGetTwitter(undefined, { loadFromDisk: true });
 
-  console.dir(await getTwitter("1853807285618815037"), { depth: null });
+  console.dir(await getTwitter("1748738014690304393"), { depth: null });
 }
 
 async function tiktokService() {
-  const { getTiktok } = await import("./src/services/tiktok/tiktok-service.js");
+  const { createGetTiktok } = await import("./src/services/tiktok/tiktok-service.js");
+  const getTiktok = createGetTiktok(undefined, { loadFromDisk: true });
 
   console.log(await getTiktok("https://vt.tiktok.com/ZSNwYG2DD/"));
 }
 
 async function instagramService() {
-  const { getInstagram } = await import("./src/services/instagram/instagram-service.js");
+  const { createGetInstagram } = await import("./src/services/instagram/instagram-service.js");
+  const getInstagram = createGetInstagram(undefined, { loadFromDisk: true });
 
-  console.log(await getInstagram("CnpKCjYPyd6"));
+  console.log(await getInstagram("CnpKCjYPyd6="));
 }
 
 async function analyticsTest() {

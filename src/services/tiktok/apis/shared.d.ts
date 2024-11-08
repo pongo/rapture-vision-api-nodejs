@@ -1,14 +1,15 @@
-import { FetchFnParameters, FactoryOptions } from "../../../utils/fetch-factory";
-import { ApiFn } from "../../../utils/balancer";
+import type { ApiFn } from "../../../utils/balancer.d.ts";
+import type { FactoryOptions, FetchFnParameters } from "../../../utils/fetch-factory.d.ts";
 
 type Limits = {
   reset?: number;
   remaining?: number;
 };
 
-type TiktokResult = { videos: string[] } & Limits;
+export type TiktokResult = { videos: string[] } & Limits;
 
-type TiktokApiFn = ApiFn<TiktokResult, FetchFnParameters<TiktokResult>>;
+export type TiktokParams = FetchFnParameters<TiktokResult>;
+export type TiktokApiFn = ApiFn<TiktokResult, TiktokParams>;
 
 export function TiktokFactory<F>(
   apiName: string,

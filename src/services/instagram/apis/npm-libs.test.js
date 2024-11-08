@@ -13,9 +13,9 @@ test("fetchInstagramUrlDirect", async () => {
   });
   assert.ok(res.isOk, formatErr(res));
   assert.equal(res.value.images.length, 1);
-  assert.match(res.value.images[0], reCdnInstagram);
+  assert.match(res.value.images[0], /^https:\/\/scontent-arn2-1\.cdninstagram\.com/);
   assert.equal(res.value.videos.length, 1);
-  assert.match(res.value.videos[0], reCdnInstagram);
+  assert.match(res.value.videos[0], /^https:\/\/scontent-arn2-1\.cdninstagram\.com/);
 });
 
 test("fetchRuhend", async () => {
