@@ -2,11 +2,11 @@ import "dotenv/config";
 //
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { requestRapidApiFetch } from "../src/utils/rapidapi.js";
-import { formatErr } from "../src/utils/testing-utils.js";
+import { requestRapidApiFetch } from "../../src/utils/rapidapi.js";
+import { formatErr } from "../../src/utils/testing-utils.js";
 
 describe("requestRapidApi", () => {
-  it.skip("GET with params", async () => {
+  it("GET with params", async () => {
     const res = await requestRapidApiFetch("GET", "https://imdb8.p.rapidapi.com/v2/search", {
       host: "imdb8.p.rapidapi.com",
       params: {
@@ -24,7 +24,7 @@ describe("requestRapidApi", () => {
     assert.ok(res.value.data.data.mainSearch);
   });
 
-  it.skip("POST", async () => {
+  it("POST", async () => {
     const res = await requestRapidApiFetch(
       "POST",
       "https://onecompiler-apis.p.rapidapi.com/api/v1/run",

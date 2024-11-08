@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, unlinkSync } from "node:fs";
 import { test } from "node:test";
-import { Balancer } from "../src/utils/balancer.js";
-import { Err } from "../src/utils/result.js";
+import { Balancer } from "../../src/utils/balancer.js";
+import { Err } from "../../src/utils/result.js";
 
-test.skip("keyv should create file with limits", async () => {
+test("keyv should create file with limits", async () => {
   const FILENAME = "keyv-test-limits.json";
   existsSync(FILENAME) && unlinkSync(FILENAME);
 

@@ -43,7 +43,7 @@ export default [
       "n/no-unsupported-features/node-builtins": [
         "error",
         {
-          ignores: ["fetch"],
+          ignores: ["fetch", "test.describe"],
         },
       ],
     },
