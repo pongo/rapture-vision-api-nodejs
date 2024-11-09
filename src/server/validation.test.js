@@ -56,10 +56,12 @@ describe("validate() middleware", () => {
   });
 });
 
-checkOneLineScheme("SenyaScheme", SenyaScheme, "url");
-checkOneLineScheme("TiktokScheme", TiktokScheme, "video");
-checkOneLineScheme("ThreadsScheme", ThreadsScheme, "url");
-checkOneLineScheme("TwitterScheme", TwitterScheme, "id");
+describe("checkOneLineScheme", { plan: 1 }, async () => {
+  checkOneLineScheme("SenyaScheme", SenyaScheme, "url");
+  checkOneLineScheme("TiktokScheme", TiktokScheme, "video");
+  checkOneLineScheme("ThreadsScheme", ThreadsScheme, "url");
+  checkOneLineScheme("TwitterScheme", TwitterScheme, "id");
+});
 
 describe("InstagramScheme", () => {
   it("should accept valid input", async () => {
