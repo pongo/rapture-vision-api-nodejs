@@ -72,6 +72,11 @@
       "optional": true
     }
   },
+  "overrides": {
+    "node-fetch@2.x": {
+      "whatwg-url": "14.x"
+    }
+  },
   "_moduleAliases": {
     "src": "./src",
     "tests": "./tests"
