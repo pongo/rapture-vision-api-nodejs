@@ -1,3 +1,6 @@
+/* c8 ignore start */
+/* node:coverage disable */
+
 // @ts-nocheck
 
 /**
