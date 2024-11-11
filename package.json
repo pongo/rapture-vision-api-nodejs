@@ -6,10 +6,14 @@
   "exports": "./index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node --test",
+    "test": "node --test src/**/*.test.js test_integration/mock/**/*.test.js",
     "test:bail": "node --test --test-reporter=@reporters/bail --test-reporter-destination=stderr --test-reporter=spec --test-reporter-destination=stdout",
     "test:watch": "node --test --watch",
-    "coverage": "c8 --clean --all --src src -r text -r html node --test && echo Report: coverage/index.html",
+    "test:min": "node --test --test-reporter=reporter-minimal --test-reporter-destination=stdout",
+    "test:min:my": "node --test --test-reporter=./src/utils/reporter-minimal.js",
+    "test:pretty": "node --test --test-reporter=@voxpelli/node-test-pretty-reporter",
+    "test:dot": "node --test --test-reporter=@synap-ac/node-dot-extra-reporter",
+    "coverage": "c8 --clean --all --src src -r text -r html node --test src/ test_integration/mock/ && echo Report: coverage/index.html",
     "installation": "npm i --include=optional --include=peer",
     "lint:oxlint": "oxlint --tsconfig=./tsconfig.json --disable-react-plugin --import-plugin  --promise-plugin --node-plugin --security-plugin src test_integration cli.js index.js eslint.config.js",
     "lint:biome": "biome lint",
@@ -47,14 +51,18 @@
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@reporters/bail": "^1.2.1",
+    "@synap-ac/node-dot-extra-reporter": "^1.3.1",
     "@types/express": "^5.0.0",
-    "@types/node": "^20.17.6",
+    "@types/node": "^22.9.0",
+    "@voxpelli/node-test-pretty-reporter": "^1.1.2",
     "eslint": "^9.14.0",
     "eslint-plugin-n": "^17.13.1",
     "eslint-plugin-unicorn": "^56.0.0",
     "express-request-mock": "^4.0.0",
     "globals": "^15.12.0",
-    "prettier": "^3.3.3"
+    "light-my-request": "^6.3.0",
+    "prettier": "^3.3.3",
+    "reporter-minimal": "^0.0.1"
   },
   "peerDependencies": {
     "@tensorflow/tfjs-node": "^4.21.0",

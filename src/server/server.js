@@ -43,7 +43,7 @@ export function createServer({
     if (result.isErr) {
       const message = result.error?.message ?? result.error;
       console.error(`tiktokVideo '${videoUrl}' error: ${message}, elapsed: ${elapsed()} ms`);
-      return void res.status(500).json({ ok: false, error: { code: 500, message } });
+      return void res.json({ ok: false, error: { message } });
     }
 
     console.info(`Fetched tiktok video in ${elapsed()} ms ${videoUrl}`);

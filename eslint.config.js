@@ -60,6 +60,8 @@ export default [
       "/model/**",
       "/_gsdata_/**",
       "_gsdata_/",
+      "src/utils/simple-mem-cache.js",
+      "src/utils/reporter-minimal.js",
     ],
   },
 ];
