@@ -1,6 +1,7 @@
 import { performance } from "node:perf_hooks";
 
 /**
+ * @returns {() => number}
  * @example
  * const elapsed = timeStart();
  * // ...
