@@ -4,7 +4,7 @@
 import inject from "light-my-request";
 import assert from "node:assert/strict";
 
-import { Err } from "../result.js";
+import { Err } from "../../src/utils/result.js";
 
 class MyResponse {
   constructor({ statusCode, body }) {
@@ -128,7 +128,7 @@ async function notImplemented() {
   return Err("Not implemented");
 }
 
-/** @type {import("../../server/server.d.ts").ServerConfig} */
+/** @type {import("../../src/server/server.d.ts").ServerConfig} */
 export const notImplementedServerConfig = {
   getInstagram: notImplemented,
   getInstagramStory: notImplemented,

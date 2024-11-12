@@ -1,7 +1,7 @@
 import requestMock from "express-request-mock";
 import assert from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
-import { createLogManager } from "../utils/testing-utils.js";
+import { createLogManager } from "../../tests/utils/utils.js";
 import {
   InstagramScheme,
   InstagramStoryScheme,

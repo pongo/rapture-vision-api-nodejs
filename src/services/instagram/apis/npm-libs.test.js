@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatErr } from "../../../utils/testing-utils.js";
+import { formatErr } from "../../../../tests/utils/utils.js";
 import { fetchBtch, fetchInstagramUrlDirect, fetchNayan, fetchRuhend } from "./npm-libs.js";
 
 const image_and_video = "CnpKCjYPyd6";

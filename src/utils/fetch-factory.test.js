@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it, mock, test } from "node:test";
 import { FetchFactory, getTmpFilePath } from "./fetch-factory.js";
 import { Ok } from "./result.js";
-import { formatErr } from "./testing-utils.js";
+import { formatErr } from "../../tests/utils/utils.js";
 
 const throwNotImplemented = () => {
   throw new Error("Not implemented");

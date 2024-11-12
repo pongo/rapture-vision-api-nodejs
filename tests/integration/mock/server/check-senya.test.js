@@ -1,15 +1,15 @@
 import assert from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
-import { createServer } from "../../../src/server/server.js";
-import { Err, Ok } from "../../../src/utils/result.js";
-import { StacklessError } from "../../../src/utils/stackless-error.js";
-import { createLogManager } from "../../../src/utils/testing-utils.js";
+import { createServer } from "../../../../src/server/server.js";
+import { Err, Ok } from "../../../../src/utils/result.js";
+import { StacklessError } from "../../../../src/utils/stackless-error.js";
+import { createLogManager } from "../../../utils/utils.js";
 import {
   assertServiceThrow,
   assertValidationError,
   notImplementedServerConfig,
   ServerTest,
-} from "../../../src/utils/testing/server.js";
+} from "../../../utils/server.js";
 
 const logManager = createLogManager();
 

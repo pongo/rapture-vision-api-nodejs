@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatErr } from "../../../utils/testing-utils.js";
+import { formatErr } from "../../../../tests/utils/utils.js";
 import { fetchLooter2, fetchRocketApi } from "./rapidapis.js";
 
 const image_and_video = "CnpKCjYPyd6";

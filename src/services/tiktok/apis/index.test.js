@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { startsWithHttp } from "../../../utils/api-utils.js";
 import { Ok } from "../../../utils/result.js";
-import { formatErr } from "../../../utils/testing-utils.js";
+import { formatErr } from "../../../../tests/utils/utils.js";
 import { apis } from "./index.js";
 
 describe("tiktok apis", () => {
