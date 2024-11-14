@@ -3,7 +3,7 @@ import nodePlugin from "eslint-plugin-n";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 
-const files = ["src/**/*.js", "test_integration/**/*.js", "cli.js", "index.js", "eslint.config.js"];
+const files = ["src/**/*.js", "tests/**/*.js", "cli.js", "index.js", "eslint.config.js"];
 
 export default [
   {
@@ -61,7 +61,7 @@ export default [
       "/_gsdata_/**",
       "_gsdata_/",
       "src/utils/simple-mem-cache.js",
-      "src/utils/reporter-minimal.js",
+      "tests/utils/reporter-minimal.js",
     ],
   },
 ];
