@@ -14,7 +14,7 @@
     "test:pretty": "node --test --test-reporter=@voxpelli/node-test-pretty-reporter",
     "test:dot": "node --test --test-reporter=@synap-ac/node-dot-extra-reporter",
     "coverage": "c8 --clean --all --src src -r text -r html node --test src/ tests/integration/mock/ && echo Report: coverage/index.html",
-    "installation": "npm i --include=optional --include=peer",
+    "installation": "npm i --include=optional --include=peer --omit=dev",
     "lint:oxlint": "oxlint --tsconfig=./tsconfig.json --disable-react-plugin --import-plugin  --promise-plugin --node-plugin --security-plugin src tests/integration cli.js index.js eslint.config.js",
     "lint:biome": "biome lint",
     "lint": "eslint"
