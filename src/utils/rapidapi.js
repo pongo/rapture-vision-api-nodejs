@@ -73,7 +73,17 @@ export async function requestRapidApiFetch(
     const data = await (parseJSON ? response.json() : response.text());
 
     if (!response.ok) {
-      throw { response, error: data };
+      const errorMessage = `${response.status} ${response.statusText}`;
+      if (response.status === 429) {
+        // балансировщик прекращает делать запросы если remaining < 3
+        // поэтому 429 ошибки не должно возникать.
+        //
+        // если же она возникла, то это или лимит запросов в минуту/час, или изменения тарифов апи.
+        // в общем, это что-то необычное. поэтому reset делаем 1 час
+        return Err(errorMessage, { remaining: 0, reset: HOUR });
+      }
+
+      return Err(errorMessage, parseLimits(response));
     }
 
     return Ok({
@@ -82,17 +92,7 @@ export async function requestRapidApiFetch(
     });
   } catch (error) {
     console.error(error);
-
-    if (error.response?.status === 429) {
-      // балансировщик прекращает делать запросы если remaining < 3
-      // поэтому 429 ошибки не должно возникать.
-      //
-      // если же она возникла, то это или лимит запросов в минуту/час, или изменения тарифов апи.
-      // в общем, это что-то необычное. поэтому reset делаем 1 час
-      return Err(error.message, { remaining: 0, reset: HOUR });
-    }
-
-    return Err(error, parseLimits(error.response));
+    return Err(error.message, { remaining: -1, reset: 0, error });
   }
 }
 

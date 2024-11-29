@@ -34,18 +34,19 @@ class ServerTestBase {
 
 // Тестирование реального сервера (с запуском и остановкой) с помощью fetch
 // Нечто подобное рекомендуется гайдом https://github.com/testjavascript/nodejs-integration-tests-best-practices/
-// eslint-disable-next-line no-unused-vars
-class ServerTestFetch extends ServerTestBase {
+export class ServerTestFetch extends ServerTestBase {
   constructor(app) {
     super(app);
     this.listener = undefined;
     this.port = undefined;
+    this.origin = undefined;
   }
 
   start() {
     return new Promise((resolve) => {
       this.listener = this.app.listen(undefined, () => {
         this.port = this.listener.address().port;
+        this.origin = `http://localhost:${this.port}`;
         resolve(undefined);
       });
     });
@@ -59,9 +60,13 @@ class ServerTestFetch extends ServerTestBase {
     });
   }
 
+  url(path) {
+    return `${this.origin}${path}`;
+  }
+
   async post(url, body) {
     assert(url.startsWith("/"), "Url must start with /");
-    const res = await fetch(`http://localhost:${this.port}${url}`, {
+    const res = await fetch(`${this.origin}${url}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
