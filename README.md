@@ -7,7 +7,6 @@ npm ci
 node index.js
 ```
 
-
 ## api/senya
 
 Проверяет, есть ли senya на фото.
@@ -36,5 +35,6 @@ curl -L -X POST "http://localhost:3000/api/senya" -H "Content-Type: application/
 
 Свежие версии tfjs-node используют инструкции, которых нет на старых процессорах. Придется использовать @tensorflow/tfjs-node@1.2.1 или компилировать tensorflow из исходников.
 
-* "@tensorflow/tfjs-node": "1.2.1",
-* /usr/local/n/versions/node/14.17.0/bin/npm i
+- "@tensorflow/tfjs-node": "1.2.1",
+- /usr/local/n/versions/node/14.17.0/bin/npm i
+- npm i @tensorflow/tfjs-node@4.21.0 @vladmandic/face-api@1.7.3 canvas@2.11.2

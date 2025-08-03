@@ -8,18 +8,18 @@ await main().catch(console.error);
 async function main() {
   // await tiktok();
   // await twitter();
-  // await instagram();
+  await instagram();
 
   // await analyticsTest();
 
-  await twitterService();
+  // await twitterService();
   // await tiktokService();
   // await instagramService();
 }
 
 async function instagram() {
-  // const apis = await import("./src/services/instagram/apis/npm-libs.js");
-  const apis = await import("./src/services/instagram/apis/rapidapis.js");
+  const apis = await import("./src/services/instagram/apis/npm-libs.js");
+  // const apis = await import("./src/services/instagram/apis/rapidapis.js");
 
   const image = "Cf4PRxnlMUa";
   const image2 = "DAN98w7zs0j";
@@ -31,7 +31,7 @@ async function instagram() {
 
   const loadFromDisk = true;
   console.log(
-    await apis.fetchLooter2(image, {
+    await apis.fetchNayan2(image, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

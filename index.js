@@ -14,12 +14,11 @@ const port = Number(process.env.PORT || 3000);
 
 async function initCheckSenya() {
   if (process.env.DISABLE_CHECK_SENYA === "on") {
-    return {
-      checkSenya: async () => Err("checkSenya disabled by environment variable"),
-    };
+    return async () => Err("checkSenya disabled by environment variable");
   }
 
-  return await import("./src/services/senya/senya-service.js");
+  const { checkSenya } = await import("./src/services/senya/senya-service.js");
+  return checkSenya;
 }
 
 const app = createServer({

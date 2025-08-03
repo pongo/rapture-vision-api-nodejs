@@ -1,12 +1,12 @@
 import { fetchVideo as prevter } from "@prevter/tiktok-scraper";
 import tobyg74 from "@tobyg74/tiktok-api-dl";
 import { ttdl as BtchDownloader } from "btch-downloader";
-import nayanPkg from "nayan-media-downloader";
 import Snaptik from "snaptik";
 import TikChan from "tikchan";
 import tiklydownSanzy from "tiklydown-sanzy";
 import { download as tiktod } from "tiktod";
 import TikTokNoWatermark from "tiktok-no-watermark-api";
+import nayanPkg from "../../../apis/nayan-videos-downloader.js";
 import { startsWithHttp } from "../../../utils/api-utils.js";
 import { TiktokFactory } from "./shared.js";
 
