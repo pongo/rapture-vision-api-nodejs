@@ -26,3 +26,9 @@ function checkUrlsArray(urls) {
 export function ThreadsFactory(apiName, options) {
   return FetchFactory(apiName, { checkFn, tmpFileNameFn, ...options });
 }
+
+export function getThreadsShortcode(url) {
+  const regex = /https?:\/\/(?:www\.)?threads\.com\/@[\w.-_]+\/post\/([\w\-_]+)/i;
+  const match = url.match(regex);
+  return match ? match[1] : undefined;
+}

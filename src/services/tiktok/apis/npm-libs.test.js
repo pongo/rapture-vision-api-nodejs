@@ -4,6 +4,7 @@ import { formatErr } from "../../../../tests/utils/utils.js";
 import {
   fetchBtchDownloader,
   fetchNayan,
+  fetchNayanAlldown,
   fetchPrevter,
   fetchSnaptik,
   fetchTikChan,
@@ -112,4 +113,12 @@ test("fetchNayan", async () => {
   assert.ok(res.isOk, formatErr(res));
   assert.equal(res.value.videos.length, 1);
   assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
+});
+
+test("fetchNayanAlldown", async () => {
+  const res = await fetchNayanAlldown("https://vt.tiktok.com/ZSNwYG2DD/", { loadFromDisk: true });
+  assert.ok(res.isOk, formatErr(res));
+  assert.equal(res.value.videos.length, 2);
+  assert.match(res.value.videos[0], /^https/);
+  assert.match(res.value.videos[1], /^https/);
 });

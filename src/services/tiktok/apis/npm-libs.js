@@ -12,6 +12,7 @@ import { startsWithHttp } from "../../../utils/api-utils.js";
 import { TiktokFactory } from "./shared.js";
 
 const nayan = nayanPkg.tikdown;
+const nayanAlldown = nayanPkg.alldown;
 
 const emptyResult = { videos: [] };
 
@@ -162,6 +163,18 @@ export const fetchNayan = TiktokFactory("tiktok/nayan", {
   parseFn(data) {
     if (data?.status && data.data) {
       return { videos: [data.data.video].filter(startsWithHttp) };
+    }
+    return { ...emptyResult };
+  },
+});
+
+export const fetchNayanAlldown = TiktokFactory("tiktok/nayan_alldown", {
+  async fetchFn(url) {
+    return await nayanAlldown(url);
+  },
+  parseFn(data) {
+    if (data?.data) {
+      return { videos: [data.data.high, data.data.low].filter(startsWithHttp) };
     }
     return { ...emptyResult };
   },

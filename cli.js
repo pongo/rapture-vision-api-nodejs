@@ -19,8 +19,8 @@ async function main() {
 }
 
 async function instagram() {
-  const apis = await import("./src/services/instagram/apis/npm-libs.js");
-  // const apis = await import("./src/services/instagram/apis/rapidapis.js");
+  // const apis = await import("./src/services/instagram/apis/npm-libs.js");
+  const apis = await import("./src/services/instagram/apis/rapidapis.js");
 
   const image = "Cf4PRxnlMUa";
   const image2 = "DAN98w7zs0j";
@@ -30,9 +30,9 @@ async function instagram() {
   const multiple_videos = "ClwKf74ywve";
   const multiple_images = "CXJdPfRgFl8";
 
-  const loadFromDisk = true;
+  const loadFromDisk = false;
   console.log(
-    await apis.fetchMetadownloader(image, {
+    await apis.fetchTuan2308(image, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
@@ -40,16 +40,16 @@ async function instagram() {
 }
 
 async function threads() {
-  const apis = await import("./src/services/threads/apis/npm-libs.js");
-  // const apis = await import("./src/services/threads/apis/rapidapis.js");
+  // const apis = await import("./src/services/threads/apis/npm-libs.js");
+  const apis = await import("./src/services/threads/apis/rapidapis.js");
 
   const image = "https://www.threads.com/@homo_euntes/post/DM2MllzNzIB";
-  const multiple_images = "https://www.threads.com/@yskphgos/post/DM2L2syTIFK";
+  // const multiple_images = "https://www.threads.com/@yskphgos/post/DM2L2syTIFK";
   const image_and_video = "https://www.threads.com/@kik_f_lm/post/DD2IlgBS6GR";
 
   const loadFromDisk = false;
   console.log(
-    await apis.fetchUniversalDownloader(image_and_video, {
+    await apis.fetchFastnewsuz(image_and_video, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
@@ -93,9 +93,9 @@ async function tiktok() {
   const ok2 = "https://vt.tiktok.com/ZSNwYG2DD/";
   const ok3 = "https://www.tiktok.com/@netleya/video/7070543692007787777";
 
-  const loadFromDisk = false;
+  const loadFromDisk = true;
   console.log(
-    await apis.fetchUniversalDownloader(ok3, {
+    await apis.fetchNayanAlldown(ok, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

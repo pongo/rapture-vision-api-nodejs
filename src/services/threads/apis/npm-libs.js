@@ -1,5 +1,4 @@
 import { threads as universalDownloader } from "../../../apis/universal-downloader.js";
-import { splitUrls } from "../../instagram/apis/shared.js";
 import { ThreadsFactory } from "./shared.js";
 
 const emptyResult = { images: [], videos: [] };
