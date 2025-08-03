@@ -1,6 +1,6 @@
 import { igdl as btch } from "btch-downloader";
 import instagramUrlDirect from "instagram-url-direct";
-import nayanPkg from "nayan-media-downloader";
+import nayanPkg from "nayan-videos-downloader";
 import { igdl as ruhend } from "ruhend-scraper";
 
 import { InstagramFactory, splitUrls, urlFromId } from "./shared.js";

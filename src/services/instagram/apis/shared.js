@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { startsWithHttp } from "../../../utils/api-utils.js";
 import { FetchFactory } from "../../../utils/fetch-factory.js";
 
@@ -42,12 +43,29 @@ export function splitUrls(urls) {
     if (!startsWithHttp(url)) {
       continue;
     }
-    const url_lower = url.toLowerCase();
-    if (reImage.test(url_lower)) {
-      images.push(url);
+    const jwt = extractAndDecodeJWT(url);
+    const target_url = jwt?.url ?? url;
+    const url_lower = target_url.toLowerCase();
+    if (
+      reImage.test(url_lower) ||
+      reImage.test(jwt?.url ?? "") ||
+      reImage.test(jwt?.filename ?? "")
+    ) {
+      images.push(target_url);
     } else {
-      videos.push(url);
+      videos.push(target_url);
     }
   }
   return { images, videos };
+}
+
+function extractAndDecodeJWT(url) {
+  try {
+    const parsedUrl = new URL(url);
+    const token = parsedUrl.searchParams.get("token");
+    if (!token) return null;
+    return jwtDecode(token);
+  } catch {
+    return null;
+  }
 }
