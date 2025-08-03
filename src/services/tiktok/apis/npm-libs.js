@@ -7,6 +7,7 @@ import tiklydownSanzy from "tiklydown-sanzy";
 import { download as tiktod } from "tiktod";
 import TikTokNoWatermark from "tiktok-no-watermark-api";
 import nayanPkg from "../../../apis/nayan-videos-downloader.js";
+import { tiktok as universalDownloader } from "../../../apis/universal-downloader.js";
 import { startsWithHttp } from "../../../utils/api-utils.js";
 import { TiktokFactory } from "./shared.js";
 
@@ -119,6 +120,24 @@ export const fetchTiktod = TiktokFactory("tiktok/tiktod", {
   parseFn(data) {
     if (data?.status === 200 && data.result) {
       return { videos: [data.result.media].filter(startsWithHttp) };
+    }
+    return { ...emptyResult };
+  },
+});
+
+export const fetchUniversalDownloader = TiktokFactory("tiktok/universalDownloader", {
+  async fetchFn(url) {
+    return await universalDownloader(url);
+  },
+  parseFn(data) {
+    if (data) {
+      return {
+        videos: [
+          data?.video_no_watermark?.url,
+          data?.video_no_watermark_alternatives?.url,
+          data?.video_watermark?.url,
+        ].filter(startsWithHttp),
+      };
     }
     return { ...emptyResult };
   },

@@ -8,7 +8,8 @@ await main().catch(console.error);
 async function main() {
   // await tiktok();
   // await twitter();
-  await instagram();
+  // await instagram();
+  await threads();
 
   // await analyticsTest();
 
@@ -32,6 +33,23 @@ async function instagram() {
   const loadFromDisk = true;
   console.log(
     await apis.fetchMetadownloader(image, {
+      loadFromDisk,
+      saveToDisk: !loadFromDisk,
+    }),
+  );
+}
+
+async function threads() {
+  const apis = await import("./src/services/threads/apis/npm-libs.js");
+  // const apis = await import("./src/services/threads/apis/rapidapis.js");
+
+  const image = "https://www.threads.com/@homo_euntes/post/DM2MllzNzIB";
+  const multiple_images = "https://www.threads.com/@yskphgos/post/DM2L2syTIFK";
+  const image_and_video = "https://www.threads.com/@kik_f_lm/post/DD2IlgBS6GR";
+
+  const loadFromDisk = false;
+  console.log(
+    await apis.fetchUniversalDownloader(image_and_video, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
@@ -77,7 +95,7 @@ async function tiktok() {
 
   const loadFromDisk = false;
   console.log(
-    await apis.fetchNayan(ok3, {
+    await apis.fetchUniversalDownloader(ok3, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),
@@ -106,7 +124,7 @@ async function twitter() {
   const loadFromDisk = false;
   for (const id of ids2) {
     console.log(
-      await twitterApis.fetchAbcdsxg1TweetResultByRestId(id, {
+      await twitterApis.fetchUniversalDownloader(id, {
         loadFromDisk,
         saveToDisk: !loadFromDisk,
       }),

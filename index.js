@@ -5,7 +5,7 @@ import {
   createGetInstagram,
   getInstagramStory,
 } from "./src/services/instagram/instagram-service.js";
-import { getThreads } from "./src/services/threads-service.js";
+import { createGetThreads } from "./src/services/threads/threads-service.js";
 import { createGetTiktok } from "./src/services/tiktok/tiktok-service.js";
 import { createGetTwitter } from "./src/services/twitter/twitter-service.js";
 import { Err } from "./src/utils/result.js";
@@ -24,7 +24,7 @@ async function initCheckSenya() {
 const app = createServer({
   getInstagram: createGetInstagram(),
   getInstagramStory,
-  getThreads,
+  getThreads: createGetThreads(),
   getTiktok: createGetTiktok(),
   getTwitter: createGetTwitter(),
   checkSenya: await initCheckSenya(),

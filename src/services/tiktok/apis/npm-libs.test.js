@@ -13,6 +13,7 @@ import {
   fetchTobyg74_v1,
   fetchTobyg74_v2,
   fetchTobyg74_v3,
+  fetchUniversalDownloader,
 } from "./npm-libs.js";
 
 test("fetchSnaptik", async () => {
@@ -77,8 +78,8 @@ test("fetchTiklydownSanzy1", async () => {
   });
   assert.ok(res.isOk, formatErr(res));
   assert.equal(res.value.videos.length, 2);
-  assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
-  assert.match(res.value.videos[1], /^https:\/\/v\d+m-default.akamaized.net/);
+  assert.match(res.value.videos[0], /^https:\/\/v16m-default.akamaized.net/);
+  assert.match(res.value.videos[1], /^https:\/\/v16m-default.akamaized.net/);
 });
 
 test("fetchTiktod", async () => {
@@ -86,6 +87,15 @@ test("fetchTiktod", async () => {
   assert.ok(res.isOk, formatErr(res));
   assert.equal(res.value.videos.length, 1);
   assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
+});
+
+test("fetchUniversalDownloader", async () => {
+  const res = await fetchUniversalDownloader("https://vt.tiktok.com/ZSNwYG2DD/", {
+    loadFromDisk: true,
+  });
+  assert.ok(res.isOk, formatErr(res));
+  assert.equal(res.value.videos.length, 2);
+  assert.match(res.value.videos[0], /^https:\/\/v16m-default.tiktokcdn.com/);
 });
 
 test("fetchTikTokNoWatermark", async () => {
