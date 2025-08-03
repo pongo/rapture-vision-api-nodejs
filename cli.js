@@ -31,7 +31,7 @@ async function instagram() {
 
   const loadFromDisk = true;
   console.log(
-    await apis.fetchNayan2(image, {
+    await apis.fetchMetadownloader(image, {
       loadFromDisk,
       saveToDisk: !loadFromDisk,
     }),

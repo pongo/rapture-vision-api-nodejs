@@ -4,6 +4,7 @@ import { formatErr } from "../../../../tests/utils/utils.js";
 import {
   fetchBtch,
   fetchInstagramUrlDirect,
+  fetchMetadownloader,
   fetchNayan,
   fetchNayan2,
   fetchRuhend,
@@ -27,6 +28,17 @@ test("fetchInstagramUrlDirect", async () => {
 
 test("fetchRuhend", async () => {
   const res = await fetchRuhend(image_and_video, {
+    loadFromDisk: true,
+  });
+  assert.ok(res.isOk, formatErr(res));
+  assert.equal(res.value.images.length, 1);
+  assert.match(res.value.images[0], reCdnInstagram);
+  assert.equal(res.value.videos.length, 1);
+  assert.match(res.value.videos[0], reCdnInstagram);
+});
+
+test("fetchMetadownloader", async () => {
+  const res = await fetchMetadownloader(image_and_video, {
     loadFromDisk: true,
   });
   assert.ok(res.isOk, formatErr(res));

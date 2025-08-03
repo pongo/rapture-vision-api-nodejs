@@ -1,8 +1,8 @@
 import { igdl as btch } from "btch-downloader";
 import { instagramGetUrl } from "instagram-url-direct";
+import metadownloader from "metadownloader";
 import { igdl as ruhend } from "ruhend-scraper";
 import nayanPkg from "../../../apis/nayan-videos-downloader.js";
-
 import { InstagramFactory, splitUrls, urlFromId } from "./shared.js";
 
 const { ndown } = nayanPkg;
@@ -17,6 +17,18 @@ export const fetchInstagramUrlDirect = InstagramFactory("instagram/instagram-url
   parseFn(data) {
     if (data?.url_list && data.url_list.length > 0) {
       return splitUrls(data.url_list);
+    }
+    return { ...emptyResult };
+  },
+});
+
+export const fetchMetadownloader = InstagramFactory("instagram/metadownloader", {
+  async fetchFn(id) {
+    return await metadownloader(urlFromId(id));
+  },
+  parseFn(data) {
+    if (data?.status && data.data && data.data.length > 0) {
+      return splitUrls(data.data.map((x) => x.url));
     }
     return { ...emptyResult };
   },
