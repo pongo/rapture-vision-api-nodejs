@@ -5,7 +5,8 @@ import { Balancer } from "../../utils/balancer.js";
 import { Err, Ok } from "../../utils/result.js";
 import { apis } from "./apis/index.js";
 
-const balancer = new Balancer({
+/** @type {import("./instagram-service.d.ts").InstagramBalancer} */
+const defaultBalancer = new Balancer({
   name: "instagram",
   apis,
   shuffle: true,
@@ -13,14 +14,19 @@ const balancer = new Balancer({
   analytics,
 });
 
-export async function getInstagram(post_id) {
-  assert(typeof post_id === "string", post_id);
+/** @type {import("./instagram-service.d.ts").createGetInstagram} */
+export function createGetInstagram(balancer = undefined, balancerCallOptions = undefined) {
+  /** @type {import("./instagram-service.d.ts").InstagramBalancer} */
+  const _balancer = balancer ?? defaultBalancer;
+  return async (post_id) => {
+    assert(typeof post_id === "string", post_id);
 
-  try {
-    return await balancer.callOneRound(post_id, { loadFromDisk: false });
-  } catch (error) {
-    return Err(`getInstagram error: ${error.message}`, { error, post_id });
-  }
+    try {
+      return await _balancer.callOneRound(post_id, { loadFromDisk: false, ...balancerCallOptions });
+    } catch (error) {
+      return Err(`getInstagram error: ${error.message}`, { error, post_id });
+    }
+  };
 }
 
 // https://rapidapi.com/rocketapi/api/rocketapi-for-instagram

@@ -103,7 +103,7 @@ describe("twitter apis", () => {
   const skip = new Set(["Glavier135TweetDetail", "Restocked47"]);
   for (const [name, twitterFetchFn] of apis) {
     if (skip.has(name)) {
-      console.log("skip", name);
+      console.warn("skip", name);
       continue;
     }
     testTwitter(name, twitterFetchFn);

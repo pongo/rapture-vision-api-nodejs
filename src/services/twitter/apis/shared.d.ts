@@ -1,5 +1,5 @@
-import { FetchFnParameters, FactoryOptions } from "../../../utils/fetch-factory";
-import { ApiFn } from "../../../utils/balancer";
+import type { ApiFn } from "../../../utils/balancer.d.ts";
+import type { FactoryOptions, FetchFnParameters } from "../../../utils/fetch-factory.d.ts";
 
 type Limits = {
   reset?: number;
@@ -7,9 +7,10 @@ type Limits = {
 };
 
 type TwitterResultBase = { text: string; images: string[]; videos: string[] };
-type TwitterResult = TwitterResultBase & Limits;
+export type TwitterResult = TwitterResultBase & Limits;
 
-type TwitterApiFn = ApiFn<TwitterResult, FetchFnParameters<TwitterResult>>;
+export type TwitterParams = FetchFnParameters<TwitterResult>;
+export type TwitterApiFn = ApiFn<TwitterResult, TwitterParams>;
 
 export function TwitterFactory<F>(
   apiName: string,

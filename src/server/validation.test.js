@@ -1,6 +1,7 @@
 import requestMock from "express-request-mock";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
+import { createLogManager } from "../../tests/utils/utils.js";
 import {
   InstagramScheme,
   InstagramStoryScheme,
@@ -10,6 +11,11 @@ import {
   TwitterScheme,
   validate,
 } from "./validation.js";
+
+const logManager = createLogManager();
+
+before(logManager.silent);
+after(logManager.restore);
 
 describe("validate() middleware", () => {
   it("should modify request object", async () => {
@@ -50,10 +56,12 @@ describe("validate() middleware", () => {
   });
 });
 
-checkOneLineScheme("SenyaScheme", SenyaScheme, "url");
-checkOneLineScheme("TiktokScheme", TiktokScheme, "video");
-checkOneLineScheme("ThreadsScheme", ThreadsScheme, "url");
-checkOneLineScheme("TwitterScheme", TwitterScheme, "id");
+describe("checkOneLineScheme", { plan: 1 }, async () => {
+  checkOneLineScheme("SenyaScheme", SenyaScheme, "url");
+  checkOneLineScheme("TiktokScheme", TiktokScheme, "video");
+  checkOneLineScheme("ThreadsScheme", ThreadsScheme, "url");
+  checkOneLineScheme("TwitterScheme", TwitterScheme, "id");
+});
 
 describe("InstagramScheme", () => {
   it("should accept valid input", async () => {

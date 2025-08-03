@@ -3,47 +3,47 @@ import { requestRapidApiFetch } from "../../../utils/rapidapi.js";
 import { InstagramFactory, urlFromId } from "./shared.js";
 
 // https://rapidapi.com/rocketapi/api/rocketapi-for-instagram
-export const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
-  async fetchFn(id) {
-    return await requestRapidApiFetch(
-      "POST",
-      "https://rocketapi-for-instagram.p.rapidapi.com/instagram/media/get_info_by_shortcode",
-      {
-        host: "rocketapi-for-instagram.p.rapidapi.com",
-        body: { shortcode: id },
-      },
-    );
-  },
-  parseFn({ remaining, reset, data }) {
-    const items = data?.response?.body?.items;
-    if (items == null || items.length === 0) {
-      return { remaining, reset, images: [], videos: [] };
-    }
-
-    const root = items[0];
-    const images = [];
-    const videos = [];
-    if (root?.carousel_media != null && root.carousel_media.length > 0) {
-      root.carousel_media.forEach(parseOne);
-    } else {
-      parseOne(root);
-    }
-
-    return { images, videos, remaining, reset };
-
-    function parseOne(obj) {
-      if (obj.media_type === 1) {
-        images.push(obj.image_versions2.candidates[0].url);
-        return;
-      }
-      if (obj.media_type === 2) {
-        videos.push(obj.video_versions[0].url);
-        return;
-      }
-      throw new Error(`unknown media_type: ${obj.media_type}`);
-    }
-  },
-});
+// export const fetchRocketApi = InstagramFactory("instagram/rocketapi", {
+//   async fetchFn(id) {
+//     return await requestRapidApiFetch(
+//       "POST",
+//       "https://rocketapi-for-instagram.p.rapidapi.com/instagram/media/get_info_by_shortcode",
+//       {
+//         host: "rocketapi-for-instagram.p.rapidapi.com",
+//         body: { shortcode: id },
+//       },
+//     );
+//   },
+//   parseFn({ remaining, reset, data }) {
+//     const items = data?.response?.body?.items;
+//     if (items == null || items.length === 0) {
+//       return { remaining, reset, images: [], videos: [] };
+//     }
+//
+//     const root = items[0];
+//     const images = [];
+//     const videos = [];
+//     if (root?.carousel_media != null && root.carousel_media.length > 0) {
+//       root.carousel_media.forEach(parseOne);
+//     } else {
+//       parseOne(root);
+//     }
+//
+//     return { images, videos, remaining, reset };
+//
+//     function parseOne(obj) {
+//       if (obj.media_type === 1) {
+//         images.push(obj.image_versions2.candidates[0].url);
+//         return;
+//       }
+//       if (obj.media_type === 2) {
+//         videos.push(obj.video_versions[0].url);
+//         return;
+//       }
+//       throw new Error(`unknown media_type: ${obj.media_type}`);
+//     }
+//   },
+// });
 
 // https://rapidapi.com/iq.faceok/api/instagram-looter2
 export const fetchLooter2 = InstagramFactory("instagram/looter2", {

@@ -1,10 +1,17 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatErr } from "../../../utils/testing-utils.js";
-import { fetchBtch, fetchInstagramUrlDirect, fetchNayan, fetchRuhend } from "./npm-libs.js";
+import { formatErr } from "../../../../tests/utils/utils.js";
+import {
+  fetchBtch,
+  fetchInstagramUrlDirect,
+  fetchNayan,
+  fetchNayan2,
+  fetchRuhend,
+} from "./npm-libs.js";
 
 const image_and_video = "CnpKCjYPyd6";
-const reCdnInstagram = /^https:\/\/scontent\.cdninstagram\.com/;
+const reCdnInstagram =
+  /^https:\/\/scontent\.cdninstagram\.com|^https:\/\/scontent-.+?\.cdninstagram\.com/;
 const reRapidCdn = /^https:\/\/d.rapidcdn.app\/d\?token=/;
 
 test("fetchInstagramUrlDirect", async () => {
@@ -13,9 +20,9 @@ test("fetchInstagramUrlDirect", async () => {
   });
   assert.ok(res.isOk, formatErr(res));
   assert.equal(res.value.images.length, 1);
-  assert.match(res.value.images[0], reCdnInstagram);
+  assert.match(res.value.images[0], /^https:\/\/scontent-arn2-1\.cdninstagram\.com/);
   assert.equal(res.value.videos.length, 1);
-  assert.match(res.value.videos[0], reCdnInstagram);
+  assert.match(res.value.videos[0], /^https:\/\/scontent-arn2-1\.cdninstagram\.com/);
 });
 
 test("fetchRuhend", async () => {
@@ -26,7 +33,7 @@ test("fetchRuhend", async () => {
   assert.equal(res.value.images.length, 1);
   assert.match(res.value.images[0], reCdnInstagram);
   assert.equal(res.value.videos.length, 1);
-  assert.match(res.value.videos[0], reRapidCdn);
+  assert.match(res.value.videos[0], reCdnInstagram);
 });
 
 test("fetchNayan", async () => {
@@ -37,7 +44,18 @@ test("fetchNayan", async () => {
   assert.equal(res.value.images.length, 1);
   assert.match(res.value.images[0], reCdnInstagram);
   assert.equal(res.value.videos.length, 1);
-  assert.match(res.value.videos[0], reRapidCdn);
+  assert.match(res.value.videos[0], reCdnInstagram);
+});
+
+test("fetchNayan2", async () => {
+  const res = await fetchNayan2(image_and_video, {
+    loadFromDisk: true,
+  });
+  assert.ok(res.isOk, formatErr(res));
+  assert.equal(res.value.images.length, 1);
+  assert.match(res.value.images[0], reCdnInstagram);
+  assert.equal(res.value.videos.length, 1);
+  assert.match(res.value.videos[0], reCdnInstagram);
 });
 
 test("fetchBtch", async () => {
@@ -48,5 +66,5 @@ test("fetchBtch", async () => {
   assert.equal(res.value.images.length, 1);
   assert.match(res.value.images[0], reCdnInstagram);
   assert.equal(res.value.videos.length, 1);
-  assert.match(res.value.videos[0], reRapidCdn);
+  assert.match(res.value.videos[0], reCdnInstagram);
 });

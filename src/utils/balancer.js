@@ -76,11 +76,13 @@ export class Balancer {
 
     this.name = name;
 
-    this.keyv = new Keyv({
-      store: new KeyvFile({
-        filename: `${name}-limits.json`,
-      }),
-    });
+    this.keyv =
+      options.keyv ??
+      new Keyv({
+        store: new KeyvFile({
+          filename: `${name}-limits.json`,
+        }),
+      });
 
     this.apis = createIterableList(apis, shuffle);
     switch (strategy) {

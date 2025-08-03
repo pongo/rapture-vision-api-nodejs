@@ -59,6 +59,7 @@ export const fetchDavethebeast241 = TwitterFactory("twitter/davethebeast241", {
 
     if (orig.quote_id && options.loadQuote !== false) {
       if (!options.loadFromDisk) await delay(1000);
+      // TODO: можно создать отдельный fetchDavethebeast241_withoutQuote
       const quotedResult = await fetchDavethebeast241(orig.quote_id, {
         ...options,
         loadQuote: false,

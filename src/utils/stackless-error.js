@@ -24,3 +24,13 @@ Object.defineProperty(StacklessError.prototype, Symbol.toStringTag, {
   configurable: false,
   enumerable: false,
 });
+
+// function inherits(ctor, superCtor) {
+//   Object.defineProperty(ctor, "super_", {
+//     __proto__: null,
+//     value: superCtor,
+//     writable: true,
+//     configurable: true,
+//   });
+//   Object.setPrototypeOf(ctor.prototype, superCtor.prototype);
+// }
