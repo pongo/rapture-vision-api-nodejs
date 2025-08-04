@@ -10,7 +10,6 @@ import {
   fetchTikChan,
   fetchTiklydownSanzy1,
   fetchTiktod,
-  fetchTikTokNoWatermark,
   fetchTobyg74_v1,
   fetchTobyg74_v2,
   fetchTobyg74_v3,
@@ -97,15 +96,6 @@ test("fetchUniversalDownloader", async () => {
   assert.ok(res.isOk, formatErr(res));
   assert.equal(res.value.videos.length, 2);
   assert.match(res.value.videos[0], /^https:\/\/v16m-default.tiktokcdn.com/);
-});
-
-test("fetchTikTokNoWatermark", async () => {
-  const res = await fetchTikTokNoWatermark("https://vt.tiktok.com/ZSNwYG2DD/", {
-    loadFromDisk: true,
-  });
-  assert.ok(res.isOk, formatErr(res));
-  assert.equal(res.value.videos.length, 1);
-  assert.match(res.value.videos[0], /^https:\/\/v\d+m-default.akamaized.net/);
 });
 
 test("fetchNayan", async () => {
