@@ -68,7 +68,7 @@
   "peerDependencies": {
     "@tensorflow/tfjs-node": "^4.21.0",
     "@vladmandic/face-api": "1.7.3",
-    "canvas": "^2.11.2"
+    "canvas": "^3.1.2"
   },
   "peerDependenciesMeta": {
     "@tensorflow/tfjs-node": {
