@@ -10,39 +10,6 @@ export const SenyaScheme = z.object({
   }),
 });
 
-export const TiktokScheme = z.object({
-  body: z.object({
-    video: NonEmptyString,
-  }),
-});
-
-export const InstagramScheme = z.object({
-  body: z.object({
-    post_id: NonEmptyString,
-  }),
-});
-
-export const InstagramStoryScheme = z.object({
-  body: z
-    .object({
-      url: TrimmedString.optional(),
-      id: TrimmedString.optional(),
-    })
-    .refine((x) => x.url || x.id, "should be url or id"),
-});
-
-export const ThreadsScheme = z.object({
-  body: z.object({
-    url: NonEmptyString,
-  }),
-});
-
-export const TwitterScheme = z.object({
-  body: z.object({
-    id: NonEmptyString,
-  }),
-});
-
 function sendValidationError(res, validationResult) {
   res.status(400).json({
     ok: false,

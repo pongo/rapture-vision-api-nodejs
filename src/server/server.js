@@ -1,24 +1,9 @@
 import express from "express";
 import { timeStart } from "../utils/time-start.js";
-import {
-  InstagramScheme,
-  InstagramStoryScheme,
-  SenyaScheme,
-  ThreadsScheme,
-  TiktokScheme,
-  TwitterScheme,
-  validate,
-} from "./validation.js";
+import { SenyaScheme, validate } from "./validation.js";
 
 /** @type {import("./server.d.ts").createServer} */
-export function createServer({
-  checkSenya,
-  getInstagram,
-  getInstagramStory,
-  getTiktok,
-  getTwitter,
-  getThreads,
-}) {
+export function createServer({ checkSenya }) {
   const app = express();
 
   app.use(express.json());
@@ -34,74 +19,6 @@ export function createServer({
 
     console.log(`${result.value ? "Yes" : "Not"} senya in ${elapsed()} ms ${url}`);
     res.json({ ok: true, is_senya: result.value });
-  });
-
-  app.post("/api/v1/tiktok-video", validate(TiktokScheme), async (req, res) => {
-    const videoUrl = req.safeData.body.video;
-    const elapsed = timeStart();
-    const result = await getTiktok(videoUrl);
-    if (result.isErr) {
-      const message = result.error?.message ?? result.error;
-      console.error(`tiktokVideo '${videoUrl}' error: ${message}, elapsed: ${elapsed()} ms`);
-      return void res.json({ ok: false, error: { message } });
-    }
-
-    console.info(`Fetched tiktok video in ${elapsed()} ms ${videoUrl}`);
-    res.json({ ok: true, value: result.value });
-  });
-
-  app.post("/api/v2/instagram", validate(InstagramScheme), async (req, res) => {
-    const { post_id } = req.safeData.body;
-    const elapsed = timeStart();
-    const result = await getInstagram(post_id);
-    if (result.isErr) {
-      console.error(`/instagram error: ${result.error.message}, elapsed: ${elapsed()} ms`);
-      return void res.json({ ok: false, error: result.error });
-    }
-
-    console.log(`Fetched instagram in ${elapsed()} ms ${post_id}`);
-    res.json({ ok: true, value: result.value });
-  });
-
-  app.post("/api/v1/instagram_story", validate(InstagramStoryScheme), async (req, res) => {
-    const { url, id } = req.safeData.body;
-    const elapsed = timeStart();
-    const result = await getInstagramStory({ id });
-    if (result.isErr) {
-      console.error(`/instagram_story error: ${result.error.message}, elapsed: ${elapsed()} ms`);
-      return void res.json({ ok: false, error: result.error });
-    }
-
-    console.log(
-      `Fetched instagram_story. ${result.value.length} links found in ${elapsed()} ms ${id} ${url}`,
-    );
-    res.json({ ok: true, links: result.value });
-  });
-
-  app.post("/api/v1/threads", validate(ThreadsScheme), async (req, res) => {
-    const { url } = req.safeData.body;
-    const elapsed = timeStart();
-    const result = await getThreads(url);
-    if (result.isErr) {
-      console.error(`/threads error: ${result.error.message}, elapsed: ${elapsed()} ms`);
-      return void res.json({ ok: false, error: result.error });
-    }
-
-    console.log(`Fetched threads in ${elapsed()} ms ${url}`);
-    res.json({ ok: true, value: result.value });
-  });
-
-  app.post("/api/v1/twitter", validate(TwitterScheme), async (req, res) => {
-    const { id } = req.safeData.body;
-    const elapsed = timeStart();
-    const result = await getTwitter(id);
-    if (result.isErr) {
-      console.error(`/twitter error: ${result.error.message}, elapsed: ${elapsed()} ms ${id}`);
-      return void res.json({ ok: false, error: result.error });
-    }
-
-    console.log(`Fetched twitter in ${elapsed()} ms ${id}`);
-    res.json({ ok: true, value: result.value });
   });
 
   app.use((error, req, res, _next) => {
