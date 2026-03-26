@@ -1,33 +1,22 @@
 import "dotenv/config";
 // dotenv must be first
 import { createServer } from "./src/server/server.js";
-import {
-  createGetInstagram,
-  getInstagramStory,
-} from "./src/services/instagram/instagram-service.js";
-import { createGetThreads } from "./src/services/threads/threads-service.js";
-import { createGetTiktok } from "./src/services/tiktok/tiktok-service.js";
-import { createGetTwitter } from "./src/services/twitter/twitter-service.js";
-import { Err } from "./src/utils/result.js";
+import { checkSenya } from "./src/services/senya/senya-service.js";
+// import { Err } from "./src/utils/result.js";
 
 const port = Number(process.env.PORT || 3000);
 
-async function initCheckSenya() {
-  if (process.env.DISABLE_CHECK_SENYA === "on") {
-    return async () => Err("checkSenya disabled by environment variable");
-  }
-
-  const { checkSenya } = await import("./src/services/senya/senya-service.js");
-  return checkSenya;
-}
+// async function initCheckSenya() {
+//   if (process.env.DISABLE_CHECK_SENYA === "on") {
+//     return async () => Err("checkSenya disabled by environment variable");
+//   }
+//
+//   const { checkSenya } = await import("./src/services/senya/senya-service.js");
+//   return checkSenya;
+// }
 
 const app = createServer({
-  getInstagram: createGetInstagram(),
-  getInstagramStory,
-  getThreads: createGetThreads(),
-  getTiktok: createGetTiktok(),
-  getTwitter: createGetTwitter(),
-  checkSenya: await initCheckSenya(),
+  checkSenya,
 });
 
 app.listen(port, () => {
